@@ -61,8 +61,6 @@ function Viewer3D()
     layout[1:3, 1] = l_sublayout
     l_sublayout[:v] = [scene3D, buttongrid]
 
-    # log = demo_log(7, "Launch test!")
-
     btn_RESET       = Button(scene, label = "RESET")
     btn_ZOOM_in     = Button(scene, label = "Zoom +")
     btn_ZOOM_out    = Button(scene, label = "Zoom -")
@@ -124,21 +122,12 @@ function show_window(s::Viewer3D, gl_wait=true)
 
     reset() = reset_and_zoom(camera, s.scene3D, zoom[1]) 
     status[] = "Stopped"
-
-    if gl_wait
-        wait(gl_screen)
-    end
-
-    # terminate the simulation
-    FLYING[1] = false
-    GUI_ACTIVE[1] = false
-    running[] = false
-    energy[1] = 0.0
-    return nothing
 end
 
 function close_window(s::Viewer3D)
     # send close event to s
+    glfw_window = to_native(s.scene)
+    GLFW.SetWindowShouldClose(glfw_window, true)
     # terminate the simulation
     FLYING[1] = false
     GUI_ACTIVE[1] = false
