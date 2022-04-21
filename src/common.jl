@@ -98,6 +98,21 @@ function update_system(scene, state, step=0)
     end
 end
 
+# update the kite power system, consisting of the tether, the kite and the state (text and numbers)
+function update_points(scene, points, step=0)
+
+    # # move the particles to the correct position
+    # for i in range(1, length=se().segments+1)
+    #     points[i] = Point3f(state.X[i], state.Y[i], state.Z[i])
+    # end
+    part_positions[] = [(points[k]) for k in 1:length(points)]
+
+    # move, scale and turn the cylinder correctly
+    positions[] = [(points[k] + points[k+1])/2 for k in 1:se().segments]
+    markersizes[] = [Point3f(1, 1, norm(points[k+1] - points[k])) for k in 1:length(points)]
+    rotations[] = [normalize(points[k+1] - points[k]) for k in 1:se().segments]
+end
+
 function reset_view(cam, scene3D)
     update_cam!(scene3D.scene, [-15.425113, -18.925116, 5.5], [-1.5, -5.0, 5.5])
 end
