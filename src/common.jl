@@ -42,12 +42,14 @@ function create_coordinate_system(scene, points = 10, max_x = 15.0)
 end
 
 # draw the kite power system, consisting of the tether, the kite and the state (text and numbers)
-function init_system(scene)
+function init_system(scene; show_kite=false)
     sphere = Sphere(Point3f(0, 0, 0), Float32(0.07 * SCALE))
     meshscatter!(scene, part_positions, marker=sphere, markersize=1.0, color=:yellow)
     cyl = Cylinder(Point3f(0,0,-0.5), Point3f(0,0,0.5), Float32(0.035 * SCALE))        
     meshscatter!(scene, positions, marker=cyl, rotations=rotations, markersize=markersizes, color=:yellow)
-    meshscatter!(scene, kite_pos, marker=KITE, markersize = 0.25, rotations=quat, color=:blue)
+    if show_kite
+        meshscatter!(scene, kite_pos, marker=KITE, markersize = 0.25, rotations=quat, color=:blue)
+    end
     if Sys.islinux()
         lin_font="/usr/share/fonts/truetype/ttf-bitstream-vera/VeraMono.ttf"
         if isfile(lin_font)
@@ -99,18 +101,17 @@ function update_system(scene, state, step=0)
 end
 
 # update the kite power system, consisting of the tether, the kite and the state (text and numbers)
-function update_points(scene, points, step=0)
-
-    # # move the particles to the correct position
-    # for i in range(1, length=se().segments+1)
-    #     points[i] = Point3f(state.X[i], state.Y[i], state.Z[i])
-    # end
+function update_points(scene, pos, segments, scale=1.0)
+    # move the particles to the correct position
+    for i in 1:length(pos)
+        points[i] = Point3f(pos[i][1], pos[i][2], pos[i][3]) * scale
+    end
     part_positions[] = [(points[k]) for k in 1:length(points)]
 
     # move, scale and turn the cylinder correctly
-    positions[] = [(points[k] + points[k+1])/2 for k in 1:se().segments]
-    markersizes[] = [Point3f(1, 1, norm(points[k+1] - points[k])) for k in 1:length(points)]
-    rotations[] = [normalize(points[k+1] - points[k]) for k in 1:se().segments]
+    positions[] = [(points[k] + points[k+1])/2 for k in 1:segments]
+    markersizes[] = [Point3f(1, 1, norm(points[k+1] - points[k])) for k in 1:segments]
+    rotations[] = [normalize(points[k+1] - points[k]) for k in 1:segments]
 end
 
 function reset_view(cam, scene3D)
