@@ -117,7 +117,7 @@ function update_points(scene, pos, segments, scale=1.0, rel_time = 0.0, elevatio
         # move and turn the kite to the new position
         q0 = orient                                          # SVector in the order w,x,y,z
         quat[]     = Quaternionf(q0[2], q0[3], q0[4], q0[1]) # the constructor expects the order x,y,z,w
-        kite_pos[] = points[end]
+        kite_pos[] = points[segments+1]
     end
     # print the text
     msg = "time:      $(@sprintf("%7.2f", rel_time)) s\n" *

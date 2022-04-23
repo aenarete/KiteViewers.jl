@@ -6,7 +6,7 @@ end
 using KiteViewers, KiteModels, KitePodModels, Rotations, StaticArrays
 
 # change this to KPS3 or KPS4
-const Model = KPS3
+const Model = KPS4
 
 if ! @isdefined kcu;  const kcu = KCU(se());   end
 if ! @isdefined kps4; const kps4 = Model(kcu); end
@@ -17,7 +17,7 @@ TIME = 30
 TIME_LAPSE_RATIO = 5
 STEPS = Int64(round(TIME/dt))
 STATISTIC = false
-SHOW_KITE = true
+SHOW_KITE = false
 # end of user parameter section #
 
 if ! @isdefined viewer; const viewer = Viewer3D(); show_window(viewer; show_kite=SHOW_KITE); end
@@ -30,7 +30,6 @@ function update_system(kps::KPS3, reltime; segments=se().segments)
     pos_before = kps.pos[end-1]
     elevation = calc_elevation(pos_kite)
     azimuth = azimuth_east(pos_kite)
-    v_reelout = kps.v_reel_out
     force = winch_force(kps)    
     if SHOW_KITE
         v_app = kps.v_apparent
@@ -39,8 +38,17 @@ function update_system(kps::KPS3, reltime; segments=se().segments)
         orient = MVector{4, Float32}(Rotations.params(q))
         update_points(viewer.scene3D, kps.pos, segments, scale, reltime, elevation, azimuth, force, orient)
     else
-        update_points(viewer.scene3D, pos, segments, scale, elevation, azimuth, force, reltime)
+        update_points(viewer.scene3D, kps.pos, segments, scale, reltime, elevation, azimuth, force)
     end
+end 
+
+function update_system(kps::KPS4, reltime; segments=se().segments)
+    scale = 0.1
+    pos_kite   = kps.pos[segments+1] # well, this is the position of the pod...
+    elevation = calc_elevation(pos_kite)
+    azimuth = azimuth_east(pos_kite)
+    force = winch_force(kps)    
+    update_points(viewer.scene3D, kps.pos, segments, scale, reltime, elevation, azimuth, force)
 end 
 
 function simulate(integrator, steps)
