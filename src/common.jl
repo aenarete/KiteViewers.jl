@@ -42,7 +42,7 @@ function create_coordinate_system(scene, points = 10, max_x = 15.0)
 end
 
 # draw the kite power system, consisting of the tether, the kite and the state (text and numbers)
-function init_system(scene; show_kite=false)
+function init_system(scene; show_kite=true)
     sphere = Sphere(Point3f(0, 0, 0), Float32(0.07 * SCALE))
     meshscatter!(scene, part_positions, marker=sphere, markersize=1.0, color=:yellow)
     cyl = Cylinder(Point3f(0,0,-0.5), Point3f(0,0,0.5), Float32(0.035 * SCALE))        
@@ -101,7 +101,7 @@ function update_system(scene, state, step=0)
 end
 
 # update the kite power system, consisting of the tether, the kite and the state (text and numbers)
-function update_points(scene, pos, segments, scale=1.0, rel_time = 0.0)
+function update_points(scene, pos, segments, scale=1.0, rel_time = 0.0, orient=nothing)
     # move the particles to the correct position
     for i in 1:length(pos)
         points[i] = Point3f(pos[i][1], pos[i][2], pos[i][3]) * scale
@@ -112,8 +112,17 @@ function update_points(scene, pos, segments, scale=1.0, rel_time = 0.0)
     positions[] = [(points[k] + points[k+1])/2 for k in 1:segments]
     markersizes[] = [Point3f(1, 1, norm(points[k+1] - points[k])) for k in 1:segments]
     rotations[] = [normalize(points[k+1] - points[k]) for k in 1:segments]
+
+    if ! isnothing(orient)
+        # move and turn the kite to the new position
+        q0 = orient                                          # SVector in the order w,x,y,z
+        quat[]     = Quaternionf(q0[2], q0[3], q0[4], q0[1]) # the constructor expects the order x,y,z,w
+        kite_pos[] = points[end]
+    end
+    # print the text
     msg = "time:      $(@sprintf("%7.2f", rel_time)) s\n"
     textnode[] = msg   
+
 end
 
 function reset_view(cam, scene3D)

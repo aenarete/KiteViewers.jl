@@ -111,10 +111,10 @@ end
 
 include("common.jl")
 
-function show_window(s::Viewer3D, gl_wait=true)
+function show_window(s::Viewer3D, show_kite=true)
     log = demo_log(7, "Launch test!")
     
-    init_system(s.scene3D)
+    init_system(s.scene3D;show_kite=show_kite)
     update_system(s.scene3D, demo_state(7, INITIAL_HEIGHT, 0))
 
     camera = cameracontrols(s.scene3D.scene)
