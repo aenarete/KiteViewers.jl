@@ -22,8 +22,7 @@ STATISTIC = false
 SHOW_KITE = true
 # end of user parameter section #
 
-viewer = Viewer3D()
-init_system(viewer.scene3D; show_kite=SHOW_KITE)
+if ! @isdefined viewer; const viewer = Viewer3D(); show_window(viewer; show_kite=SHOW_KITE); end
 
 include("../examples/timers.jl")
 

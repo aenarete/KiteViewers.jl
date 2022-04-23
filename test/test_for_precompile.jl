@@ -19,7 +19,7 @@ let
     # end of user parameter section #
 
     viewer = Viewer3D()
-    init_system(viewer.scene3D; show_kite=SHOW_KITE)
+    show_window(viewer; show_kite=SHOW_KITE)
 
     include("../examples/timers.jl")
 

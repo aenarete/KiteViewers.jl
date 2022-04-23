@@ -31,6 +31,9 @@ mutable struct Viewer3D
     scene3D::LScene
     cam::Camera3D
     screen::GLMakie.Screen
+    btn_RESET::Button
+    btn_ZOOM_in::Button
+    btn_ZOOM_out::Button
 end
 
 function Viewer3D()
@@ -72,7 +75,7 @@ function Viewer3D()
     buttongrid[1, 1:7] = [btn_PLAY_PAUSE, btn_ZOOM_in, btn_ZOOM_out, btn_RESET, btn_STOP, sw, label]
 
     gl_screen = display(scene)
-    Viewer3D(scene, layout, scene3D, cam, gl_screen)
+    Viewer3D(scene, layout, scene3D, cam, gl_screen, btn_RESET, btn_ZOOM_in, btn_ZOOM_out)
 end
 
 
@@ -111,16 +114,27 @@ end
 
 include("common.jl")
 
-function show_window(s::Viewer3D, show_kite=true)
-    log = demo_log(7, "Launch test!")
-    
-    init_system(s.scene3D;show_kite=show_kite)
-    update_system(s.scene3D, demo_state(7, INITIAL_HEIGHT, 0))
+function show_window(s::Viewer3D; show_kite=true)  
+    init_system(s.scene3D; show_kite=show_kite)
 
     camera = cameracontrols(s.scene3D.scene)
     reset_view(camera, s.scene3D)
 
     reset() = reset_and_zoom(camera, s.scene3D, zoom[1]) 
+    on(s.btn_RESET.clicks) do c
+        reset_view(camera, s.scene3D)
+        zoom[1] = 1.0
+    end
+
+    on(s.btn_ZOOM_in.clicks) do c    
+        zoom[1] *= 1.2
+        reset_and_zoom(camera, s.scene3D, zoom[1])
+    end
+
+    on(s.btn_ZOOM_out.clicks) do c
+        zoom[1] /= 1.2
+        reset_and_zoom(camera, s.scene3D, zoom[1])
+    end
     status[] = "Stopped"
 end
 
