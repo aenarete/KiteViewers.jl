@@ -14,7 +14,7 @@ if ! @isdefined kps4; const kps4 = Model(kcu); end
 # the following values can be changed to match your interest
 dt = 0.05
 TIME = 30
-TIME_LAPSE_RATIO = 5
+TIME_LAPSE_RATIO = 10
 STEPS = Int64(round(TIME/dt))
 STATISTIC = false
 SHOW_KITE = false
@@ -65,9 +65,15 @@ function simulate(integrator, steps)
         # KitePodModels.on_timer(kcu, dt)
         KiteModels.next_step!(kps4, integrator, dt=dt)     
         reltime = i*dt
-        update_system(kps4, reltime; segments=se().segments) 
-        # sleep(dt/5)    
-        wait_until(start_time+i*dt/TIME_LAPSE_RATIO)     
+        if mod(i, TIME_LAPSE_RATIO) == 0 || i == steps
+            update_system(kps4, reltime; segments=se().segments) 
+            if start_time+dt > time() + 0.002
+                wait_until(start_time+dt) 
+            else
+                sleep(0.001)
+            end
+            start_time = time()
+        end
     end
     (integrator.p.iter - start) / steps
 end
