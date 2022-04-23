@@ -101,7 +101,7 @@ function update_system(scene, state, step=0)
 end
 
 # update the kite power system, consisting of the tether, the kite and the state (text and numbers)
-function update_points(scene, pos, segments, scale=1.0)
+function update_points(scene, pos, segments, scale=1.0, rel_time = 0.0)
     # move the particles to the correct position
     for i in 1:length(pos)
         points[i] = Point3f(pos[i][1], pos[i][2], pos[i][3]) * scale
@@ -112,6 +112,8 @@ function update_points(scene, pos, segments, scale=1.0)
     positions[] = [(points[k] + points[k+1])/2 for k in 1:segments]
     markersizes[] = [Point3f(1, 1, norm(points[k+1] - points[k])) for k in 1:segments]
     rotations[] = [normalize(points[k+1] - points[k]) for k in 1:segments]
+    msg = "time:      $(@sprintf("%7.2f", rel_time)) s\n"
+    textnode[] = msg   
 end
 
 function reset_view(cam, scene3D)
