@@ -101,7 +101,7 @@ function update_system(scene, state, step=0)
 end
 
 # update the kite power system, consisting of the tether, the kite and the state (text and numbers)
-function update_points(scene, pos, segments, scale=1.0, rel_time = 0.0, orient=nothing)
+function update_points(scene, pos, segments, scale=1.0, rel_time = 0.0, elevation=0.0, azimuth=0.0, force=0.0, orient=nothing)
     # move the particles to the correct position
     for i in 1:length(pos)
         points[i] = Point3f(pos[i][1], pos[i][2], pos[i][3]) * scale
@@ -120,7 +120,10 @@ function update_points(scene, pos, segments, scale=1.0, rel_time = 0.0, orient=n
         kite_pos[] = points[end]
     end
     # print the text
-    msg = "time:      $(@sprintf("%7.2f", rel_time)) s\n"
+    msg = "time:      $(@sprintf("%7.2f", rel_time)) s\n" *
+          "elevation: $(@sprintf("%7.2f", elevation/pi*180.0)) °\n" *
+          "azimuth:   $(@sprintf("%7.2f", azimuth/pi*180.0)) °\n" *
+          "force:     $(@sprintf("%7.2f", force    )) N     "
     textnode[] = msg   
 
 end

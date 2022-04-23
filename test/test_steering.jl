@@ -16,8 +16,6 @@ dt = 0.05
 TIME = 30
 TIME_LAPSE_RATIO = 5
 STEPS = Int64(round(TIME/dt))
-FRONT_VIEW = false
-ZOOM = true
 STATISTIC = false
 SHOW_KITE = true
 # end of user parameter section #
@@ -26,18 +24,22 @@ if ! @isdefined viewer; const viewer = Viewer3D(); show_window(viewer; show_kite
 
 include("../examples/timers.jl")
 
-function plot2d(pos, reltime; zoom=ZOOM, front=FRONT_VIEW, segments=se().segments)
+function update_system(kps::KPS3, reltime; segments=se().segments)
     scale = 0.1
-    pos_kite   = pos[end]
-    pos_before = pos[end-1]
+    pos_kite   = kps.pos[end]
+    pos_before = kps.pos[end-1]
+    elevation = calc_elevation(pos_kite)
+    azimuth = azimuth_east(pos_kite)
+    v_reelout = kps.v_reel_out
+    force = winch_force(kps)    
     if SHOW_KITE
-        v_app = kps4.v_apparent
+        v_app = kps.v_apparent
         rotation = rot(pos_kite, pos_before, v_app)
         q = QuatRotation(rotation)
         orient = MVector{4, Float32}(Rotations.params(q))
-        update_points(viewer.scene3D, pos, segments, scale, reltime, orient)
+        update_points(viewer.scene3D, kps.pos, segments, scale, reltime, elevation, azimuth, force, orient)
     else
-        update_points(viewer.scene3D, pos, segments, scale, reltime)
+        update_points(viewer.scene3D, pos, segments, scale, elevation, azimuth, force, reltime)
     end
 end 
 
@@ -55,7 +57,7 @@ function simulate(integrator, steps)
         # KitePodModels.on_timer(kcu, dt)
         KiteModels.next_step!(kps4, integrator, dt=dt)     
         reltime = i*dt
-        plot2d(kps4.pos, reltime; zoom=ZOOM, front=FRONT_VIEW, segments=se().segments) 
+        update_system(kps4, reltime; segments=se().segments) 
         # sleep(dt/5)    
         wait_until(start_time+i*dt/TIME_LAPSE_RATIO)     
     end

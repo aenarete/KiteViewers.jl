@@ -27,14 +27,18 @@ let
         scale = 0.1
         pos_kite   = pos[end]
         pos_before = pos[end-1]
+        elevation = calc_elevation(pos_kite)
+        azimuth = azimuth_east(pos_kite)
+        v_reelout = kps4.v_reel_out
+        force = winch_force(kps4)
         if SHOW_KITE
             v_app = kps4.v_apparent
             rotation = rot(pos_kite, pos_before, v_app)
             q = QuatRotation(rotation)
             orient = MVector{4, Float32}(Rotations.params(q))
-            update_points(viewer.scene3D, pos, segments, scale, reltime, orient)
+            update_points(viewer.scene3D, pos, segments, scale, reltime, elevation, azimuth, force, orient)
         else
-            update_points(viewer.scene3D, pos, segments, scale, reltime)
+            update_points(viewer.scene3D, pos, segments, scale, reltime, elevation, azimuth, force)
         end
     end 
 
