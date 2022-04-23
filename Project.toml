@@ -27,7 +27,8 @@ julia = "1.6, 1.7, 1.8"
 [extras]
 KiteModels = "b94af626-7959-4878-9336-2adc27959007"
 KitePodModels = "9de5dc81-f971-414a-927b-652b2f41c539"
+PackageCompiler = "9b87118b-4619-50d2-8e1e-99f35a4d4d9d"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [targets]
-test = ["Test", "KiteModels", "KitePodModels"]
+test = ["Test", "KiteModels", "KitePodModels", "PackageCompiler"]
