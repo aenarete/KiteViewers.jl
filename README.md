@@ -13,11 +13,17 @@ update_points
     viewer=Viewer3D(true);
 
 After some time a window with the 3D view of a kite power system should pop up.
+If you keep the window open and execute the following code:
 
-    using StaticArrays
+    using StaticArrays, KiteUtils
     segments=6
-    pos=zeros(SVector{segements+1, MVector{3, Float64}})
-    update_points(pos, segments)
+    state=demo_state(segments+1)
+    pos=zeros(SVector{segments+1, MVector{3, Float64}})
+    for i in range(1, length=se().segments+1)
+        pos[i] .= MVector(state.X[i], state.Y[i], state.Z[i])
+    end
+    update_points(pos, segments, orient=state.orient)
 
+you should see a kite on a tether.
 
 
