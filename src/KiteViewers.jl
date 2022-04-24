@@ -12,6 +12,6 @@ const RGBf0 = RGBf
 
 include("pure.jl")
 
-precompile(show_window, (Viewer3D,))
+# precompile(show_window, (Viewer3D,))
 
 end
