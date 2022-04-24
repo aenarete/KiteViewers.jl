@@ -81,7 +81,7 @@ function Viewer3D()
     
     # buttongrid[1, 1:7] = [btn_PLAY_PAUSE, btn_ZOOM_in, btn_ZOOM_out, btn_RESET, btn_STOP, sw, label]
 
-    gl_screen = display(scene)
+    gl_screen = display(fig)
     # old code, working with GLMakie 4.7 
     # Viewer3D(scene, layout, scene3D, cam, gl_screen, btn_RESET, btn_ZOOM_in, btn_ZOOM_out)
     Viewer3D(fig, scene3D, cam, btn_RESET, btn_ZOOM_in, btn_ZOOM_out)
