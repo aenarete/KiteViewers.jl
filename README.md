@@ -39,3 +39,10 @@ segments=6
 state=demo_state_4p(segments+1)
 update_points(state.pos, segments, orient=state.orient)
 ```
+
+## See also
+- [Research Fechner](https://research.tudelft.nl/en/publications/?search=Uwe+Fechner&pageSize=50&ordering=rating&descending=true) for the scientic background of this code
+- The application [KiteViewer](https://github.com/ufechner7/KiteViewer)
+- the package [KiteUtils](https://github.com/ufechner7/KiteUtils.jl)
+- the package [KitePodModels](https://github.com/aenarete/KitePodModels.jl)
+- the package [KiteModels](https://github.com/ufechner7/KiteModels.jl)
