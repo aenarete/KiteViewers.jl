@@ -25,5 +25,9 @@ If you keep the window open and execute the following code:
     update_points(pos, segments, orient=state.orient)
 
 you should see a kite on a tether.
+The same example, but using the 4 point kite model:
 
-
+    using KiteUtils#main
+    segments=6
+    state=demo_state_4p(segments+1)
+    update_points(state.pos, segments, orient=state.orient)
