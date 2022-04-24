@@ -103,9 +103,19 @@ end
 # update the kite power system, consisting of the tether, the kite and the state (text and numbers)
 function update_points(pos, segments, scale=1.0, rel_time = 0.0, elevation=0.0, azimuth=0.0, force=0.0; orient=nothing)
     # move the particles to the correct position
-    for i in 1:length(pos)
+    for i in 1:segments+1
         points[i] = Point3f(pos[i][1], pos[i][2], pos[i][3]) * scale
     end
+    pos_pod=points[segments+1]
+
+    # enlarge 4 point kite
+    scale_kite = 4.0
+    for i in segments+2:length(pos)
+        pos_abs = Point3f(pos[i][1], pos[i][2], pos[i][3]) * scale
+        pos_rel = pos_abs-pos_pod
+        points[i] = pos_abs + (scale_kite-1.0) * pos_rel
+    end
+
     part_positions[] = [(points[k]) for k in 1:length(points)]
 
     # move, scale and turn the cylinder correctly
