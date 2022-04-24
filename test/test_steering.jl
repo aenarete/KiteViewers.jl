@@ -3,7 +3,7 @@ if ! ("KiteModels" ∈ keys(Pkg.project().dependencies))
     using TestEnv; TestEnv.activate()
 end
 
-using KiteViewers, KiteModels, KitePodModels, Rotations, StaticArrays
+using KiteViewers, KiteModels, KitePodModels, Rotations
 
 # change this to KPS3 or KPS4
 const Model = KPS4
