@@ -26,19 +26,26 @@ SOFTWARE. =#
 
 # struct that stores the state of the 3D viewer
 mutable struct Viewer3D
-    scene::Scene
-    layout::GridLayout
+    # scene::Scene
+    # layout::GridLayout
     scene3D::LScene
     cam::Camera3D
-    screen::GLMakie.Screen
+    # screen::GLMakie.Screen
     btn_RESET::Button
     btn_ZOOM_in::Button
     btn_ZOOM_out::Button
 end
 
 function Viewer3D()
-    scene, layout = layoutscene(resolution = (840, 900), backgroundcolor = RGBf0(0.7, 0.8, 1))
-    scene3D = LScene(scene, scenekw = (show_axis=false, limits = Rect(-7,-10.0,0, 11,10,11), resolution = (800, 800)), raw=false)
+    # old code, working with GLMakie 4.7 
+    # scene, layout = layoutscene(resolution = (840, 900), backgroundcolor = RGBf0(0.7, 0.8, 1))
+    # scene3D = LScene(scene, scenekw = (show_axis=false, limits = Rect(-7,-10.0,0, 11,10,11), resolution = (800, 800)), raw=false)
+    
+    fig = Figure(resolution=(840, 900), backgroundcolor=RGBf(0.7, 0.8, 1))
+    # just a try
+    scene = fig[1,1]
+    scene3D = LScene(scene, scenekw=(show_axis=false, limits=Rect(-7,-10.0,0, 11,10,11), resolution=(800, 800)), raw=false)
+    
     create_coordinate_system(scene3D)
     cam = cameracontrols(scene3D.scene)
 
@@ -57,13 +64,12 @@ function Viewer3D()
     text!(scene, status, position = Point2f0( 20, 0), textsize = TEXT_SIZE, align = (:left, :bottom), show_axis = false)
     status[]="Stopped"
 
-    layout[1, 1] = scene3D
-    layout[2, 1] = buttongrid = GridLayout(tellwidth = false)
+    # layout[1, 1] = scene3D
+    # layout[2, 1] = buttongrid = GridLayout(tellwidth = false)
 
-    l_sublayout = GridLayout()
-    layout[1:3, 1] = l_sublayout
-    l_sublayout[:v] = [scene3D, buttongrid]
-
+    # l_sublayout = GridLayout()
+    # layout[1:3, 1] = l_sublayout
+    # l_sublayout[:v] = [scene3D, buttongrid]
     btn_RESET       = Button(scene, label = "RESET")
     btn_ZOOM_in     = Button(scene, label = "Zoom +")
     btn_ZOOM_out    = Button(scene, label = "Zoom -")
@@ -72,10 +78,12 @@ function Viewer3D()
     sw = Toggle(scene, active = false)
     label = Label(scene, "repeat")
     
-    buttongrid[1, 1:7] = [btn_PLAY_PAUSE, btn_ZOOM_in, btn_ZOOM_out, btn_RESET, btn_STOP, sw, label]
+    # buttongrid[1, 1:7] = [btn_PLAY_PAUSE, btn_ZOOM_in, btn_ZOOM_out, btn_RESET, btn_STOP, sw, label]
 
     gl_screen = display(scene)
-    Viewer3D(scene, layout, scene3D, cam, gl_screen, btn_RESET, btn_ZOOM_in, btn_ZOOM_out)
+    # old code, working with GLMakie 4.7 
+    # Viewer3D(scene, layout, scene3D, cam, gl_screen, btn_RESET, btn_ZOOM_in, btn_ZOOM_out)
+    Viewer3D(scene3D, cam, btn_RESET, btn_ZOOM_in, btn_ZOOM_out)
 end
 
 
