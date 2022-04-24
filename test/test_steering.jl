@@ -36,9 +36,9 @@ function update_system(kps::KPS3, reltime; segments=se().segments)
         rotation = rot(pos_kite, pos_before, v_app)
         q = QuatRotation(rotation)
         orient = MVector{4, Float32}(Rotations.params(q))
-        update_points(viewer.scene3D, kps.pos, segments, scale, reltime, elevation, azimuth, force, orient)
+        update_points(kps.pos, segments, scale, reltime, elevation, azimuth, force, orient)
     else
-        update_points(viewer.scene3D, kps.pos, segments, scale, reltime, elevation, azimuth, force)
+        update_points(kps.pos, segments, scale, reltime, elevation, azimuth, force)
     end
 end 
 
@@ -48,7 +48,7 @@ function update_system(kps::KPS4, reltime; segments=se().segments)
     elevation = calc_elevation(pos_kite)
     azimuth = azimuth_east(pos_kite)
     force = winch_force(kps)    
-    update_points(viewer.scene3D, kps.pos, segments, scale, reltime, elevation, azimuth, force)
+    update_points(kps.pos, segments, scale, reltime, elevation, azimuth, force)
 end 
 
 function simulate(integrator, steps)
