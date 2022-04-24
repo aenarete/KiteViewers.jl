@@ -10,6 +10,8 @@ const Node = Observable
 const Quaternionf0 = Quaternionf
 const RGBf0 = RGBf
 
+KiteUtils.set_data_path("") 
+
 include("pure.jl")
 
 # precompile(show_window, (Viewer3D,))
