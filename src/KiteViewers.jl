@@ -6,6 +6,7 @@ using KiteUtils
 export Viewer3D                                                  # types
 export update_points                                             # functions
 
-include("pure.jl")
+include("viewer3D.jl")
+include("common.jl")
 
 end

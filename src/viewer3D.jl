@@ -20,6 +20,39 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. =#
 
+@consts begin
+    SCALE = 1.2 
+    INITIAL_HEIGHT =  80.0*se().zoom # meter, for demo
+    MAX_HEIGHT     = 200.0*se().zoom # meter, for demo
+    KITE = FileIO.load(se().model)
+    FLYING     = [false]
+    PLAYING    = [false]
+    GUI_ACTIVE = [false]
+    AXIS_LABEL_SIZE = 30
+    TEXT_SIZE = 16
+    running   = Node(false)
+    starting  = [0]
+    zoom      = [1.0]
+    steering  = [0.0]
+    textnode  = Node("")
+    textsize  = Node(TEXT_SIZE)
+    textsize2 = Node(AXIS_LABEL_SIZE)
+    status = Node("")
+    p1 = Node(Vector{Point2f0}(undef, 6000)) # 5 min
+    p2 = Node(Vector{Point2f0}(undef, 6000)) # 5 min
+    pos_x = Node(0.0f0)
+
+    points          = Vector{Point3f0}(undef, se().segments+1+4)
+    quat            = Node(Quaternionf0(0,0,0,1))                        # orientation of the kite
+    kite_pos        = Node(Point3f0(1,0,0))                              # position of the kite
+    positions       = Node([Point3f0(x,0,0) for x in 1:se().segments])   # positions of the tether segments
+    part_positions  = Node([Point3f0(x,0,0) for x in 1:se().segments+1+4]) # positions of the tether particles
+    markersizes     = Node([Point3f0(1,1,1) for x in 1:se().segments])   # includes the segment length
+    rotations       = Node([Point3f0(1,0,0) for x in 1:se().segments])   # unit vectors corresponding with
+                                                                           #   the orientation of the segments 
+    energy = [0.0]
+end 
+
 # struct that stores the state of the 3D viewer
 mutable struct Viewer3D
     scene::Scene
@@ -95,39 +128,3 @@ function Viewer3D(show_kite=true)
     status[] = "Stopped"
     return s
 end
-
-
-@consts begin
-    SCALE = 1.2 
-    INITIAL_HEIGHT =  80.0*se().zoom # meter, for demo
-    MAX_HEIGHT     = 200.0*se().zoom # meter, for demo
-    KITE = FileIO.load(se().model)
-    FLYING     = [false]
-    PLAYING    = [false]
-    GUI_ACTIVE = [false]
-    AXIS_LABEL_SIZE = 30
-    TEXT_SIZE = 16
-    running   = Node(false)
-    starting  = [0]
-    zoom      = [1.0]
-    steering  = [0.0]
-    textnode  = Node("")
-    textsize  = Node(TEXT_SIZE)
-    textsize2 = Node(AXIS_LABEL_SIZE)
-    status = Node("")
-    p1 = Node(Vector{Point2f0}(undef, 6000)) # 5 min
-    p2 = Node(Vector{Point2f0}(undef, 6000)) # 5 min
-    pos_x = Node(0.0f0)
-
-    points          = Vector{Point3f0}(undef, se().segments+1+4)
-    quat            = Node(Quaternionf0(0,0,0,1))                        # orientation of the kite
-    kite_pos        = Node(Point3f0(1,0,0))                              # position of the kite
-    positions       = Node([Point3f0(x,0,0) for x in 1:se().segments])   # positions of the tether segments
-    part_positions  = Node([Point3f0(x,0,0) for x in 1:se().segments+1+4]) # positions of the tether particles
-    markersizes     = Node([Point3f0(1,1,1) for x in 1:se().segments])   # includes the segment length
-    rotations       = Node([Point3f0(1,0,0) for x in 1:se().segments])   # unit vectors corresponding with
-                                                                           #   the orientation of the segments 
-    energy = [0.0]
-end                                                                           
-
-include("common.jl")
