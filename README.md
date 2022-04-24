@@ -12,7 +12,7 @@ viewer=Viewer3D(show_kite)
 ```
 
 ## Exported functions
-update_points(pos, segments, scale=1.0, rel_time = 0.0, elevation=0.0, azimuth=0.0, force=0.0; orient=nothing)
+update_points(pos, segments, scale=1.0, rel_time = 0.0, elevation=0.0, azimuth=0.0, force=0.0; orient=nothing, scale_kite=3.5)
 
 ## Examples
 ```julia
