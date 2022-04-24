@@ -27,6 +27,7 @@ SOFTWARE. =#
 # struct that stores the state of the 3D viewer
 mutable struct Viewer3D
     # scene::Scene
+    fig::Figure
     # layout::GridLayout
     scene3D::LScene
     cam::Camera3D
@@ -83,7 +84,7 @@ function Viewer3D()
     gl_screen = display(scene)
     # old code, working with GLMakie 4.7 
     # Viewer3D(scene, layout, scene3D, cam, gl_screen, btn_RESET, btn_ZOOM_in, btn_ZOOM_out)
-    Viewer3D(scene3D, cam, btn_RESET, btn_ZOOM_in, btn_ZOOM_out)
+    Viewer3D(fig, scene3D, cam, btn_RESET, btn_ZOOM_in, btn_ZOOM_out)
 end
 
 
