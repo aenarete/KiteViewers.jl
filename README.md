@@ -5,8 +5,14 @@ This package provides different kind of 2D and 3D viewers for kite power system.
 ## Exported types
 Viewer3D
 
+Usage:
+```julia
+show_kite=true
+viewer=Viewer3D(show_kite)
+```
+
 ## Exported functions
-update_points
+update_points(pos, segments, scale=1.0, rel_time = 0.0, elevation=0.0, azimuth=0.0, force=0.0; orient=nothing)
 
 ## Examples
 ```julia
