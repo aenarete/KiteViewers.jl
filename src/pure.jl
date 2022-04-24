@@ -92,7 +92,7 @@ end
     SCALE = 1.2 
     INITIAL_HEIGHT =  80.0*se().zoom # meter, for demo
     MAX_HEIGHT     = 200.0*se().zoom # meter, for demo
-    KITE = FileIO.load(se().model)
+    KITE = nothing# FileIO.load(se().model)
     FLYING     = [false]
     PLAYING    = [false]
     GUI_ACTIVE = [false]
