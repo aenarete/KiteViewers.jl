@@ -6,6 +6,10 @@ using KiteUtils
 export Viewer3D                                                  # types
 export show_window, close_window, init_system, update_points     # functions
 
+const Node = Observable
+const Quaternionf0 = Quaternionf
+const RGBf0 = RGBf
+
 include("pure.jl")
 
 precompile(show_window, (Viewer3D,))
