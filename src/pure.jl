@@ -20,10 +20,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. =#
 
-# Stripped down version of KiteViewer, no simulation, no 2D diagrams
-
-
-
 # struct that stores the state of the 3D viewer
 mutable struct Viewer3D
     scene::Scene
@@ -36,7 +32,7 @@ mutable struct Viewer3D
     btn_ZOOM_out::Button
 end
 
-function Viewer3D()
+function Viewer3D(show_kite=true)
     scene, layout = layoutscene(resolution = (840, 900), backgroundcolor = RGBf0(0.7, 0.8, 1))
     scene3D = LScene(scene, scenekw = (show_axis=false, limits = Rect(-7,-10.0,0, 11,10,11), resolution = (800, 800)), raw=false)
     create_coordinate_system(scene3D)
@@ -75,7 +71,29 @@ function Viewer3D()
     buttongrid[1, 1:7] = [btn_PLAY_PAUSE, btn_ZOOM_in, btn_ZOOM_out, btn_RESET, btn_STOP, sw, label]
 
     gl_screen = display(scene)
-    Viewer3D(scene, layout, scene3D, cam, gl_screen, btn_RESET, btn_ZOOM_in, btn_ZOOM_out)
+    s = Viewer3D(scene, layout, scene3D, cam, gl_screen, btn_RESET, btn_ZOOM_in, btn_ZOOM_out)
+
+    init_system(s.scene3D; show_kite=show_kite)
+
+    camera = cameracontrols(s.scene3D.scene)
+    reset_view(camera, s.scene3D)
+
+    on(s.btn_RESET.clicks) do c
+        reset_view(camera, s.scene3D)
+        zoom[1] = 1.0
+    end
+
+    on(s.btn_ZOOM_in.clicks) do c    
+        zoom[1] *= 1.2
+        reset_and_zoom(camera, s.scene3D, zoom[1])
+    end
+
+    on(s.btn_ZOOM_out.clicks) do c
+        zoom[1] /= 1.2
+        reset_and_zoom(camera, s.scene3D, zoom[1])
+    end
+    status[] = "Stopped"
+    return s
 end
 
 
@@ -113,39 +131,3 @@ end
 end                                                                           
 
 include("common.jl")
-
-function show_window(s::Viewer3D; show_kite=true)  
-    init_system(s.scene3D; show_kite=show_kite)
-
-    camera = cameracontrols(s.scene3D.scene)
-    reset_view(camera, s.scene3D)
-
-    reset() = reset_and_zoom(camera, s.scene3D, zoom[1]) 
-    on(s.btn_RESET.clicks) do c
-        reset_view(camera, s.scene3D)
-        zoom[1] = 1.0
-    end
-
-    on(s.btn_ZOOM_in.clicks) do c    
-        zoom[1] *= 1.2
-        reset_and_zoom(camera, s.scene3D, zoom[1])
-    end
-
-    on(s.btn_ZOOM_out.clicks) do c
-        zoom[1] /= 1.2
-        reset_and_zoom(camera, s.scene3D, zoom[1])
-    end
-    status[] = "Stopped"
-end
-
-function close_window(s::Viewer3D)
-    # send close event to s
-    glfw_window = to_native(s.scene)
-    GLFW.SetWindowShouldClose(glfw_window, true)
-    # terminate the simulation
-    FLYING[1] = false
-    GUI_ACTIVE[1] = false
-    running[] = false
-    energy[1] = 0.0
-    return nothing
-end

@@ -18,8 +18,7 @@ let
     SHOW_KITE = true
     # end of user parameter section #
 
-    viewer = Viewer3D()
-    show_window(viewer; show_kite=SHOW_KITE)
+    viewer = Viewer3D(SHOW_KITE)
 
     include("../examples/timers.jl")
 

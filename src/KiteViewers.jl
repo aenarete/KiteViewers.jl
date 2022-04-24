@@ -4,10 +4,8 @@ using GeometryBasics, Rotations, GLMakie, FileIO, LinearAlgebra, Printf, Paramet
 using KiteUtils
 
 export Viewer3D                                                  # types
-export show_window, close_window, init_system, update_points     # functions
+export update_points                                             # functions
 
 include("pure.jl")
-
-precompile(show_window, (Viewer3D,))
 
 end

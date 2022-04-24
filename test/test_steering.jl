@@ -20,7 +20,7 @@ STATISTIC = false
 SHOW_KITE = false
 # end of user parameter section #
 
-if ! @isdefined viewer; const viewer = Viewer3D(); show_window(viewer; show_kite=SHOW_KITE); end
+if ! @isdefined viewer; const viewer = Viewer3D(SHOW_KITE); end
 
 include("../examples/timers.jl")
 
