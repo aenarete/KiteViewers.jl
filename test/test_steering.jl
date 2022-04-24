@@ -36,7 +36,7 @@ function update_system(kps::KPS3, reltime; segments=se().segments)
         rotation = rot(pos_kite, pos_before, v_app)
         q = QuatRotation(rotation)
         orient = MVector{4, Float32}(Rotations.params(q))
-        update_points(kps.pos, segments, scale, reltime, elevation, azimuth, force, orient)
+        update_points(kps.pos, segments, scale, reltime, elevation, azimuth, force, orient=orient)
     else
         update_points(kps.pos, segments, scale, reltime, elevation, azimuth, force)
     end
