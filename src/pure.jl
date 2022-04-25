@@ -38,6 +38,10 @@ mutable struct Viewer3D
 end
 
 function Viewer3D()
+    # TO FIX
+    # 1. hide coordinate init_system
+    # 2. status line text is shown on the 3D scene but should not
+    #
     # old code, working with GLMakie 4.7 
     # scene, layout = layoutscene(resolution = (840, 900), backgroundcolor = RGBf0(0.7, 0.8, 1))
     # scene3D = LScene(scene, scenekw = (show_axis=false, limits = Rect(-7,-10.0,0, 11,10,11), resolution = (800, 800)), raw=false)
@@ -71,6 +75,14 @@ function Viewer3D()
     # l_sublayout = GridLayout()
     # layout[1:3, 1] = l_sublayout
     # l_sublayout[:v] = [scene3D, buttongrid]
+
+    # fig[1, 1] = scene3D
+    fig[2, 1] = buttongrid = GridLayout(tellwidth=true)
+
+    l_sublayout = GridLayout()
+    fig[1:3, 1] = l_sublayout
+    l_sublayout[:v] = [scene3D, buttongrid]
+
     btn_RESET       = Button(scene, label = "RESET")
     btn_ZOOM_in     = Button(scene, label = "Zoom +")
     btn_ZOOM_out    = Button(scene, label = "Zoom -")
@@ -79,9 +91,9 @@ function Viewer3D()
     sw = Toggle(scene, active = false)
     label = Label(scene, "repeat")
     
-    # buttongrid[1, 1:7] = [btn_PLAY_PAUSE, btn_ZOOM_in, btn_ZOOM_out, btn_RESET, btn_STOP, sw, label]
+    buttongrid[1, 1:7] = [btn_PLAY_PAUSE, btn_ZOOM_in, btn_ZOOM_out, btn_RESET, btn_STOP, sw, label]
 
-    gl_screen = display(fig)
+    display(fig)
     # old code, working with GLMakie 4.7 
     # Viewer3D(scene, layout, scene3D, cam, gl_screen, btn_RESET, btn_ZOOM_in, btn_ZOOM_out)
     Viewer3D(fig, scene3D, cam, btn_RESET, btn_ZOOM_in, btn_ZOOM_out)
