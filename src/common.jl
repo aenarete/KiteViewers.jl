@@ -117,10 +117,44 @@ function update_points(pos, segments, scale=1.0, rel_time = 0.0, elevation=0.0, 
 
     part_positions[] = [(points[k]) for k in 1:length(points)]
 
+    function calc_positions(s)
+        tmp = [(points[k] + points[k+1])/2 for k in 1:segments]
+        push!(tmp, (points[s+1]+points[s+4]) / 2) # S6
+        push!(tmp, (points[s+2]+points[s+5]) / 2) # S8
+        push!(tmp, (points[s+3]+points[s+5]) / 2) # S7
+        push!(tmp, (points[s+2]+points[s+4]) / 2) # S2
+        push!(tmp, (points[s+1]+points[s+5]) / 2) # S5
+        push!(tmp, (points[s+4]+points[s+3]) / 2) # S4
+        push!(tmp, (points[s+1]+points[s+2]) / 2) # S1
+        push!(tmp, (points[s+3]+points[s+2]) / 2) # S9
+    end
+    function calc_markersizes(s)
+        tmp = [Point3f(1, 1, norm(points[k+1] - points[k])) for k in 1:segments]
+        push!(tmp, Point3f(1, 1, norm(points[s+1] - points[s+4]))) # S6
+        push!(tmp, Point3f(1, 1, norm(points[s+2] - points[s+5]))) # S8
+        push!(tmp, Point3f(1, 1, norm(points[s+3] - points[s+5]))) # S7
+        push!(tmp, Point3f(1, 1, norm(points[s+2] - points[s+4]))) # S2
+        push!(tmp, Point3f(1, 1, norm(points[s+1] - points[s+5]))) # S5
+        push!(tmp, Point3f(1, 1, norm(points[s+4] - points[s+3]))) # S4
+        push!(tmp, Point3f(1, 1, norm(points[s+1] - points[s+2]))) # S1
+        push!(tmp, Point3f(1, 1, norm(points[s+3] - points[s+2]))) # S9
+    end
+    function calc_rotations(s)
+        tmp = [normalize(points[k+1] - points[k]) for k in 1:segments]
+        push!(tmp, normalize(points[s+1] - points[s+4]))
+        push!(tmp, normalize(points[s+2] - points[s+5]))
+        push!(tmp, normalize(points[s+3] - points[s+5]))
+        push!(tmp, normalize(points[s+2] - points[s+4]))
+        push!(tmp, normalize(points[s+1] - points[s+5]))
+        push!(tmp, normalize(points[s+4] - points[s+3]))
+        push!(tmp, normalize(points[s+1] - points[s+2]))
+        push!(tmp, normalize(points[s+3] - points[s+2]))
+    end
+
     # move, scale and turn the cylinder correctly
-    positions[] = [(points[k] + points[k+1])/2 for k in 1:segments]
-    markersizes[] = [Point3f(1, 1, norm(points[k+1] - points[k])) for k in 1:segments]
-    rotations[] = [normalize(points[k+1] - points[k]) for k in 1:segments]
+    positions[]   = calc_positions(segments)
+    markersizes[] = calc_markersizes(segments)
+    rotations[]   = calc_rotations(segments)
 
     if ! isnothing(orient)
         # move and turn the kite to the new position

@@ -43,13 +43,13 @@ SOFTWARE. =#
     pos_x = Node(0.0f0)
 
     points          = Vector{Point3f0}(undef, se().segments+1+4)
-    quat            = Node(Quaternionf0(0,0,0,1))                        # orientation of the kite
-    kite_pos        = Node(Point3f0(1,0,0))                              # position of the kite
-    positions       = Node([Point3f0(x,0,0) for x in 1:se().segments])   # positions of the tether segments
-    part_positions  = Node([Point3f0(x,0,0) for x in 1:se().segments+1+4]) # positions of the tether particles
-    markersizes     = Node([Point3f0(1,1,1) for x in 1:se().segments])   # includes the segment length
-    rotations       = Node([Point3f0(1,0,0) for x in 1:se().segments])   # unit vectors corresponding with
-                                                                           #   the orientation of the segments 
+    quat            = Node(Quaternionf0(0,0,0,1))                                     # orientation of the kite
+    kite_pos        = Node(Point3f0(1,0,0))                                           # position of the kite
+    positions       = Node([Point3f0(x,0,0) for x in 1:se().segments+KITE_SPRINGS])   # positions of the tether segments
+    part_positions  = Node([Point3f0(x,0,0) for x in 1:se().segments+1+4])            # positions of the tether particles
+    markersizes     = Node([Point3f0(1,1,1) for x in 1:se().segments+KITE_SPRINGS])   # includes the segment length
+    rotations       = Node([Point3f0(1,0,0) for x in 1:se().segments+KITE_SPRINGS])   # unit vectors corresponding with
+                                                                                      #   the orientation of the segments 
     energy = [0.0]
 end 
 

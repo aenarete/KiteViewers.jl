@@ -25,7 +25,7 @@ if ! @isdefined viewer; const viewer = Viewer3D(SHOW_KITE); end
 include("../examples/timers.jl")
 
 function update_system(kps::KPS3, reltime; segments=se().segments)
-    scale = 0.1
+    scale = 0.08
     pos_kite   = kps.pos[end]
     pos_before = kps.pos[end-1]
     elevation = calc_elevation(pos_kite)
@@ -43,7 +43,7 @@ function update_system(kps::KPS3, reltime; segments=se().segments)
 end 
 
 function update_system(kps::KPS4, reltime; segments=se().segments)
-    scale = 0.1
+    scale = 0.08
     pos_kite   = kps.pos[segments+1] # well, this is the position of the pod...
     elevation = calc_elevation(pos_kite)
     azimuth = azimuth_east(pos_kite)
