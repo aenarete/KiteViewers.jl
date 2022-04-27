@@ -67,7 +67,7 @@ function init_system(scene; show_kite=true)
 end
 
 # update the kite power system, consisting of the tether, the kite and the state (text and numbers)
-function update_system(scene, state, step=0)
+function update_system(state::SysState, step=0)
 
     # move the particles to the correct position
     for i in range(1, length=se().segments+1)
