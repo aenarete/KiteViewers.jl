@@ -4,8 +4,8 @@ using GeometryBasics, Rotations, GLMakie, FileIO, LinearAlgebra, Printf, Paramet
 import GeometryBasics:Point3f
 using KiteUtils
 
-export Viewer3D                                                  # types
-export update_points                                             # functions
+export Viewer3D                      # types
+export update_points, update_system  # functions
 
 const KITE_SPRINGS = 8 
 
