@@ -102,6 +102,8 @@ end
 
 # update the kite power system, consisting of the tether, the kite and the state (text and numbers)
 function update_points(pos, segments, scale=1.0, rel_time = 0.0, elevation=0.0, azimuth=0.0, force=0.0; orient=nothing, scale_kite=1.0)
+    height = points[segments+1][3]
+    fourpoint = length(pos) > segments+1
     # move the particles to the correct position
     for i in 1:segments+1
         points[i] = Point3f(pos[i][1], pos[i][2], pos[i][3]) * scale
@@ -119,36 +121,45 @@ function update_points(pos, segments, scale=1.0, rel_time = 0.0, elevation=0.0, 
 
     function calc_positions(s)
         tmp = [(points[k] + points[k+1])/2 for k in 1:segments]
-        push!(tmp, (points[s+1]+points[s+4]) / 2) # S6
-        push!(tmp, (points[s+2]+points[s+5]) / 2) # S8
-        push!(tmp, (points[s+3]+points[s+5]) / 2) # S7
-        push!(tmp, (points[s+2]+points[s+4]) / 2) # S2
-        push!(tmp, (points[s+1]+points[s+5]) / 2) # S5
-        push!(tmp, (points[s+4]+points[s+3]) / 2) # S4
-        push!(tmp, (points[s+1]+points[s+2]) / 2) # S1
-        push!(tmp, (points[s+3]+points[s+2]) / 2) # S9
+        if fourpoint
+            push!(tmp, (points[s+1]+points[s+4]) / 2) # S6
+            push!(tmp, (points[s+2]+points[s+5]) / 2) # S8
+            push!(tmp, (points[s+3]+points[s+5]) / 2) # S7
+            push!(tmp, (points[s+2]+points[s+4]) / 2) # S2
+            push!(tmp, (points[s+1]+points[s+5]) / 2) # S5
+            push!(tmp, (points[s+4]+points[s+3]) / 2) # S4
+            push!(tmp, (points[s+1]+points[s+2]) / 2) # S1
+            push!(tmp, (points[s+3]+points[s+2]) / 2) # S9
+        end
+        tmp
     end
     function calc_markersizes(s)
         tmp = [Point3f(1, 1, norm(points[k+1] - points[k])) for k in 1:segments]
-        push!(tmp, Point3f(1, 1, norm(points[s+1] - points[s+4]))) # S6
-        push!(tmp, Point3f(1, 1, norm(points[s+2] - points[s+5]))) # S8
-        push!(tmp, Point3f(1, 1, norm(points[s+3] - points[s+5]))) # S7
-        push!(tmp, Point3f(1, 1, norm(points[s+2] - points[s+4]))) # S2
-        push!(tmp, Point3f(1, 1, norm(points[s+1] - points[s+5]))) # S5
-        push!(tmp, Point3f(1, 1, norm(points[s+4] - points[s+3]))) # S4
-        push!(tmp, Point3f(1, 1, norm(points[s+1] - points[s+2]))) # S1
-        push!(tmp, Point3f(1, 1, norm(points[s+3] - points[s+2]))) # S9
+        if fourpoint
+            push!(tmp, Point3f(1, 1, norm(points[s+1] - points[s+4]))) # S6
+            push!(tmp, Point3f(1, 1, norm(points[s+2] - points[s+5]))) # S8
+            push!(tmp, Point3f(1, 1, norm(points[s+3] - points[s+5]))) # S7
+            push!(tmp, Point3f(1, 1, norm(points[s+2] - points[s+4]))) # S2
+            push!(tmp, Point3f(1, 1, norm(points[s+1] - points[s+5]))) # S5
+            push!(tmp, Point3f(1, 1, norm(points[s+4] - points[s+3]))) # S4
+            push!(tmp, Point3f(1, 1, norm(points[s+1] - points[s+2]))) # S1
+            push!(tmp, Point3f(1, 1, norm(points[s+3] - points[s+2]))) # S9
+        end
+        tmp
     end
     function calc_rotations(s)
         tmp = [normalize(points[k+1] - points[k]) for k in 1:segments]
-        push!(tmp, normalize(points[s+1] - points[s+4]))
-        push!(tmp, normalize(points[s+2] - points[s+5]))
-        push!(tmp, normalize(points[s+3] - points[s+5]))
-        push!(tmp, normalize(points[s+2] - points[s+4]))
-        push!(tmp, normalize(points[s+1] - points[s+5]))
-        push!(tmp, normalize(points[s+4] - points[s+3]))
-        push!(tmp, normalize(points[s+1] - points[s+2]))
-        push!(tmp, normalize(points[s+3] - points[s+2]))
+        if fourpoint
+            push!(tmp, normalize(points[s+1] - points[s+4]))
+            push!(tmp, normalize(points[s+2] - points[s+5]))
+            push!(tmp, normalize(points[s+3] - points[s+5]))
+            push!(tmp, normalize(points[s+2] - points[s+4]))
+            push!(tmp, normalize(points[s+1] - points[s+5]))
+            push!(tmp, normalize(points[s+4] - points[s+3]))
+            push!(tmp, normalize(points[s+1] - points[s+2]))
+            push!(tmp, normalize(points[s+3] - points[s+2]))
+        end
+        tmp
     end
 
     # move, scale and turn the cylinder correctly
@@ -164,6 +175,7 @@ function update_points(pos, segments, scale=1.0, rel_time = 0.0, elevation=0.0, 
     end
     # print the text
     msg = "time:      $(@sprintf("%7.2f", rel_time)) s\n" *
+          "height:    $(@sprintf("%7.2f", height)) m\n" *
           "elevation: $(@sprintf("%7.2f", elevation/pi*180.0)) °\n" *
           "azimuth:   $(@sprintf("%7.2f", azimuth/pi*180.0)) °\n" *
           "force:     $(@sprintf("%7.2f", force    )) N     "
