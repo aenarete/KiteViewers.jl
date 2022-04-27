@@ -1,5 +1,5 @@
 let
-    using KiteViewers, KiteModels, KitePodModels, Rotations
+    using KiteViewers, KiteModels, KitePodModels, Rotations, StaticArrays
 
     # change this to KPS3 or KPS4
     Model = KPS3
@@ -35,9 +35,9 @@ let
             rotation = rot(pos_kite, pos_before, v_app)
             q = QuatRotation(rotation)
             orient = MVector{4, Float32}(Rotations.params(q))
-            update_points(viewer.scene3D, pos, segments, scale, reltime, elevation, azimuth, force, orient)
+            update_points(pos, segments, scale, reltime, elevation, azimuth, force; orient=orient)
         else
-            update_points(viewer.scene3D, pos, segments, scale, reltime, elevation, azimuth, force)
+            update_points(pos, segments, scale, reltime, elevation, azimuth, force, scale_kite=3.5)
         end
     end 
 
