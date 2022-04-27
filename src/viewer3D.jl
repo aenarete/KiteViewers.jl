@@ -38,17 +38,17 @@ SOFTWARE. =#
     textsize  = Node(TEXT_SIZE)
     textsize2 = Node(AXIS_LABEL_SIZE)
     status = Node("")
-    p1 = Node(Vector{Point2f0}(undef, 6000)) # 5 min
-    p2 = Node(Vector{Point2f0}(undef, 6000)) # 5 min
+    p1 = Node(Vector{Point2f}(undef, 6000)) # 5 min
+    p2 = Node(Vector{Point2f}(undef, 6000)) # 5 min
     pos_x = Node(0.0f0)
 
-    points          = Vector{Point3f0}(undef, se().segments+1+4)
+    points          = Vector{Point3f}(undef, se().segments+1+4)
     quat            = Node(Quaternionf0(0,0,0,1))                                     # orientation of the kite
-    kite_pos        = Node(Point3f0(1,0,0))                                           # position of the kite
-    positions       = Node([Point3f0(x,0,0) for x in 1:se().segments+KITE_SPRINGS])   # positions of the tether segments
-    part_positions  = Node([Point3f0(x,0,0) for x in 1:se().segments+1+4])            # positions of the tether particles
-    markersizes     = Node([Point3f0(1,1,1) for x in 1:se().segments+KITE_SPRINGS])   # includes the segment length
-    rotations       = Node([Point3f0(1,0,0) for x in 1:se().segments+KITE_SPRINGS])   # unit vectors corresponding with
+    kite_pos        = Node(Point3f(1,0,0))                                           # position of the kite
+    positions       = Node([Point3f(x,0,0) for x in 1:se().segments+KITE_SPRINGS])   # positions of the tether segments
+    part_positions  = Node([Point3f(x,0,0) for x in 1:se().segments+1+4])            # positions of the tether particles
+    markersizes     = Node([Point3f(1,1,1) for x in 1:se().segments+KITE_SPRINGS])   # includes the segment length
+    rotations       = Node([Point3f(1,0,0) for x in 1:se().segments+KITE_SPRINGS])   # unit vectors corresponding with
                                                                                       #   the orientation of the segments 
     energy = [0.0]
 end 
@@ -67,7 +67,7 @@ end
 
 function Viewer3D(show_kite=true)
     KiteUtils.set_data_path(datapath)
-    scene, layout = layoutscene(resolution = (840, 900), backgroundcolor = RGBf0(0.7, 0.8, 1))
+    scene, layout = layoutscene(resolution = (840, 900), backgroundcolor = RGBf(0.7, 0.8, 1))
     scene3D = LScene(scene, scenekw = (show_axis=false, limits = Rect(-7,-10.0,0, 11,10,11), resolution = (800, 800)), raw=false)
     create_coordinate_system(scene3D)
     cam = cameracontrols(scene3D.scene)
@@ -80,11 +80,11 @@ function Viewer3D(show_kite=true)
 
     textsize[]  = TEXT_SIZE
     textsize2[] = AXIS_LABEL_SIZE
-    text!(scene3D, "z", position = Point3f0(0, 0, 14.6), textsize = textsize2, align = (:center, :center), show_axis = false)
-    text!(scene3D, "x", position = Point3f0(17, 0,0), textsize = textsize2, align = (:center, :center), show_axis = false)
-    text!(scene3D, "y", position = Point3f0( 0, 14.5, 0), textsize = textsize2, align = (:center, :center), show_axis = false)
+    text!(scene3D, "z", position = Point3f(0, 0, 14.6), textsize = textsize2, align = (:center, :center), show_axis = false)
+    text!(scene3D, "x", position = Point3f(17, 0,0), textsize = textsize2, align = (:center, :center), show_axis = false)
+    text!(scene3D, "y", position = Point3f( 0, 14.5, 0), textsize = textsize2, align = (:center, :center), show_axis = false)
 
-    text!(scene, status, position = Point2f0( 20, 0), textsize = TEXT_SIZE, align = (:left, :bottom), show_axis = false)
+    text!(scene, status, position = Point2f( 20, 0), textsize = TEXT_SIZE, align = (:left, :bottom), show_axis = false)
     status[]="Stopped"
 
     layout[1, 1] = scene3D

@@ -1,3 +1,8 @@
+using Pkg
+if ! ("KiteModels" ∈ keys(Pkg.project().dependencies))
+    using TestEnv; TestEnv.activate()
+end
+
 using KiteViewers, KiteModels, KitePodModels, Rotations
 
 # change this to KPS3 or KPS4
@@ -8,8 +13,8 @@ if ! @isdefined kps4; const kps4 = Model(kcu); end
 
 # the following values can be changed to match your interest
 dt = 0.05
-TIME = 30
-TIME_LAPSE_RATIO = 10
+TIME = 45
+TIME_LAPSE_RATIO = 5
 STEPS = Int64(round(TIME/dt))
 STATISTIC = false
 SHOW_KITE = false
@@ -17,7 +22,7 @@ SHOW_KITE = false
 
 if ! @isdefined viewer; const viewer = Viewer3D(SHOW_KITE); end
 
-include("../examples/timers.jl")
+include("timers.jl")
 
 function update_system(kps::KPS3, reltime; segments=se().segments)
     scale = 0.08
@@ -55,7 +60,11 @@ function simulate(integrator, steps)
         elseif i == 302
             set_depower_steering(kps4.kcu, 0.25, -0.1)
         elseif i == 304
-            set_depower_steering(kps4.kcu, 0.25, 0.0)            
+            set_depower_steering(kps4.kcu, 0.25, 0.0)    
+        elseif i == 350
+            set_depower_steering(kps4.kcu, 0.25, -0.04)
+        elseif i == 352
+            set_depower_steering(kps4.kcu, 0.25, 0.0)           
         end
         # KitePodModels.on_timer(kcu, dt)
         KiteModels.next_step!(kps4, integrator, dt=dt)     
