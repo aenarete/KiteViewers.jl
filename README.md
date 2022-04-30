@@ -33,7 +33,7 @@ update_points(state.pos, segments, orient=state.orient)
 ```
 
 you should see a kite on a tether.
-<p align="center"><img src="./kite_1p.png" /></p>
+<p align="center"><img src="./kite_1p.png" width="600" /></p>
 The same example, but using the 4 point kite model:
 
 ```julia
