@@ -38,12 +38,11 @@ you should see a kite on a tether.
 The same example, but using the 4 point kite model:
 
 ```julia
-using KiteViewers
-using KiteUtils
+using KiteViewers, KiteUtils
 viewer=Viewer3D(false);
 segments=6
 state=demo_state_4p(segments+1)
-update_points(state.pos, segments, orient=state.orient, kite_scale=0.5)
+update_points(state.pos, segments, kite_scale=0.5)
 ```
 <p align="center"><img src="./kite_4p.png" width="500" /></p>
 

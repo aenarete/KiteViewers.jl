@@ -116,13 +116,14 @@ function update_points(pos, segments, scale=1.0, rel_time = 0.0, force=0.0; orie
     end
     pos_pod=points[segments+1]
 
-    # enlarge 4 point kite
-    for i in segments+2:length(pos)
-        pos_abs = Point3f(pos[i][1], pos[i][2], pos[i][3]) * scale
-        pos_rel = pos_abs-pos_pod
-        points[i] = pos_abs + (scale_kite-1.0) * pos_rel
+    if fourpoint
+        # enlarge 4 point kite
+        for i in segments+2:length(pos)
+            pos_abs = Point3f(pos[i][1], pos[i][2], pos[i][3]) * scale
+            pos_rel = pos_abs-pos_pod
+            points[i] = pos_abs + (kite_scale-1.0) * pos_rel
+        end
     end
-
     part_positions[] = [(points[k]) for k in 1:length(points)]
 
     function calc_positions(s)
