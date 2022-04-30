@@ -33,7 +33,8 @@ update_points(state.pos, segments, orient=state.orient)
 ```
 
 you should see a kite on a tether.
-<p align="center"><img src="./kite_1p.png" width="600" /></p>
+<p align="center"><img src="./kite_1p.png" width="500" /></p>
+
 The same example, but using the 4 point kite model:
 
 ```julia
@@ -42,8 +43,9 @@ using KiteUtils
 viewer=Viewer3D(false);
 segments=6
 state=demo_state_4p(segments+1)
-update_points(state.pos, segments, orient=state.orient)
+update_points(state.pos, segments, orient=state.orient, kite_scale=0.5)
 ```
+<p align="center"><img src="./kite_4p.png" width="500" /></p>
 
 ## See also
 - [Research Fechner](https://research.tudelft.nl/en/publications/?search=Uwe+Fechner&pageSize=50&ordering=rating&descending=true) for the scientic background of this code

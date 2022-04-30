@@ -35,7 +35,7 @@ let
             orient = MVector{4, Float32}(Rotations.params(q))
             update_points(pos, segments, scale, reltime, force; orient=orient)
         else
-            update_points(pos, segments, scale, reltime, force, scale_kite=3.5)
+            update_points(pos, segments, scale, reltime, force, kite_scale=3.5)
         end
     end 
 
