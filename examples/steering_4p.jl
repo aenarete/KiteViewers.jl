@@ -44,11 +44,8 @@ end
 
 function update_system(kps::KPS4, reltime; segments=se().segments)
     scale = 0.08
-    pos_kite   = kps.pos[segments+1] # well, this is the position of the pod...
-    elevation = calc_elevation(pos_kite)
-    azimuth = azimuth_east(pos_kite)
     force = winch_force(kps)    
-    update_points(kps.pos, segments, scale, reltime, elevation, azimuth, force, scale_kite=3.5)
+    update_points(kps.pos, segments, scale, reltime, force, scale_kite=3.5)
 end 
 
 function simulate(integrator, steps)

@@ -14,7 +14,7 @@ viewer=Viewer3D(show_kite)
 ```
 
 ## Exported functions
-update_points(pos, segments, scale=1.0, rel_time = 0.0, elevation=0.0, azimuth=0.0, force=0.0; orient=nothing, scale_kite=3.5)
+update_points(pos, segments, scale=1.0, rel_time = 0.0, force=0.0; orient=nothing, scale_kite=3.5)
 
 ## Examples
 ```julia
@@ -33,6 +33,7 @@ update_points(state.pos, segments, orient=state.orient)
 ```
 
 you should see a kite on a tether.
+<p align="center"><img src="./kite_1p.png" /></p>
 The same example, but using the 4 point kite model:
 
 ```julia

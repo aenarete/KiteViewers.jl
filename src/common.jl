@@ -101,8 +101,14 @@ function update_system(state::SysState, step=0)
 end
 
 # update the kite power system, consisting of the tether, the kite and the state (text and numbers)
-function update_points(pos, segments, scale=1.0, rel_time = 0.0, elevation=0.0, azimuth=0.0, force=0.0; orient=nothing, scale_kite=1.0)
-    height = points[segments+1][3]
+function update_points(pos, segments, scale=1.0, rel_time = 0.0, force=0.0; orient=nothing, scale_kite=1.0)
+    pos_kite = pos[segments+1]
+    height = pos_kite[3]
+    elevation = calc_elevation(pos_kite)
+    azimuth = azimuth_east(pos_kite)
+    if azimuth ≈ 0
+        azimuth=zero(azimuth)
+    end
     fourpoint = length(pos) > segments+1
     # move the particles to the correct position
     for i in 1:segments+1
