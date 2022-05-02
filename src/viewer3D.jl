@@ -129,3 +129,10 @@ function Viewer3D(show_kite=true)
     status[] = "Stopped"
     return s
 end
+
+function save_png(viewer; filename="video", index = 1)
+    # scene.center = false
+    buffer = IOBuffer()
+    @printf(buffer, "%06i", index) 
+    save(filename * String(take!(buffer)) * ".png", viewer.scene)
+end
