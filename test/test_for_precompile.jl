@@ -1,5 +1,5 @@
 let
-    using KiteViewers, KiteModels, KitePodModels, Rotations, StaticArrays
+    using KiteViewers, KiteModels, KitePodModels, Rotations, StaticArrays, Plots
 
     # change this to KPS3 or KPS4
     Model = KPS3
@@ -63,7 +63,7 @@ let
     integrator = KiteModels.init_sim!(kps4, stiffness_factor=0.04, prn=STATISTIC)
 
     av_steps = simulate(integrator, STEPS)
-    nothing
+    plot(1:10)
 end
 
 @info "Precompile script has completed execution."

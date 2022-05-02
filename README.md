@@ -14,7 +14,11 @@ viewer=Viewer3D(show_kite)
 ```
 
 ## Exported functions
+```julia
 update_points(pos, segments, scale=1.0, rel_time = 0.0, force=0.0; orient=nothing, scale_kite=3.5)
+update_system(state::SysState, step=0)
+save_png(viewer; filename="video", index = 1)
+```
 
 ## Examples
 ```julia
