@@ -4,6 +4,11 @@
 
 This package provides different kind of 2D and 3D viewers for kite power system.
 
+It is part of Julia Kite Power Tools, which consist of the following packages:
+<p align="center"><img src="./docs/kite_power_tools.png" width="500" /></p>
+
+
+
 ## Exported types
 Viewer3D
 
@@ -53,8 +58,5 @@ update_points(state.pos, segments, kite_scale=0.5)
 ## See also
 - [Research Fechner](https://research.tudelft.nl/en/publications/?search=Uwe+Fechner&pageSize=50&ordering=rating&descending=true) for the scientic background of this code
 - The application [KiteViewer](https://github.com/ufechner7/KiteViewer)
-- the package [KiteUtils](https://github.com/ufechner7/KiteUtils.jl)
-- the package [KitePodModels](https://github.com/aenarete/KitePodModels.jl)
-- the package [AtmosphericModels](https://github.com/aenarete/AtmosphericModels.jl)
-- the package [KiteModels](https://github.com/ufechner7/KiteModels.jl)
-- the package [KiteControllers](https://github.com/aenarete/KiteControllers.jl)
+- the packages [KiteModels](https://github.com/ufechner7/KiteModels.jl) and [WinchModels](https://github.com/aenarete/WinchModels.jl) and [KitePodModels](https://github.com/aenarete/KitePodModels.jl) and [AtmosphericModels](https://github.com/aenarete/AtmosphericModels.jl)
+- the package [KiteUtils](https://github.com/ufechner7/KiteUtils.jl) and [KiteControllers](https://github.com/aenarete/KiteControllers.jl)
