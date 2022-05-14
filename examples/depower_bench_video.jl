@@ -19,6 +19,7 @@ TIME = 50
 TIME_LAPSE_RATIO = 10
 STEPS = Int64(round(TIME/dt))
 STATISTIC = false
+SHOW_VIEWER = true
 SHOW_KITE = false
 SAVE_PNG  = false
 PLOT_PERFORMANCE = false
@@ -52,7 +53,9 @@ end
 function update_system(kps::KPS4, reltime; segments=se().segments)
     scale = 0.08
     force = winch_force(kps)    
-    update_points(kps.pos, segments, scale, reltime, force, kite_scale=3.5)
+    heading = calc_heading(kps)
+    course = calc_course(kps)
+    update_points(kps.pos, segments, scale, reltime, force, kite_scale=3.5, heading=heading, course=course)
 end 
 
 function simulate(integrator, steps; log=false)
@@ -69,14 +72,16 @@ function simulate(integrator, steps; log=false)
         KiteModels.next_step!(kps4, integrator, dt=dt)     
         reltime = i*dt
         if mod(i, TIME_LAPSE_RATIO) == 0 || i == steps
-            update_system(kps4, reltime; segments=se().segments) 
+            if SHOW_VIEWER update_system(kps4, reltime; segments=se().segments) end
             if log
                 save_png(viewer, index=div(i, TIME_LAPSE_RATIO))
             end
-            if start_time+dt > time() + 0.002
-                wait_until(start_time+dt) 
-            else
-                sleep(0.001)
+            if SHOW_VIEWER
+                if start_time+dt > time() + 0.002
+                    wait_until(start_time+dt) 
+                else
+                    sleep(0.001)
+                end
             end
             start_time = time()
             time_vec[div(i, TIME_LAPSE_RATIO)]=time_/(TIME_LAPSE_RATIO*dt)*100.0
@@ -93,6 +98,7 @@ av_steps = simulate(integrator, STEPS, log=SAVE_PNG)
 if PLOT_PERFORMANCE
     using Plots
     plot(range(0.5,TIME,step=0.5), time_vec, ylabel="CPU time [%]", xlabel="Simulation time [s]", legend=false)
+    savefig("performance.png")
 end
 # mean with :Dense integrator: 6.66% CPU time, 15 times realtime
 # mean with :GMRES integrator: 1.96% CPU time, 51 times realtime

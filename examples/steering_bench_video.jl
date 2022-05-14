@@ -16,12 +16,12 @@ if ! @isdefined kps4; const kps4 = Model(kcu); end
 # the following values can be changed to match your interest
 dt = 0.05
 TIME = 45
-TIME_LAPSE_RATIO = 10
+TIME_LAPSE_RATIO = 2
 STEPS = Int64(round(TIME/dt))
 STATISTIC = false
 SHOW_KITE = false
 SAVE_PNG  = false
-PLOT_PERFORMANCE = true
+PLOT_PERFORMANCE = false
 # end of user parameter section #
 
 if ! @isdefined time_vec; const time_vec = zeros(div(STEPS, TIME_LAPSE_RATIO)); end
@@ -53,7 +53,9 @@ end
 function update_system(kps::KPS4, reltime; segments=se().segments)
     scale = 0.08
     force = winch_force(kps)    
-    update_points(kps.pos, segments, scale, reltime, force, kite_scale=3.5)
+    heading = calc_heading(kps)
+    course = calc_course(kps)
+    update_points(kps.pos, segments, scale, reltime, force, kite_scale=3.5, heading=heading, course=course)
 end 
 
 function simulate(integrator, steps; log=false)
@@ -69,7 +71,7 @@ function simulate(integrator, steps; log=false)
         elseif i == 304
             set_depower_steering(kps4.kcu, 0.25, 0.0)    
         elseif i == 350
-            set_depower_steering(kps4.kcu, 0.25, -0.04)
+            # set_depower_steering(kps4.kcu, 0.25, -0.04)
         elseif i == 352
             set_depower_steering(kps4.kcu, 0.25, 0.0)           
         end
