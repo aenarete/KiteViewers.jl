@@ -7,8 +7,6 @@ This package provides different kind of 2D and 3D viewers for kite power system.
 It is part of Julia Kite Power Tools, which consist of the following packages:
 <p align="center"><img src="./docs/kite_power_tools.png" width="500" /></p>
 
-
-
 ## Exported types
 Viewer3D
 
