@@ -101,7 +101,7 @@ function update_system(state::SysState, step=0)
 end
 
 # update the kite power system, consisting of the tether, the kite and the state (text and numbers)
-function update_points(pos, segments, scale=1.0, rel_time = 0.0, force=0.0; orient=nothing, kite_scale=1.0)
+function update_points(pos, segments, scale=1.0, rel_time = 0.0, force=0.0; orient=nothing, kite_scale=1.0, heading=0.0, course=0.0)
     pos_kite = pos[segments+1]
     height = pos_kite[3]
     elevation = calc_elevation(pos_kite)
@@ -183,8 +183,8 @@ function update_points(pos, segments, scale=1.0, rel_time = 0.0, force=0.0; orie
     # print the text
     msg = "time:      $(@sprintf("%7.2f", rel_time)) s\n" *
           "height:    $(@sprintf("%7.2f", height)) m\n" *
-          "elevation: $(@sprintf("%7.2f", elevation/pi*180.0)) °\n" *
-          "azimuth:   $(@sprintf("%7.2f", azimuth/pi*180.0)) °\n" *
+          "elevation: $(@sprintf("%7.2f", elevation/pi*180.0)) ° " * "heading: $(@sprintf("%7.2f", heading/pi*180.0)) °\n" *
+          "azimuth:   $(@sprintf("%7.2f", azimuth/pi*180.0)) ° "   * "course:  $(@sprintf("%7.2f", course/pi*180.0)) °\n" *
           "force:     $(@sprintf("%7.2f", force    )) N     "
     textnode[] = msg   
 
