@@ -64,6 +64,7 @@ function init_system(scene; show_kite=true)
         font=se().fixed_font
     end
     text!(scene, textnode, position = Point3f(-5.2, 3.5, -1), textsize = textsize, font=font, align = (:left, :top))
+    text!(scene, textnode2, position = Point3f(11, -2.5, 18), textsize = textsize, font=font, align = (:left, :top))
 end
 
 # update the kite power system, consisting of the tether, the kite and the state (text and numbers)
@@ -159,7 +160,9 @@ function update_system(state::SysState, step=0; scale=1.0, kite_scale=1.0)
             "azimuth:   $(@sprintf("%7.2f", azimuth/pi*180.0)) °     " * "course:  $(@sprintf("%7.2f", state.course/pi*180.0)) °\n" *
             "v_reelout: $(@sprintf("%7.2f", state.v_reelout)) m/s   " * "p_mech: $(@sprintf("%8.2f", state.force*state.v_reelout)) W\n" *
             "force:     $(@sprintf("%7.2f", state.force    )) N     " * "energy: $(@sprintf("%8.2f", energy[1]/3600)) Wh\n"
-        textnode[] = msg   
+        textnode[] = msg
+        textnode2[] = "depower:  $(@sprintf("%5.2f", state.depower*100)) %\n" *
+                      "steering: $(@sprintf("%5.2f", state.steering*100)) %"
     end
 end
 
