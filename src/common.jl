@@ -67,35 +67,98 @@ function init_system(scene; show_kite=true)
 end
 
 # update the kite power system, consisting of the tether, the kite and the state (text and numbers)
-function update_system(state::SysState, step=0)
-
+function update_system(state::SysState, step=0; scale=1.0, kite_scale=1.0)
+    segments=se().segments
+    azimuth = state.azimuth
+    if azimuth ≈ 0 # suppress -0 and replace it with 0
+        azimuth=zero(azimuth)
+    end
+    fourpoint = length(state.Z) > segments+1
+    if fourpoint
+        height = state.Z[end-2]
+    else
+        height = state.Z[end]
+    end
     # move the particles to the correct position
     for i in range(1, length=se().segments+1)
-        points[i] = Point3f(state.X[i], state.Y[i], state.Z[i])
+        points[i] = Point3f(state.X[i], state.Y[i], state.Z[i]) * scale
     end
-    part_positions[] = [(points[k]) for k in 1:se().segments+1]
+    if fourpoint
+        pos_pod = Point3f(state.X[segments+1], state.Y[segments+1], state.Z[segments+1]) * scale
+        # enlarge 4 point kite
+        for i in segments+2:length(state.Z)
+            pos_abs = Point3f(state.X[i], state.Y[i], state.Z[i]) * scale
+            pos_rel = pos_abs-pos_pod
+            points[i] = pos_abs + (kite_scale-1.0) * pos_rel
+        end
+    end
+    part_positions[] = [(points[k]) for k in 1:length(state.Z)]
+
+    function calc_positions(s)
+        tmp = [(points[k] + points[k+1])/2 for k in 1:segments]
+        if fourpoint
+            push!(tmp, (points[s+1]+points[s+4]) / 2) # S6
+            push!(tmp, (points[s+2]+points[s+5]) / 2) # S8
+            push!(tmp, (points[s+3]+points[s+5]) / 2) # S7
+            push!(tmp, (points[s+2]+points[s+4]) / 2) # S2
+            push!(tmp, (points[s+1]+points[s+5]) / 2) # S5
+            push!(tmp, (points[s+4]+points[s+3]) / 2) # S4
+            push!(tmp, (points[s+1]+points[s+2]) / 2) # S1
+            push!(tmp, (points[s+3]+points[s+2]) / 2) # S9
+        end
+        tmp
+    end
+    function calc_markersizes(s)
+        tmp = [Point3f(1, 1, norm(points[k+1] - points[k])) for k in 1:segments]
+        if fourpoint
+            push!(tmp, Point3f(1, 1, norm(points[s+1] - points[s+4]))) # S6
+            push!(tmp, Point3f(1, 1, norm(points[s+2] - points[s+5]))) # S8
+            push!(tmp, Point3f(1, 1, norm(points[s+3] - points[s+5]))) # S7
+            push!(tmp, Point3f(1, 1, norm(points[s+2] - points[s+4]))) # S2
+            push!(tmp, Point3f(1, 1, norm(points[s+1] - points[s+5]))) # S5
+            push!(tmp, Point3f(1, 1, norm(points[s+4] - points[s+3]))) # S4
+            push!(tmp, Point3f(1, 1, norm(points[s+1] - points[s+2]))) # S1
+            push!(tmp, Point3f(1, 1, norm(points[s+3] - points[s+2]))) # S9
+        end
+        tmp
+    end
+    function calc_rotations(s)
+        tmp = [normalize(points[k+1] - points[k]) for k in 1:segments]
+        if fourpoint
+            push!(tmp, normalize(points[s+1] - points[s+4]))
+            push!(tmp, normalize(points[s+2] - points[s+5]))
+            push!(tmp, normalize(points[s+3] - points[s+5]))
+            push!(tmp, normalize(points[s+2] - points[s+4]))
+            push!(tmp, normalize(points[s+1] - points[s+5]))
+            push!(tmp, normalize(points[s+4] - points[s+3]))
+            push!(tmp, normalize(points[s+1] - points[s+2]))
+            push!(tmp, normalize(points[s+3] - points[s+2]))
+        end
+        tmp
+    end
 
     # move, scale and turn the cylinder correctly
-    positions[] = [(points[k] + points[k+1])/2 for k in 1:se().segments]
-    markersizes[] = [Point3f(1, 1, norm(points[k+1] - points[k])) for k in 1:se().segments]
-    rotations[] = [normalize(points[k+1] - points[k]) for k in 1:se().segments]
+    positions[]   = calc_positions(segments)
+    markersizes[] = calc_markersizes(segments)
+    rotations[]   = calc_rotations(segments)
 
-    # move and turn the kite to the new position
-    q0 = state.orient                                     # SVector in the order w,x,y,z
-    quat[]     = Quaternionf(q0[2], q0[3], q0[4], q0[1]) # the constructor expects the order x,y,z,w
-    kite_pos[] = points[end]
+    if ! fourpoint
+        # move and turn the kite to the new position
+        q0 = state.orient                                     # SVector in the order w,x,y,z
+        quat[]     = Quaternionf(q0[2], q0[3], q0[4], q0[1]) # the constructor expects the order x,y,z,w
+        kite_pos[] = points[end]
+    end
 
     # print state values
     power = state.force * state.v_reelout
     energy[1] += (power / se().sample_freq)
     if mod(step, 2) == 0
-        height = points[end][3]/se().zoom
         msg = "time:      $(@sprintf("%7.2f", state.time)) s\n" *
-            "height:    $(@sprintf("%7.2f", height)) m\n" *
-            "elevation: $(@sprintf("%7.2f", state.elevation/pi*180.0)) °\n" *
-            "azimuth:   $(@sprintf("%7.2f", state.azimuth/pi*180.0)) °\n" *
-            "v_reelout: $(@sprintf("%7.2f", state.v_reelout)) m/s   " * "p_mech:  $(@sprintf("%8.2f", state.force*state.v_reelout)) W\n" *
-            "force:     $(@sprintf("%7.2f", state.force    )) N     " * "energy:  $(@sprintf("%8.2f", energy[1]/3600)) Wh\n"
+            "height:    $(@sprintf("%7.2f", height)) m\n" * "fourpoint: " * repr(fourpoint)
+            "elevation: $(@sprintf("%7.2f", state.elevation/pi*180.0)) °     " * "heading: $(@sprintf("%7.2f", state.heading/pi*180.0)) °\n" *
+            "azimuth:   $(@sprintf("%7.2f", azimuth/pi*180.0)) °     " * "course:  $(@sprintf("%7.2f", state.course/pi*180.0)) °\n" *
+            "v_reelout: $(@sprintf("%7.2f", state.v_reelout)) m/s   " * "p_mech: $(@sprintf("%8.2f", state.force*state.v_reelout)) W\n" *
+            "force:     $(@sprintf("%7.2f", state.force    )) N     " * "energy: $(@sprintf("%8.2f", energy[1]/3600)) Wh\n"
         textnode[] = msg   
     end
 end
