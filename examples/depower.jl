@@ -67,7 +67,6 @@ function simulate(integrator, steps; log=false)
             set_depower_steering(kps4.kcu, 0.35, 0.0)    
         end
         KiteModels.next_step!(kps4, integrator, dt=dt)     
-        reltime = i*dt
         if mod(i, TIME_LAPSE_RATIO) == 0 || i == steps
             if SHOW_VIEWER update_system2(kps4) end
             if log
