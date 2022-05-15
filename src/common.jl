@@ -154,7 +154,7 @@ function update_system(state::SysState, step=0; scale=1.0, kite_scale=1.0)
     energy[1] += (power / se().sample_freq)
     if mod(step, 2) == 0
         msg = "time:      $(@sprintf("%7.2f", state.time)) s\n" *
-            "height:    $(@sprintf("%7.2f", height)) m\n" * "fourpoint: " * repr(fourpoint)
+            "height:    $(@sprintf("%7.2f", height)) m\n" *
             "elevation: $(@sprintf("%7.2f", state.elevation/pi*180.0)) °     " * "heading: $(@sprintf("%7.2f", state.heading/pi*180.0)) °\n" *
             "azimuth:   $(@sprintf("%7.2f", azimuth/pi*180.0)) °     " * "course:  $(@sprintf("%7.2f", state.course/pi*180.0)) °\n" *
             "v_reelout: $(@sprintf("%7.2f", state.v_reelout)) m/s   " * "p_mech: $(@sprintf("%8.2f", state.force*state.v_reelout)) W\n" *

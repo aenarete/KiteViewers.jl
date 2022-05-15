@@ -50,17 +50,9 @@ function update_system(kps::KPS3, reltime; segments=se().segments)
     end
 end 
 
-function update_system(kps::KPS4, reltime; segments=se().segments)
-    scale = 0.08
-    force = winch_force(kps)    
-    heading = calc_heading(kps)
-    course = calc_course(kps)
-    update_points(kps.pos, segments, scale, reltime, force, kite_scale=3.5, heading=heading, course=course)
-end 
-
 function update_system2(kps::KPS4)
-     sys_state=SysState(kps)
-     KiteViewers.update_system(sys_state)
+     sys_state = SysState(kps)
+     KiteViewers.update_system(sys_state; scale = 0.08, kite_scale=3.5)
 end 
 
 function simulate(integrator, steps; log=false)
