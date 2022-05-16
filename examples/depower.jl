@@ -19,11 +19,11 @@ if ! @isdefined kps4; const kps4 = Model(kcu); end
 # the following values can be changed to match your interest
 dt = 0.05
 TIME = 50
-TIME_LAPSE_RATIO = 10
+TIME_LAPSE_RATIO = 5
 STEPS = Int64(round(TIME/dt))
 STATISTIC = false
 SHOW_VIEWER = true
-SHOW_KITE = false
+SHOW_KITE = true
 SAVE_PNG  = false
 PLOT_PERFORMANCE = false
 # end of user parameter section #
@@ -39,7 +39,7 @@ include("timers.jl")
 
 function update_system2(kps)
      sys_state = SysState(kps)
-     KiteViewers.update_system(viewer, sys_state; scale = 0.08, kite_scale=3.5)
+     KiteViewers.update_system(viewer, sys_state; scale = 0.08, kite_scale=3.0)
 end 
 
 function simulate(integrator, steps; log=false)

@@ -80,6 +80,7 @@ mutable struct Viewer3D <: AKV
     btn_ZOOM_out::Button
     step::Int64
     energy::Float64
+    show_kite::Bool
 end
 
 function clear_viewer(akv::AKV)
@@ -127,7 +128,7 @@ function Viewer3D(show_kite=true)
     buttongrid[1, 1:7] = [btn_PLAY_PAUSE, btn_ZOOM_in, btn_ZOOM_out, btn_RESET, btn_STOP, sw, label]
 
     gl_screen = display(scene)
-    s = Viewer3D(scene, layout, scene3D, cam, gl_screen, btn_RESET, btn_ZOOM_in, btn_ZOOM_out, 0, 0)
+    s = Viewer3D(scene, layout, scene3D, cam, gl_screen, btn_RESET, btn_ZOOM_in, btn_ZOOM_out, 0, 0, show_kite)
 
     init_system(s.scene3D; show_kite=show_kite)
 

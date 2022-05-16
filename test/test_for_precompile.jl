@@ -22,9 +22,9 @@ let
 
     include("../examples/timers.jl")
 
-    function update_system2(kps::KPS4)
+    function update_system2(kps)
         sys_state = SysState(kps)
-        KiteViewers.update_system(viewer, sys_state; scale = 0.08, kite_scale=3.5)
+        KiteViewers.update_system(viewer, sys_state; scale = 0.08, kite_scale=3)
     end 
 
     function simulate(integrator, steps)

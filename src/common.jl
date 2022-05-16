@@ -143,7 +143,12 @@ function update_system(kv::AKV, state::SysState; scale=1.0, kite_scale=1.0)
     markersizes[] = calc_markersizes(segments)
     rotations[]   = calc_rotations(segments)
 
-    if ! fourpoint
+    if fourpoint
+        s = segments
+        q0 = state.orient                                     # SVector in the order w,x,y,z
+        quat[]     = Quaternionf(q0[2], q0[3], q0[4], q0[1])  # the constructor expects the order x,y,z,w
+        kite_pos[] = 0.8 * 0.5 * (points[s+4] + points[s+5]) + 0.2 * points[s+1]
+    else
         # move and turn the kite to the new position
         q0 = state.orient                                     # SVector in the order w,x,y,z
         quat[]     = Quaternionf(q0[2], q0[3], q0[4], q0[1]) # the constructor expects the order x,y,z,w
