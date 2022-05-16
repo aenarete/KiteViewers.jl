@@ -52,13 +52,14 @@ end
 
 function update_system2(kps::KPS4)
      sys_state = SysState(kps)
-     KiteViewers.update_system(sys_state; scale = 0.08, kite_scale=3.5)
+     KiteViewers.update_system(viewer, sys_state; scale = 0.08, kite_scale=3.5)
 end 
 
 function simulate(integrator, steps; log=false)
     start = integrator.p.iter
     start_time = time()
     time_ = 0.0
+    KiteViewers.clear(viewer)
     for i in 1:steps
         iter = kps4.iter
         if i == 300

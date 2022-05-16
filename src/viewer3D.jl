@@ -51,11 +51,25 @@ SOFTWARE. =#
     markersizes     = Node([Point3f(1,1,1) for x in 1:se().segments+KITE_SPRINGS])   # includes the segment length
     rotations       = Node([Point3f(1,0,0) for x in 1:se().segments+KITE_SPRINGS])   # unit vectors corresponding with
                                                                                       #   the orientation of the segments 
-    energy = [0.0]
 end 
 
+"""
+    abstract type AbstractKiteViewer
+
+All kite viewers must inherit from this type. All methods that are defined on this type must work
+with all kite viewers. All exported methods must work on this type. 
+"""
+abstract type AbstractKiteViewer end
+
+"""
+    const AKV = AbstractKiteViewer
+
+Short alias for the AbstractKiteViewer. 
+"""
+const AKV = AbstractKiteViewer
+
 # struct that stores the state of the 3D viewer
-mutable struct Viewer3D
+mutable struct Viewer3D <: AKV
     scene::Scene
     layout::GridLayout
     scene3D::LScene
@@ -64,9 +78,16 @@ mutable struct Viewer3D
     btn_RESET::Button
     btn_ZOOM_in::Button
     btn_ZOOM_out::Button
+    index::Int64
+    energy::Float64
 end
 
-function Viewer3D(show_kite=true)
+function clear(akv::AKV)
+    akv.index = 1
+    akv.energy = 0
+end
+
+function Viewer3D(show_kite=true) 
     KiteUtils.set_data_path(datapath)
     scene, layout = layoutscene(resolution = (840, 900), backgroundcolor = RGBf(0.7, 0.8, 1))
     scene3D = LScene(scene, scenekw = (show_axis=false, limits = Rect(-7,-10.0,0, 11,10,11), resolution = (800, 800)), raw=false)
@@ -106,7 +127,7 @@ function Viewer3D(show_kite=true)
     buttongrid[1, 1:7] = [btn_PLAY_PAUSE, btn_ZOOM_in, btn_ZOOM_out, btn_RESET, btn_STOP, sw, label]
 
     gl_screen = display(scene)
-    s = Viewer3D(scene, layout, scene3D, cam, gl_screen, btn_RESET, btn_ZOOM_in, btn_ZOOM_out)
+    s = Viewer3D(scene, layout, scene3D, cam, gl_screen, btn_RESET, btn_ZOOM_in, btn_ZOOM_out, 0, 0)
 
     init_system(s.scene3D; show_kite=show_kite)
 

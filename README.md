@@ -9,6 +9,8 @@ It is part of Julia Kite Power Tools, which consist of the following packages:
 
 ## Exported types
 Viewer3D
+AbstractKiteViewer
+AKV
 
 Usage:
 ```julia
@@ -18,8 +20,8 @@ viewer=Viewer3D(show_kite)
 
 ## Exported functions
 ```julia
-update_points(pos, segments, scale=1.0, rel_time = 0.0, force=0.0; orient=nothing, scale_kite=3.5)
-update_system(state::SysState, step=0)
+clear(akv::AKV)
+update_system(akv::AKV, state::SysState; scale=1.0, scale_kite=3.5)
 save_png(viewer; filename="video", index = 1)
 ```
 

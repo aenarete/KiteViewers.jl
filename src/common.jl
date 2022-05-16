@@ -68,7 +68,7 @@ function init_system(scene; show_kite=true)
 end
 
 # update the kite power system, consisting of the tether, the kite and the state (text and numbers)
-function update_system(state::SysState, step=0; scale=1.0, kite_scale=1.0)
+function update_system(akv::AKV, state::SysState, step=0; scale=1.0, kite_scale=1.0)
     segments=se().segments
     azimuth = state.azimuth
     if azimuth ≈ 0 # suppress -0 and replace it with 0
@@ -150,110 +150,26 @@ function update_system(state::SysState, step=0; scale=1.0, kite_scale=1.0)
         kite_pos[] = points[end]
     end
 
-    # print state values
+    # calculate power and energy
     power = state.force * state.v_reelout
-    energy[1] += (power / se().sample_freq)
+    dt = 1/se().sample_freq
+    if abs(power) < 0.001
+        power = 0
+    end
+    akv.energy += (power * dt)
+
+    # print state values
     if mod(step, 2) == 0
         msg = "time:      $(@sprintf("%7.2f", state.time)) s\n" *
             "height:    $(@sprintf("%7.2f", height)) m\n" *
             "elevation: $(@sprintf("%7.2f", state.elevation/pi*180.0)) °     " * "heading: $(@sprintf("%7.2f", state.heading/pi*180.0)) °\n" *
             "azimuth:   $(@sprintf("%7.2f", azimuth/pi*180.0)) °     " * "course:  $(@sprintf("%7.2f", state.course/pi*180.0)) °\n" *
-            "v_reelout: $(@sprintf("%7.2f", state.v_reelout)) m/s   " * "p_mech: $(@sprintf("%8.2f", state.force*state.v_reelout)) W\n" *
-            "force:     $(@sprintf("%7.2f", state.force    )) N     " * "energy: $(@sprintf("%8.2f", energy[1]/3600)) Wh\n"
+            "v_reelout: $(@sprintf("%7.2f", state.v_reelout)) m/s   " * "p_mech: $(@sprintf("%8.2f", power)) W\n" *
+            "force:     $(@sprintf("%7.2f", state.force    )) N     " * "energy: $(@sprintf("%8.2f", akv.energy/3600)) Wh\n"
         textnode[] = msg
         textnode2[] = "depower:  $(@sprintf("%5.2f", state.depower*100)) %\n" *
                       "steering: $(@sprintf("%5.2f", state.steering*100)) %"
     end
-end
-
-# update the kite power system, consisting of the tether, the kite and the state (text and numbers)
-function update_points(pos, segments, scale=1.0, rel_time = 0.0, force=0.0; orient=nothing, kite_scale=1.0, heading=0.0, course=0.0)
-    pos_kite = pos[segments+1]
-    height = pos_kite[3]
-    elevation = calc_elevation(pos_kite)
-    azimuth = azimuth_east(pos_kite)
-    if azimuth ≈ 0
-        azimuth=zero(azimuth)
-    end
-    fourpoint = length(pos) > segments+1
-    # move the particles to the correct position
-    for i in 1:segments+1
-        points[i] = Point3f(pos[i][1], pos[i][2], pos[i][3]) * scale
-    end
-    pos_pod=points[segments+1]
-
-    if fourpoint
-        # enlarge 4 point kite
-        for i in segments+2:length(pos)
-            pos_abs = Point3f(pos[i][1], pos[i][2], pos[i][3]) * scale
-            pos_rel = pos_abs-pos_pod
-            points[i] = pos_abs + (kite_scale-1.0) * pos_rel
-        end
-    end
-    part_positions[] = [(points[k]) for k in 1:length(points)]
-
-    function calc_positions(s)
-        tmp = [(points[k] + points[k+1])/2 for k in 1:segments]
-        if fourpoint
-            push!(tmp, (points[s+1]+points[s+4]) / 2) # S6
-            push!(tmp, (points[s+2]+points[s+5]) / 2) # S8
-            push!(tmp, (points[s+3]+points[s+5]) / 2) # S7
-            push!(tmp, (points[s+2]+points[s+4]) / 2) # S2
-            push!(tmp, (points[s+1]+points[s+5]) / 2) # S5
-            push!(tmp, (points[s+4]+points[s+3]) / 2) # S4
-            push!(tmp, (points[s+1]+points[s+2]) / 2) # S1
-            push!(tmp, (points[s+3]+points[s+2]) / 2) # S9
-        end
-        tmp
-    end
-    function calc_markersizes(s)
-        tmp = [Point3f(1, 1, norm(points[k+1] - points[k])) for k in 1:segments]
-        if fourpoint
-            push!(tmp, Point3f(1, 1, norm(points[s+1] - points[s+4]))) # S6
-            push!(tmp, Point3f(1, 1, norm(points[s+2] - points[s+5]))) # S8
-            push!(tmp, Point3f(1, 1, norm(points[s+3] - points[s+5]))) # S7
-            push!(tmp, Point3f(1, 1, norm(points[s+2] - points[s+4]))) # S2
-            push!(tmp, Point3f(1, 1, norm(points[s+1] - points[s+5]))) # S5
-            push!(tmp, Point3f(1, 1, norm(points[s+4] - points[s+3]))) # S4
-            push!(tmp, Point3f(1, 1, norm(points[s+1] - points[s+2]))) # S1
-            push!(tmp, Point3f(1, 1, norm(points[s+3] - points[s+2]))) # S9
-        end
-        tmp
-    end
-    function calc_rotations(s)
-        tmp = [normalize(points[k+1] - points[k]) for k in 1:segments]
-        if fourpoint
-            push!(tmp, normalize(points[s+1] - points[s+4]))
-            push!(tmp, normalize(points[s+2] - points[s+5]))
-            push!(tmp, normalize(points[s+3] - points[s+5]))
-            push!(tmp, normalize(points[s+2] - points[s+4]))
-            push!(tmp, normalize(points[s+1] - points[s+5]))
-            push!(tmp, normalize(points[s+4] - points[s+3]))
-            push!(tmp, normalize(points[s+1] - points[s+2]))
-            push!(tmp, normalize(points[s+3] - points[s+2]))
-        end
-        tmp
-    end
-
-    # move, scale and turn the cylinder correctly
-    positions[]   = calc_positions(segments)
-    markersizes[] = calc_markersizes(segments)
-    rotations[]   = calc_rotations(segments)
-
-    if ! isnothing(orient)
-        # move and turn the kite to the new position
-        q0 = orient                                          # SVector in the order w,x,y,z
-        quat[]     = Quaternionf(q0[2], q0[3], q0[4], q0[1]) # the constructor expects the order x,y,z,w
-        kite_pos[] = points[segments+1]
-    end
-    # print the text
-    msg = "time:      $(@sprintf("%7.2f", rel_time)) s\n" *
-          "height:    $(@sprintf("%7.2f", height)) m\n" *
-          "elevation: $(@sprintf("%7.2f", elevation/pi*180.0)) ° " * "heading: $(@sprintf("%7.2f", heading/pi*180.0)) °\n" *
-          "azimuth:   $(@sprintf("%7.2f", azimuth/pi*180.0)) ° "   * "course:  $(@sprintf("%7.2f", course/pi*180.0)) °\n" *
-          "force:     $(@sprintf("%7.2f", force    )) N     "
-    textnode[] = msg   
-
 end
 
 function reset_view(cam, scene3D)
