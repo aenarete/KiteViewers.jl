@@ -42,15 +42,15 @@ function update_system(kps::KPS3, reltime; segments=se().segments)
     end
 end 
 
-function update_system(kps::KPS4, reltime; segments=se().segments)
-    scale = 0.08
-    force = winch_force(kps)    
-    update_points(kps.pos, segments, scale, reltime, force, kite_scale=3.5)
+function update_system2(kps::KPS4)
+    sys_state = SysState(kps)
+    KiteViewers.update_system(viewer, sys_state; scale = 0.08, kite_scale=3.5)
 end 
 
 function simulate(integrator, steps)
     start = integrator.p.iter
     start_time = time()
+    clear_viewer(viewer)
     for i in 1:steps
         if i == 300
             set_depower_steering(kps4.kcu, 0.25, 0.1)
@@ -67,7 +67,7 @@ function simulate(integrator, steps)
         KiteModels.next_step!(kps4, integrator, dt=dt)     
         reltime = i*dt
         if mod(i, TIME_LAPSE_RATIO) == 0 || i == steps
-            update_system(kps4, reltime; segments=se().segments) 
+            update_system2(kps4) 
             if start_time+dt > time() + 0.002
                 wait_until(start_time+dt) 
             else

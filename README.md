@@ -20,8 +20,8 @@ viewer=Viewer3D(show_kite)
 
 ## Exported functions
 ```julia
-clear(akv::AKV)
-update_system(akv::AKV, state::SysState; scale=1.0, scale_kite=3.5)
+clear_viewer(kv::AKV)
+update_system(kv::AKV, state::SysState; scale=1.0, scale_kite=3.5)
 save_png(viewer; filename="video", index = 1)
 ```
 
@@ -38,7 +38,7 @@ If you keep the window open and execute the following code:
 using KiteUtils
 segments=6
 state=demo_state(segments+1)
-update_points(state.pos, segments, orient=state.orient)
+update_system(viewer, state)
 ```
 
 you should see a kite on a tether.
@@ -51,7 +51,7 @@ using KiteViewers, KiteUtils
 viewer=Viewer3D(false);
 segments=6
 state=demo_state_4p(segments+1)
-update_points(state.pos, segments, kite_scale=0.5)
+update_system(viewer, state, kite_scale=0.5)
 ```
 <p align="center"><img src="./kite_4p.png" width="500" /></p>
 

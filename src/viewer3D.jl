@@ -78,12 +78,12 @@ mutable struct Viewer3D <: AKV
     btn_RESET::Button
     btn_ZOOM_in::Button
     btn_ZOOM_out::Button
-    index::Int64
+    step::Int64
     energy::Float64
 end
 
-function clear(akv::AKV)
-    akv.index = 1
+function clear_viewer(akv::AKV)
+    akv.step = 1
     akv.energy = 0
 end
 

@@ -2,7 +2,7 @@ let
     using KiteViewers, KiteModels, KitePodModels, Rotations, StaticArrays, Plots
 
     # change this to KPS3 or KPS4
-    Model = KPS3
+    Model = KPS4
 
     if ! @isdefined kcu;  kcu = KCU(se());   end
     if ! @isdefined kps4; kps4 = Model(kcu); end
@@ -22,21 +22,9 @@ let
 
     include("../examples/timers.jl")
 
-    function plot2d(pos, reltime; zoom=ZOOM, front=FRONT_VIEW, segments=se().segments)
-        scale = 0.1
-        pos_kite   = pos[end]
-        pos_before = pos[end-1]
-        v_reelout = kps4.v_reel_out
-        force = winch_force(kps4)
-        if SHOW_KITE
-            v_app = kps4.v_apparent
-            rotation = rot(pos_kite, pos_before, v_app)
-            q = QuatRotation(rotation)
-            orient = MVector{4, Float32}(Rotations.params(q))
-            update_points(pos, segments, scale, reltime, force; orient=orient)
-        else
-            update_points(pos, segments, scale, reltime, force, kite_scale=3.5)
-        end
+    function update_system2(kps::KPS4)
+        sys_state = SysState(kps)
+        KiteViewers.update_system(viewer, sys_state; scale = 0.08, kite_scale=3.5)
     end 
 
     function simulate(integrator, steps)
@@ -53,7 +41,7 @@ let
             # KitePodModels.on_timer(kcu, dt)
             KiteModels.next_step!(kps4, integrator, dt=dt)     
             reltime = i*dt
-            plot2d(kps4.pos, reltime; zoom=ZOOM, front=FRONT_VIEW, segments=se().segments) 
+            update_system2(kps4)
             # sleep(dt/5)    
             wait_until(start_time+i*dt/TIME_LAPSE_RATIO)     
         end

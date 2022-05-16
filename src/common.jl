@@ -68,7 +68,7 @@ function init_system(scene; show_kite=true)
 end
 
 # update the kite power system, consisting of the tether, the kite and the state (text and numbers)
-function update_system(akv::AKV, state::SysState, step=0; scale=1.0, kite_scale=1.0)
+function update_system(kv::AKV, state::SysState; scale=1.0, kite_scale=1.0)
     segments=se().segments
     azimuth = state.azimuth
     if azimuth ≈ 0 # suppress -0 and replace it with 0
@@ -147,7 +147,7 @@ function update_system(akv::AKV, state::SysState, step=0; scale=1.0, kite_scale=
         # move and turn the kite to the new position
         q0 = state.orient                                     # SVector in the order w,x,y,z
         quat[]     = Quaternionf(q0[2], q0[3], q0[4], q0[1]) # the constructor expects the order x,y,z,w
-        kite_pos[] = points[end]
+        kite_pos[] = Point3f(state.X[segments+1], state.Y[segments+1], state.Z[segments+1]) * scale
     end
 
     # calculate power and energy
@@ -156,16 +156,17 @@ function update_system(akv::AKV, state::SysState, step=0; scale=1.0, kite_scale=
     if abs(power) < 0.001
         power = 0
     end
-    akv.energy += (power * dt)
+    kv.energy += (power * dt)
+    kv.step+=1
 
     # print state values
-    if mod(step, 2) == 0
+    if mod(kv.step, 2) == 0
         msg = "time:      $(@sprintf("%7.2f", state.time)) s\n" *
             "height:    $(@sprintf("%7.2f", height)) m\n" *
             "elevation: $(@sprintf("%7.2f", state.elevation/pi*180.0)) °     " * "heading: $(@sprintf("%7.2f", state.heading/pi*180.0)) °\n" *
             "azimuth:   $(@sprintf("%7.2f", azimuth/pi*180.0)) °     " * "course:  $(@sprintf("%7.2f", state.course/pi*180.0)) °\n" *
             "v_reelout: $(@sprintf("%7.2f", state.v_reelout)) m/s   " * "p_mech: $(@sprintf("%8.2f", power)) W\n" *
-            "force:     $(@sprintf("%7.2f", state.force    )) N     " * "energy: $(@sprintf("%8.2f", akv.energy/3600)) Wh\n"
+            "force:     $(@sprintf("%7.2f", state.force    )) N     " * "energy: $(@sprintf("%8.2f", kv.energy/3600)) Wh\n"
         textnode[] = msg
         textnode2[] = "depower:  $(@sprintf("%5.2f", state.depower*100)) %\n" *
                       "steering: $(@sprintf("%5.2f", state.steering*100)) %"
