@@ -1,3 +1,6 @@
+# using KiteUtils
+# se().segments=15
+
 using Pkg
 if ! ("KitePodModels" ∈ keys(Pkg.project().dependencies))
     using TestEnv; TestEnv.activate()
@@ -25,6 +28,8 @@ SAVE_PNG  = false
 PLOT_PERFORMANCE = false
 # end of user parameter section #
 
+if Model==KPS3 SHOW_KITE = true end
+
 if ! @isdefined time_vec; const time_vec = zeros(div(STEPS, TIME_LAPSE_RATIO)); end
 if ! @isdefined viewer; const viewer = Viewer3D(SHOW_KITE); end
 
@@ -32,25 +37,7 @@ if ! @isdefined viewer; const viewer = Viewer3D(SHOW_KITE); end
 
 include("timers.jl")
 
-function update_system(kps::KPS3, reltime; segments=se().segments)
-    scale = 0.08
-    pos_kite   = kps.pos[end]
-    pos_before = kps.pos[end-1]
-    elevation = calc_elevation(pos_kite)
-    azimuth = azimuth_east(pos_kite)
-    force = winch_force(kps)    
-    if SHOW_KITE
-        v_app = kps.v_apparent
-        rotation = rot(pos_kite, pos_before, v_app)
-        q = QuatRotation(rotation)
-        orient = MVector{4, Float32}(Rotations.params(q))
-        update_points(kps.pos, segments, scale, reltime, elevation, azimuth, force, orient=orient)
-    else
-        update_points(kps.pos, segments, scale, reltime, elevation, azimuth, force)
-    end
-end 
-
-function update_system2(kps::KPS4)
+function update_system2(kps)
      sys_state = SysState(kps)
      KiteViewers.update_system(viewer, sys_state; scale = 0.08, kite_scale=3.5)
 end 
