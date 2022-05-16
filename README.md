@@ -7,6 +7,18 @@ This package provides different kind of 2D and 3D viewers for kite power system.
 It is part of Julia Kite Power Tools, which consist of the following packages:
 <p align="center"><img src="./docs/kite_power_tools.png" width="500" /></p>
 
+## Installation
+Download [Julia 1.6](http://www.julialang.org) or later, if you haven't already.
+```julia
+using Pkg
+pkg"add KiteViewers"
+``` 
+at the Julia prompt. You can run the unit tests with the command:
+```julia
+pkg"test KiteViewers"
+```
+This package should work on Linux, Windows and Mac. If you find a bug, please file an issue.
+
 ## Exported types
 ```julia
 Viewer3D
