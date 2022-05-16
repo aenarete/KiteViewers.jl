@@ -8,9 +8,12 @@ It is part of Julia Kite Power Tools, which consist of the following packages:
 <p align="center"><img src="./docs/kite_power_tools.png" width="500" /></p>
 
 ## Exported types
+```julia
 Viewer3D
 AbstractKiteViewer
 AKV
+```
+AKV is just the short form of AbstractKiteViewer, Viewer3D the first implementation of it.
 
 Usage:
 ```julia
@@ -21,8 +24,8 @@ viewer=Viewer3D(show_kite)
 ## Exported functions
 ```julia
 clear_viewer(kv::AKV)
-update_system(kv::AKV, state::SysState; scale=1.0, scale_kite=3.5)
-save_png(viewer; filename="video", index = 1)
+update_system(kv::AKV, state::SysState; scale=1.0, kite_scale=3.5)
+save_png(kv::AKV; filename="video", index = 1)
 ```
 
 ## Examples
