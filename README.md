@@ -63,10 +63,10 @@ The same example, but using the 4 point kite model:
 
 ```julia
 using KiteViewers, KiteUtils
-viewer=Viewer3D(false);
+viewer=Viewer3D(true);
 segments=6
 state=demo_state_4p(segments+1)
-update_system(viewer, state, kite_scale=0.5)
+update_system(viewer, state, kite_scale=0.25)
 ```
 <p align="center"><img src="./kite_4p.png" width="500" /></p>
 

@@ -165,7 +165,7 @@ function update_system(kv::AKV, state::SysState; scale=1.0, kite_scale=1.0)
     kv.step+=1
 
     # print state values
-    if mod(kv.step, 2) == 0
+    if mod(kv.step, 2) == 1
         msg = "time:      $(@sprintf("%7.2f", state.time)) s\n" *
             "height:    $(@sprintf("%7.2f", height)) m\n" *
             "elevation: $(@sprintf("%7.2f", state.elevation/pi*180.0)) °     " * "heading: $(@sprintf("%7.2f", state.heading/pi*180.0)) °\n" *
