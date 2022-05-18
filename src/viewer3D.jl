@@ -93,6 +93,11 @@ function clear_viewer(kv::AKV)
     status[] = "Running..."
 end
 
+function stop(kv::AKV)
+    kv.stop = true
+    status[]="Stopped"
+end
+
 function Viewer3D(show_kite=true) 
     KiteUtils.set_data_path(datapath)
     scene, layout = layoutscene(resolution = (840, 900), backgroundcolor = RGBf(0.7, 0.8, 1))

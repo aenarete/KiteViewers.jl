@@ -71,7 +71,7 @@ on(viewer.btn_PLAY.clicks) do c
     @async play()
 end
 on(viewer.btn_STOP.clicks) do c
-   viewer.stop = true
+   stop(viewer)
 end
 
 play()
