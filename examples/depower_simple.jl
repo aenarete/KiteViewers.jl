@@ -1,7 +1,8 @@
 # using KiteUtils
 # se().segments=15
 
-using Pkg
+using Pkg, Timers
+tic()
 if ! ("KitePodModels" ∈ keys(Pkg.project().dependencies))
     using TestEnv; TestEnv.activate()
 end
@@ -28,13 +29,9 @@ if Model==KPS3 SHOW_KITE = true end
 if ! @isdefined time_vec; const time_vec = zeros(div(STEPS, TIME_LAPSE_RATIO)); end
 if ! @isdefined viewer; const viewer = Viewer3D(SHOW_KITE); end
 
-# ffmpeg -r:v 20 -i "video%06d.png" -codec:v libx264 -preset veryslow -pix_fmt yuv420p -crf 10 -an "video.mp4"
-
-include("timers.jl")
-
 function simulate(integrator, steps)
     start = integrator.p.iter
-    start_time = time()
+    start_time_ns = time_ns()
     time_ = 0.0
     KiteViewers.clear_viewer(viewer)
     for i in 1:steps
@@ -47,12 +44,8 @@ function simulate(integrator, steps)
         KiteModels.next_step!(kps4, integrator, dt=dt)     
         if mod(i, TIME_LAPSE_RATIO) == 0 || i == steps
             update_system(viewer, SysState(kps4); scale = 0.08, kite_scale=3.0)
-            if start_time+dt > time() + 0.002
-                wait_until(start_time+dt) 
-            else
-                sleep(0.001)
-            end
-            start_time = time()
+            wait_until(start_time_ns + dt*1e9, always_sleep=true) 
+            start_time_ns = time_ns()
             time_vec[div(i, TIME_LAPSE_RATIO)]=time_/(TIME_LAPSE_RATIO*dt)*100.0
             time_ = 0.0
         end
@@ -68,11 +61,16 @@ function play()
 end
 
 on(viewer.btn_PLAY.clicks) do c
-    @async play()
+    @async begin
+        play()
+        stop(viewer)
+    end
 end
 on(viewer.btn_STOP.clicks) do c
    stop(viewer)
 end
 
+toc()
 play()
+stop(viewer)
 nothing
