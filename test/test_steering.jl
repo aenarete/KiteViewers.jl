@@ -1,4 +1,4 @@
-using KiteViewers, KiteModels, KitePodModels, Rotations
+using KiteViewers, KiteModels, KitePodModels, Rotations, Timers
 
 # change this to KPS3 or KPS4
 const Model = KPS4
@@ -17,8 +17,6 @@ SHOW_KITE = false
 
 if ! @isdefined viewer; const viewer = Viewer3D(SHOW_KITE); end
 
-include("../examples/timers.jl")
-
 function update_system2(kps)
     sys_state = SysState(kps)
     KiteViewers.update_system(viewer, sys_state; scale = 0.08, kite_scale=3)
@@ -26,7 +24,7 @@ end
 
 function simulate(integrator, steps)
     start = integrator.p.iter
-    start_time = time()
+    start_time_ns = time_ns()
     for i in 1:steps
         if i == 300
             set_depower_steering(kps4.kcu, 0.25, 0.1)
@@ -40,12 +38,8 @@ function simulate(integrator, steps)
         reltime = i*dt
         if mod(i, TIME_LAPSE_RATIO) == 0 || i == steps
             update_system2(kps4) 
-            if start_time+dt > time() + 0.002
-                wait_until(start_time+dt) 
-            else
-                sleep(0.001)
-            end
-            start_time = time()
+            wait_until(start_time+dt, always_sleep=true) 
+            start_time_ns = time_ns()
         end
     end
     (integrator.p.iter - start) / steps
