@@ -167,7 +167,7 @@ function update_system(kv::AKV, state::SysState; scale=1.0, kite_scale=1.0)
     # print state values
     if mod(kv.step, 2) == 1
         msg = "time:      $(@sprintf("%7.2f", state.time)) s\n" *
-            "height:    $(@sprintf("%7.2f", height)) m\n" *
+            "height:    $(@sprintf("%7.2f", height)) m     "  * "length:  $(@sprintf("%7.2f", state.l_tether)) m\n" *
             "elevation: $(@sprintf("%7.2f", state.elevation/pi*180.0)) °     " * "heading: $(@sprintf("%7.2f", state.heading/pi*180.0)) °\n" *
             "azimuth:   $(@sprintf("%7.2f", azimuth/pi*180.0)) °     " * "course:  $(@sprintf("%7.2f", state.course/pi*180.0)) °\n" *
             "v_reelout: $(@sprintf("%7.2f", state.v_reelout)) m/s   " * "p_mech: $(@sprintf("%8.2f", power)) W\n" *
