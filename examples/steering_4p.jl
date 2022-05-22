@@ -1,4 +1,4 @@
-using Pkg
+using Pkg, Timers
 if ! ("KiteModels" ∈ keys(Pkg.project().dependencies))
     using TestEnv; TestEnv.activate()
 end
@@ -22,8 +22,6 @@ SHOW_KITE = true
 
 if ! @isdefined viewer; const viewer = Viewer3D(SHOW_KITE); end
 
-include("timers.jl")
-
 function update_system2(kps)
     sys_state = SysState(kps)
     KiteViewers.update_system(viewer, sys_state; scale = 0.08, kite_scale=3)
@@ -31,7 +29,7 @@ end
 
 function simulate(integrator, steps)
     start = integrator.p.iter
-    start_time = time()
+    start_time_ns = time_ns()
     clear_viewer(viewer)
     for i in 1:steps
         if i == 300
@@ -48,12 +46,8 @@ function simulate(integrator, steps)
         reltime = i*dt
         if mod(i, TIME_LAPSE_RATIO) == 0 || i == steps
             update_system2(kps4) 
-            if start_time+dt > time() + 0.002
-                wait_until(start_time+dt) 
-            else
-                sleep(0.001)
-            end
-            start_time = time()
+            wait_until(start_time_ns + 1e9*dt, always_sleep=true) 
+            start_time_ns = time_ns()
         end
     end
     (integrator.p.iter - start) / steps

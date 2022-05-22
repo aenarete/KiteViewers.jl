@@ -1,6 +1,3 @@
-# using KiteUtils
-# se().segments=15
-
 using Pkg, Timers
 tic()
 if ! ("KitePodModels" ∈ keys(Pkg.project().dependencies))

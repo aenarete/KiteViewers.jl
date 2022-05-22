@@ -1,4 +1,4 @@
-using Pkg
+using Pkg, Timers
 if ! ("KiteModels" ∈ keys(Pkg.project().dependencies))
     using TestEnv; TestEnv.activate()
 end
@@ -30,8 +30,6 @@ if ! @isdefined viewer; const viewer = Viewer3D(SHOW_KITE); end
 # ffmpeg -r:v 20 -i "video%06d.png" -codec:v libx264 -preset veryslow -pix_fmt yuv420p -crf 10 -an "video.mp4"
 # plot(range(0.5,45,step=0.5), time_vec, ylabel="CPU time [%]", xlabel="Simulation time [s]", legend=false)
 
-include("timers.jl")
-
 function update_system2(kps)
     sys_state = SysState(kps)
     KiteViewers.update_system(viewer, sys_state; scale = 0.08, kite_scale=3.5)
@@ -39,7 +37,7 @@ end
 
 function simulate(integrator, steps; log=false)
     start = integrator.p.iter
-    start_time = time()
+    start_time_ns = time_ns()
     time_ = 0.0
     clear_viewer(viewer)
     for i in 1:steps
@@ -57,18 +55,13 @@ function simulate(integrator, steps; log=false)
         end
         # KitePodModels.on_timer(kcu, dt)
         KiteModels.next_step!(kps4, integrator, dt=dt)     
-        reltime = i*dt
         if mod(i, TIME_LAPSE_RATIO) == 0 || i == steps
             update_system2(kps4) 
             if log
                 save_png(viewer, index=div(i, TIME_LAPSE_RATIO))
             end
-            if start_time+dt > time() + 0.002
-                wait_until(start_time+dt) 
-            else
-                sleep(0.001)
-            end
-            start_time = time()
+            wait_until(start_time_ns + dt*1e9, always_sleep=true) 
+            start_time_ns = time_ns()
             time_vec[div(i, TIME_LAPSE_RATIO)]=time_/(TIME_LAPSE_RATIO*dt)*100.0
             time_ = 0.0
         end
