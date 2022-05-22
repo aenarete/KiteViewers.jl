@@ -3,15 +3,15 @@ if ! ("KiteModels" ∈ keys(Pkg.project().dependencies))
     using TestEnv; TestEnv.activate()
 end
 
-using KiteViewers, KiteModels, KitePodModels, Rotations, Joysticks
+using KiteViewers, KiteModels, KitePodModels, Joysticks
 
 # change this to KPS3 or KPS4
 const Model = KPS4
 
 if ! @isdefined kcu;    const kcu = KCU(se());   end
 if ! @isdefined kps4;   const kps4 = Model(kcu); end
-if ! @isdefined js;     const js = open_joystick(); end
-if ! @isdefined jsaxes; 
+if ! @isdefined js;
+    const js = open_joystick();
     const jsaxes = JSState(); 
     const jsbuttons = JSButtonState()
     async_read!(js, jsaxes, jsbuttons)
@@ -20,7 +20,6 @@ end
 # the following values can be changed to match your interest
 dt = 0.05
 TIME_LAPSE_RATIO = 1
-STATISTIC = false
 SHOW_KITE = true
 # end of user parameter section #
 
@@ -45,7 +44,7 @@ function simulate(integrator)
             v_ro = jsaxes.u * 8.0 
         end
         KiteModels.next_step!(kps4, integrator, v_ro=v_ro, dt=dt)     
-        if mod(i, TIME_LAPSE_RATIO) == 0 || i == steps
+        if mod(i, TIME_LAPSE_RATIO) == 0 
             update_system2(kps4) 
             wait_until(start_time_ns + 1e9*dt, always_sleep=true) 
             start_time_ns = time_ns()
@@ -57,7 +56,7 @@ function simulate(integrator)
 end
 
 function play()
-    integrator = KiteModels.init_sim!(kps4, stiffness_factor=0.04, prn=STATISTIC)
+    integrator = KiteModels.init_sim!(kps4, stiffness_factor=0.04)
     av_iter = simulate(integrator)
     println("Average iterations per step: $av_iter")
 end
