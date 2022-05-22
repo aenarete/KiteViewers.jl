@@ -37,10 +37,14 @@ function simulate(integrator)
     clear_viewer(viewer)
     i=1
     while true
+        v_ro = 0.0
         if i > 100
-            set_depower_steering(kps4.kcu, 0.25, jsaxes.x)           
+            depower = 0.25 - jsaxes.y*0.4
+            if depower < 0.25; depower = 0.25; end
+            set_depower_steering(kps4.kcu, depower, jsaxes.x)
+            v_ro = jsaxes.u * 8.0 
         end
-        KiteModels.next_step!(kps4, integrator, dt=dt)     
+        KiteModels.next_step!(kps4, integrator, v_ro=v_ro, dt=dt)     
         if mod(i, TIME_LAPSE_RATIO) == 0 || i == steps
             update_system2(kps4) 
             wait_until(start_time_ns + 1e9*dt, always_sleep=true) 
@@ -54,7 +58,8 @@ end
 
 function play()
     integrator = KiteModels.init_sim!(kps4, stiffness_factor=0.04, prn=STATISTIC)
-    simulate(integrator)
+    av_iter = simulate(integrator)
+    println("Average iterations per step: $av_iter")
 end
 
 function async_play()
