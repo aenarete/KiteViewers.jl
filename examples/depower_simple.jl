@@ -58,9 +58,11 @@ function play()
 end
 
 on(viewer.btn_PLAY.clicks) do c
-    @async begin
-        play()
-        stop(viewer)
+    if viewer.stop
+        @async begin
+            play()
+            stop(viewer)
+        end
     end
 end
 on(viewer.btn_STOP.clicks) do c
