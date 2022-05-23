@@ -26,6 +26,7 @@ SHOW_KITE = true
 
 if ! @isdefined viewer; const viewer = Viewer3D(SHOW_KITE); end
 if ! @isdefined time_vec_tot; const time_vec_tot = zeros(Int(MAX_TIME/dt)); end
+if ! @isdefined time_vec_gc; const time_vec_gc = zeros(Int(MAX_TIME/dt)); end
 
 steps=0
 
@@ -42,6 +43,7 @@ function simulate(integrator)
     j=0; k=0
     GC.gc()
     max_time = 0
+    t_gc_tot = 0
     while true
         v_ro = 0.0
         if i > 100
@@ -51,9 +53,9 @@ function simulate(integrator)
             v_ro = jsaxes.u * 8.0 
         end   
         t_sim = @elapsed KiteModels.next_step!(kps4, integrator, v_ro=v_ro, dt=dt)
-        t_gc = 0.0
+        t_gc_tot = 0.0
         if t_sim < 0.3*dt
-            t_gc = @elapsed GC.gc(false)
+            t_gc_tot += @elapsed GC.gc(false)
         end
         if mod(i, TIME_LAPSE_RATIO) == 0 
             update_system2(kps4) 
@@ -61,9 +63,9 @@ function simulate(integrator)
             wait_until(start_time_ns + 1e9*dt, always_sleep=true) 
             mtime = 0
             if i > 10/dt 
-                # if we missed the deadline by more than 2 ms
+                # if we missed the deadline by more than 5 ms
                 mtime = time_ns() - start_time_ns
-                if mtime > dt*1e9 + 2e6
+                if mtime > dt*1e9 + 5e6
                     print(".")
                     j += 1
                 end
@@ -75,6 +77,8 @@ function simulate(integrator)
             time_tot = end_time_ns - start_time_ns
             start_time_ns = time_ns()
             time_vec_tot[div(i, TIME_LAPSE_RATIO)] = time_tot/1e9/dt*1000*dt
+            time_vec_gc[div(i, TIME_LAPSE_RATIO)] = t_gc_tot/dt*1000*dt
+            t_gc_tot = 0
         end
         if viewer.stop break end
         i += 1
@@ -88,6 +92,7 @@ function play()
     global steps
     integrator = KiteModels.init_sim!(kps4, stiffness_factor=0.04)
     steps = simulate(integrator)
+    GC.enable(true)
 end
 
 function async_play()
@@ -108,4 +113,5 @@ on(jsbuttons.btn2) do val; if val stop(viewer) end; end
 play()
 stop(viewer)
 using Plots
-plot(range(5*TIME_LAPSE_RATIO*dt,steps*dt,step=dt*TIME_LAPSE_RATIO), time_vec_tot[5:steps],  xlabel="Simulation time [s]", ylabel="time per frame [ms]", legend=false)
+plot(range(5*TIME_LAPSE_RATIO*dt,steps*dt,step=dt*TIME_LAPSE_RATIO), time_vec_tot[5:steps],  xlabel="Simulation time [s]", ylabel="time per frame [ms]", label="time_tot")
+plot!(range(5*TIME_LAPSE_RATIO*dt,steps*dt,step=dt*TIME_LAPSE_RATIO), time_vec_gc[5:steps], label="time_gc")
