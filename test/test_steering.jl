@@ -38,7 +38,7 @@ function simulate(integrator, steps)
         reltime = i*dt
         if mod(i, TIME_LAPSE_RATIO) == 0 || i == steps
             update_system2(kps4) 
-            wait_until(start_time+dt, always_sleep=true) 
+            wait_until(start_time_ns+dt, always_sleep=true) 
             start_time_ns = time_ns()
         end
     end
