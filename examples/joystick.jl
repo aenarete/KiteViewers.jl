@@ -35,6 +35,9 @@ function simulate(integrator)
     start_time_ns = time_ns()
     clear_viewer(viewer)
     i=1
+    j=0; k=0
+    GC.gc()
+    max_time = 0
     while true
         v_ro = 0.0
         if i > 100
@@ -42,16 +45,35 @@ function simulate(integrator)
             if depower < 0.25; depower = 0.25; end
             set_depower_steering(kps4.kcu, depower, jsaxes.x)
             v_ro = jsaxes.u * 8.0 
+        end   
+        t_sim = @elapsed KiteModels.next_step!(kps4, integrator, v_ro=v_ro, dt=dt)
+        t_gc = 0.0
+        if t_sim < 0.1*dt
+            t_gc = @elapsed GC.gc(false)
         end
-        KiteModels.next_step!(kps4, integrator, v_ro=v_ro, dt=dt)     
         if mod(i, TIME_LAPSE_RATIO) == 0 
             update_system2(kps4) 
             wait_until(start_time_ns + 1e9*dt, always_sleep=true) 
+            mtime = 0
+            if i > 10/dt 
+                # if we missed the deadline by more than 2 ms
+                mtime = time_ns() - start_time_ns
+                if mtime > dt*1e9 + 2e6
+                    print(".")
+                    j += 1
+                end
+                k +=1
+            end
+            if mtime > max_time
+                max_time = mtime
+            end            
             start_time_ns = time_ns()
         end
         if viewer.stop break end
         i += 1
     end
+    misses = j/k * 100
+    println("\nMissed the deadline for $(round(misses, digits=2)) %. Max time: $(round((max_time*1e-6), digits=1)) ms")
     (integrator.p.iter - start) / i
 end
 
