@@ -14,7 +14,7 @@ if ! @isdefined kps4; const kps4 = Model(kcu); end
 # the following values can be changed to match your interest
 const dt = 0.05
 const TIME = 50
-const TIME_LAPSE_RATIO = 8
+const TIME_LAPSE_RATIO = 5
 const STEPS = Int64(round(TIME/dt))
 STATISTIC = false
 SHOW_KITE = true
@@ -102,7 +102,7 @@ play()
 stop(viewer)
 if PLOT_PERFORMANCE
     using Plots
-    if false
+    if true
         plt=plot(range(dt,TIME,step=dt), time_vec_gc, ylabel="time [%]", xlabel="Simulation time [s]", label="GC time")
         plt=plot!(range(dt,TIME,step=dt), time_vec_sim, label="sim_time")
         plt=plot!(range(dt,TIME,step=dt), time_vec_sim.+time_vec_gc, label="total_time")
