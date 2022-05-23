@@ -31,13 +31,11 @@ if ! @isdefined viewer; const viewer = Viewer3D(SHOW_KITE); end
 function simulate(integrator, steps)
     start = integrator.p.iter
     start_time_ns = time_ns()
-    time_ = 0.0
     j=0; k=0
     KiteViewers.clear_viewer(viewer)
     GC.gc()
     max_time = 0
     for i in 1:steps
-        iter = kps4.iter
         if i == 300
             set_depower_steering(kps4.kcu, 0.30, 0.0)
         elseif i == 640
@@ -104,8 +102,11 @@ play()
 stop(viewer)
 if PLOT_PERFORMANCE
     using Plots
-    plt=plot(range(dt,TIME,step=dt), time_vec_gc, ylabel="time [%]", xlabel="Simulation time [s]", label="GC time")
-    plt=plot!(range(dt,TIME,step=dt), time_vec_sim, label="sim_time")
-    plt=plot!(range(dt,TIME,step=dt), time_vec_sim.+time_vec_gc, label="total_time")
-    plt2=plot(range(3*TIME_LAPSE_RATIO*dt,TIME,step=dt*TIME_LAPSE_RATIO), time_vec_tot[3:end],  xlabel="Simulation time [s]", ylabel="time per frame [ms]", legend=false)
+    if false
+        plt=plot(range(dt,TIME,step=dt), time_vec_gc, ylabel="time [%]", xlabel="Simulation time [s]", label="GC time")
+        plt=plot!(range(dt,TIME,step=dt), time_vec_sim, label="sim_time")
+        plt=plot!(range(dt,TIME,step=dt), time_vec_sim.+time_vec_gc, label="total_time")
+    else
+        plt2=plot(range(3*TIME_LAPSE_RATIO*dt,TIME,step=dt*TIME_LAPSE_RATIO), time_vec_tot[3:end],  xlabel="Simulation time [s]", ylabel="time per frame [ms]", legend=false)
+    end
 end
