@@ -19,11 +19,15 @@ end
 
 # the following values can be changed to match your interest
 dt = 0.05
+MAX_TIME=3600
 TIME_LAPSE_RATIO = 1
 SHOW_KITE = true
 # end of user parameter section #
 
 if ! @isdefined viewer; const viewer = Viewer3D(SHOW_KITE); end
+if ! @isdefined time_vec_tot; const time_vec_tot = zeros(Int(MAX_TIME/dt)); end
+
+steps=0
 
 function update_system2(kps)
     sys_state = SysState(kps)
@@ -48,11 +52,12 @@ function simulate(integrator)
         end   
         t_sim = @elapsed KiteModels.next_step!(kps4, integrator, v_ro=v_ro, dt=dt)
         t_gc = 0.0
-        if t_sim < 0.1*dt
+        if t_sim < 0.3*dt
             t_gc = @elapsed GC.gc(false)
         end
         if mod(i, TIME_LAPSE_RATIO) == 0 
             update_system2(kps4) 
+            end_time_ns = time_ns()
             wait_until(start_time_ns + 1e9*dt, always_sleep=true) 
             mtime = 0
             if i > 10/dt 
@@ -67,20 +72,22 @@ function simulate(integrator)
             if mtime > max_time
                 max_time = mtime
             end            
+            time_tot = end_time_ns - start_time_ns
             start_time_ns = time_ns()
+            time_vec_tot[div(i, TIME_LAPSE_RATIO)] = time_tot/1e9/dt*1000*dt
         end
         if viewer.stop break end
         i += 1
     end
     misses = j/k * 100
     println("\nMissed the deadline for $(round(misses, digits=2)) %. Max time: $(round((max_time*1e-6), digits=1)) ms")
-    (integrator.p.iter - start) / i
+    return div(i, TIME_LAPSE_RATIO)
 end
 
 function play()
+    global steps
     integrator = KiteModels.init_sim!(kps4, stiffness_factor=0.04)
-    av_iter = simulate(integrator)
-    println("Average iterations per step: $av_iter")
+    steps = simulate(integrator)
 end
 
 function async_play()
@@ -100,4 +107,5 @@ on(jsbuttons.btn2) do val; if val stop(viewer) end; end
 
 play()
 stop(viewer)
-nothing
+using Plots
+plot(range(5*TIME_LAPSE_RATIO*dt,steps*dt,step=dt*TIME_LAPSE_RATIO), time_vec_tot[5:steps],  xlabel="Simulation time [s]", ylabel="time per frame [ms]", legend=false)
