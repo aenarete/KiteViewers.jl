@@ -70,6 +70,38 @@ update_system(viewer, state, kite_scale=0.25)
 ```
 <p align="center"><img src="./kite_4p.png" width="500" /></p>
 
+## Advanced usage
+If you have git and bash installed, you can also check out this repository directly:
+```
+mkdir repos
+cd repos
+git clone https://github.com/aenarete/KiteViewers.jl.git
+cd KiteViewers.jl
+```
+Then you can build a customer system image which will save a lot of time later:
+```
+cd bin
+./create_sys_image --update
+cd ..
+```
+This takes about 10 min and compiles all the packages that are used. If you now
+launch Julia with the command:
+```
+./bin/run_julia
+```
+this image is used.
+You can now run the examples, e.g.
+```
+include("examples/depower_simple.jl")
+```
+which runs a 50s simulation with 8 times time lapse and shows the git depowering
+in two steps in the 3D viewer. If you have a joystick connected you can also run
+```
+include("examples/joystick.jl")
+```
+The x axis of the Joystick controls steering, y-axis depowering and z-axis the
+reel-in and reel-out of the winch.
+
 ## See also
 - [Research Fechner](https://research.tudelft.nl/en/publications/?search=Uwe+Fechner&pageSize=50&ordering=rating&descending=true) for the scientic background of this code
 - The application [KiteViewer](https://github.com/ufechner7/KiteViewer)
