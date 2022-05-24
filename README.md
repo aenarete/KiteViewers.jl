@@ -94,13 +94,14 @@ You can now run the examples, e.g.
 ```julia
 include("examples/depower_simple.jl")
 ```
-which runs a 50s simulation with 8 times time lapse and shows the git depowering
+which runs a 50s simulation with 8 times time lapse and shows the kite depowering
 in two steps in the 3D viewer. If you have a joystick connected you can also run
 ```julia
 include("examples/joystick.jl")
 ```
 The x axis of the Joystick controls steering, y-axis depowering and z-axis the
-reel-in and reel-out of the winch.
+reel-in and reel-out of the winch. With button one you can start the simulation,
+with button two you can stop it.
 
 ## See also
 - [Research Fechner](https://research.tudelft.nl/en/publications/?search=Uwe+Fechner&pageSize=50&ordering=rating&descending=true) for the scientic background of this code
