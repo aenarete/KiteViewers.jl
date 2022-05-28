@@ -7,6 +7,11 @@ This package provides different kind of 2D and 3D viewers for kite power system.
 It is part of Julia Kite Power Tools, which consist of the following packages:
 <p align="center"><img src="./docs/kite_power_tools.png" width="500" /></p>
 
+## What to install
+If you want to run simulations and see the results in 3D, please install the meta package  [KiteSimulators](https://github.com/aenarete/KiteSimulators.jl) . If you just want to replay log files
+or implement a real-time viewer for a system outside of Julia this package will be sufficient. When you have KiteSimulators installed, please replace
+any statement `using KiteViewers` in the examples with `using KiteSimulators`.
+
 ## Installation
 Download [Julia 1.6](http://www.julialang.org) or later, if you haven't already.
 ```julia
@@ -103,8 +108,9 @@ The x axis of the Joystick controls steering, y-axis depowering and z-axis the
 reel-in and reel-out of the winch. With button one you can start the simulation,
 with button two you can stop it.
 
+
 ## See also
 - [Research Fechner](https://research.tudelft.nl/en/publications/?search=Uwe+Fechner&pageSize=50&ordering=rating&descending=true) for the scientic background of this code
-- The application [KiteViewer](https://github.com/ufechner7/KiteViewer)
+- The meta-package  [KiteSimulators](https://github.com/aenarete/KiteSimulators.jl)
 - the packages [KiteModels](https://github.com/ufechner7/KiteModels.jl) and [WinchModels](https://github.com/aenarete/WinchModels.jl) and [KitePodModels](https://github.com/aenarete/KitePodModels.jl) and [AtmosphericModels](https://github.com/aenarete/AtmosphericModels.jl)
 - the package [KiteUtils](https://github.com/ufechner7/KiteUtils.jl) and [KiteControllers](https://github.com/aenarete/KiteControllers.jl)
