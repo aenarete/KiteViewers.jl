@@ -1,7 +1,7 @@
 name = "KiteViewers"
 uuid = "2e593061-95e7-45e4-95f4-df0491f2e601"
 authors = ["Uwe Fechner <fechner@aenarete.eu> and contributors"]
-version = "0.2.1"
+version = "0.2.2"
 
 [deps]
 FileIO = "5789e2e9-d7fb-5bc7-8068-2c6fae9b9549"
@@ -30,7 +30,7 @@ StaticArrays = "1.4"
 TestEnv = "1"
 Reexport = "1"
 Timers = "0.1.5"
-Joysticks = "0.1.2"
+Joysticks = "0.1.2, 0.1.4"
 julia = "1.6, 1.7, 1.8"
 
 [extras]
