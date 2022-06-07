@@ -1,7 +1,7 @@
 module KiteViewers
 
 using GeometryBasics, Rotations, GLMakie, FileIO, LinearAlgebra, Printf, Parameters, Reexport
-import GeometryBasics:Point3f
+import GeometryBasics:Point3f, GeometryBasics.Point2f
 using KiteUtils
 
 export Viewer3D, AbstractKiteViewer, AKV              # types

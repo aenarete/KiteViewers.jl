@@ -79,6 +79,8 @@ mutable struct Viewer3D <: AKV
     btn_ZOOM_in::Button
     btn_ZOOM_out::Button
     btn_PLAY::Button
+    btn_AUTO::Button
+    btn_PARKING::Button
     btn_STOP::Button
     step::Int64
     energy::Float64
@@ -130,14 +132,16 @@ function Viewer3D(show_kite=true)
     btn_ZOOM_in     = Button(scene, label = "Zoom +")
     btn_ZOOM_out    = Button(scene, label = "Zoom -")
     btn_PLAY_PAUSE  = Button(scene, label = @lift($running ? "PAUSE" : " PLAY  "))
+    btn_AUTO        = Button(scene, label = "Autopilot")
+    btn_PARKING     = Button(scene, label = "Parking")
     btn_STOP        = Button(scene, label = "STOP")
     sw = Toggle(scene, active = false)
     label = Label(scene, "repeat")
     
-    buttongrid[1, 1:7] = [btn_PLAY_PAUSE, btn_ZOOM_in, btn_ZOOM_out, btn_RESET, btn_STOP, sw, label]
+    buttongrid[1, 1:9] = [btn_PLAY_PAUSE, btn_ZOOM_in, btn_ZOOM_out, btn_RESET, btn_AUTO, btn_PARKING, btn_STOP, sw, label]
 
     gl_screen = display(scene)
-    s = Viewer3D(scene, layout, scene3D, cam, gl_screen, btn_RESET, btn_ZOOM_in, btn_ZOOM_out, btn_PLAY_PAUSE, btn_STOP, 0, 0, show_kite, false)
+    s = Viewer3D(scene, layout, scene3D, cam, gl_screen, btn_RESET, btn_ZOOM_in, btn_ZOOM_out, btn_PLAY_PAUSE, btn_AUTO, btn_PARKING, btn_STOP, 0, 0, show_kite, false)
 
     init_system(s.scene3D; show_kite=show_kite)
 
