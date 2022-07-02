@@ -100,7 +100,11 @@ function stop(kv::AKV)
     status[]="Stopped"
 end
 
-function Viewer3D(show_kite=true) 
+function set_status(kv::AKV, status_text)
+    status[] = status_text
+end
+
+function Viewer3D(show_kite=true, autolabel="Autopilot") 
     scene, layout = layoutscene(resolution = (840, 900), backgroundcolor = RGBf(0.7, 0.8, 1))
     scene3D = LScene(scene, scenekw = (show_axis=false, limits = Rect(-7,-10.0,0, 11,10,11), resolution = (800, 800)), raw=false)
     create_coordinate_system(scene3D)
@@ -132,7 +136,7 @@ function Viewer3D(show_kite=true)
     btn_ZOOM_in     = Button(scene, label = "Zoom +")
     btn_ZOOM_out    = Button(scene, label = "Zoom -")
     btn_PLAY_PAUSE  = Button(scene, label = @lift($running ? "PAUSE" : " PLAY  "))
-    btn_AUTO        = Button(scene, label = "Autopilot")
+    btn_AUTO        = Button(scene, label = autolabel)
     btn_PARKING     = Button(scene, label = "Parking")
     btn_STOP        = Button(scene, label = "STOP")
     sw = Toggle(scene, active = false)

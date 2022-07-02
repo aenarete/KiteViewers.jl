@@ -43,6 +43,8 @@ viewer=Viewer3D(show_kite)
 clear_viewer(kv::AKV)
 update_system(kv::AKV, state::SysState; scale=1.0, kite_scale=3.5)
 save_png(kv::AKV; filename="video", index = 1)
+stop(kv::AKV)
+set_status(kv::AKV, status_text)
 ```
 
 ## Examples
