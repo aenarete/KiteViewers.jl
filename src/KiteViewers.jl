@@ -15,8 +15,8 @@ if ! isdir(get_data_path())
     KiteUtils.set_data_path(datapath)
 end
 
-include("viewer3D.jl")
-include("common.jl")
+# include("viewer3D.jl")
+# include("common.jl")
 
 @with_kw mutable struct KiteLogger
     states::Vector{SysState{7}} = SysState{7}[]
