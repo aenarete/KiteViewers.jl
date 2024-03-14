@@ -169,32 +169,8 @@ function Viewer3D(show_kite=true, autolabel="Autopilot")
 
     reset_view(cam, scene3D)
 
-#     fontsize[]  = TEXT_SIZE
-#     fontsize2[] = AXIS_LABEL_SIZE
-#     text!(scene3D, "z", position = Point3f(0, 0, 14.6), fontsize = fontsize2, align = (:center, :center), show_axis = false)
-#     text!(scene3D, "x", position = Point3f(17, 0,0), fontsize = fontsize2, align = (:center, :center), show_axis = false)
-#     text!(scene3D, "y", position = Point3f( 0, 14.5, 0), fontsize = fontsize2, align = (:center, :center), show_axis = false)
-
-#     text!(sub_fig, status, position = Point2f( 20, 0), fontsize = TEXT_SIZE, align = (:left, :bottom), show_axis = false)
-#     status[]="Stopped"
-
-#     layout[1, 1] = scene3D
-#     layout[2, 1] = buttongrid = GridLayout(tellwidth = false)
-
-#     l_sublayout = GridLayout()
-#     layout[1:3, 1] = l_sublayout
-#     l_sublayout[:v] = [scene3D, buttongrid]
-
-#     btn_RESET       = Button(sub_fig, label = "RESET")
-#     btn_ZOOM_in     = Button(sub_fig, label = "Zoom +")
-#     btn_ZOOM_out    = Button(sub_fig, label = "Zoom -")
-#     btn_PLAY_PAUSE  = Button(sub_fig, label = @lift($running ? "PAUSE" : " PLAY  "))
 #     btn_AUTO        = Button(sub_fig, label = autolabel)
-#     btn_PARKING     = Button(sub_fig, label = "Parking")
-#     btn_STOP        = Button(sub_fig, label = "STOP")
-#     sw = Toggle(sub_fig, active = false)
-#     label = Label(sub_fig, "repeat")
-    
+#     btn_PARKING     = Button(sub_fig, label = "Parking")    
 #     buttongrid[1, 1:9] = [btn_PLAY_PAUSE, btn_ZOOM_in, btn_ZOOM_out, btn_RESET, btn_AUTO, btn_PARKING, btn_STOP, sw, label]
 
 #     gl_screen = display(sub_fig)
