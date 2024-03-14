@@ -94,10 +94,18 @@ mutable struct Viewer3D
     # layout::GridLayout
     scene3D::LScene
     cam::Camera3D
-    # screen::GLMakie.Screen
+    screen::GLMakie.Screen
     btn_RESET::Button
     btn_ZOOM_in::Button
     btn_ZOOM_out::Button
+    btn_PLAY::Button
+    btn_AUTO::Button
+    btn_PARKING::Button
+    btn_STOP::Button
+    step::Int64
+    energy::Float64
+    show_kite::Bool
+    stop::Bool
 end
 
 function clear_viewer(kv::AKV)
@@ -154,14 +162,14 @@ function Viewer3D(show_kite=true, autolabel="Autopilot")
     btn_ZOOM_in     = Button(sub_fig, label = "Zoom +")
     btn_ZOOM_out    = Button(sub_fig, label = "Zoom -")
     btn_PLAY_PAUSE  = Button(sub_fig, label = @lift($running ? "PAUSE" : " PLAY  "))
+    btn_AUTO        = Button(sub_fig, label = autolabel)
+    btn_PARKING     = Button(sub_fig, label = "Parking")  
     btn_STOP        = Button(sub_fig, label = "STOP")
     sw = Toggle(sub_fig, active = false)
     label = Label(sub_fig, "repeat")
     
-    buttongrid[1, 1:7] = [btn_PLAY_PAUSE, btn_ZOOM_in, btn_ZOOM_out, btn_RESET, btn_STOP, sw, label]
-
-    display(fig)
-    Viewer3D(fig, scene3D, cam, btn_RESET, btn_ZOOM_in, btn_ZOOM_out)
+    buttongrid[1, 1:9] = [btn_PLAY_PAUSE, btn_ZOOM_in, btn_ZOOM_out, btn_RESET, btn_AUTO, btn_PARKING, btn_STOP, sw, label]
+    gl_screen = display(fig)
 
     FLYING[1] = false
     PLAYING[1] = false
@@ -169,35 +177,31 @@ function Viewer3D(show_kite=true, autolabel="Autopilot")
 
     reset_view(cam, scene3D)
 
-#     btn_AUTO        = Button(sub_fig, label = autolabel)
-#     btn_PARKING     = Button(sub_fig, label = "Parking")    
-#     buttongrid[1, 1:9] = [btn_PLAY_PAUSE, btn_ZOOM_in, btn_ZOOM_out, btn_RESET, btn_AUTO, btn_PARKING, btn_STOP, sw, label]
+    # gl_screen = display(fig)
+    s = Viewer3D(fig, scene3D, cam, gl_screen, btn_RESET, btn_ZOOM_in, btn_ZOOM_out, btn_PLAY_PAUSE, btn_AUTO, btn_PARKING, btn_STOP, 0, 0, show_kite, false)
+    # s = Viewer3D(sub_fig, layout, scene3D, cam, gl_screen, btn_RESET, btn_ZOOM_in, btn_ZOOM_out, btn_PLAY_PAUSE, btn_AUTO, btn_PARKING, btn_STOP, 0, 0, show_kite, false)
 
-#     gl_screen = display(sub_fig)
-#     s = Viewer3D(sub_fig, layout, scene3D, cam, gl_screen, btn_RESET, btn_ZOOM_in, btn_ZOOM_out, btn_PLAY_PAUSE, btn_AUTO, btn_PARKING, btn_STOP, 0, 0, show_kite, false)
+    init_system(s.scene3D; show_kite=show_kite)
 
-#     init_system(s.scene3D; show_kite=show_kite)
+   camera = cameracontrols(s.scene3D.scene)
+   reset_view(camera, s.scene3D)
 
-#     camera = cameracontrols(s.scene3D.scene)
-#     reset_view(camera, s.scene3D)
+    on(s.btn_RESET.clicks) do c
+        reset_view(camera, s.scene3D)
+        zoom[1] = 1.0
+    end
 
-#     on(s.btn_RESET.clicks) do c
-#         reset_view(camera, s.scene3D)
-#         zoom[1] = 1.0
-#     end
+    on(s.btn_ZOOM_in.clicks) do c    
+        zoom[1] *= 1.2
+        reset_and_zoom(camera, s.scene3D, zoom[1])
+    end
 
-#     on(s.btn_ZOOM_in.clicks) do c    
-#         zoom[1] *= 1.2
-#         reset_and_zoom(camera, s.scene3D, zoom[1])
-#     end
-
-#     on(s.btn_ZOOM_out.clicks) do c
-#         zoom[1] /= 1.2
-#         reset_and_zoom(camera, s.scene3D, zoom[1])
-#     end
-#     status[] = "Stopped"
-#     return s
-     scene3D
+    on(s.btn_ZOOM_out.clicks) do c
+        zoom[1] /= 1.2
+        reset_and_zoom(camera, s.scene3D, zoom[1])
+    end
+    status[] = "Stopped"
+     s
 end
 
 # function save_png(viewer; filename="video", index = 1)
