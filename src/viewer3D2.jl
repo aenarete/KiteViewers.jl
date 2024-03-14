@@ -53,56 +53,56 @@ SOFTWARE. =#
                                                                                            #   the orientation of the segments 
 end 
 
-# """
-#     abstract type AbstractKiteViewer
+"""
+    abstract type AbstractKiteViewer
 
-# All kite viewers must inherit from this type. All methods that are defined on this type must work
-# with all kite viewers. All exported methods must work on this type. 
-# """
-# abstract type AbstractKiteViewer end
+All kite viewers must inherit from this type. All methods that are defined on this type must work
+with all kite viewers. All exported methods must work on this type. 
+"""
+abstract type AbstractKiteViewer end
 
-# """
-#     const AKV = AbstractKiteViewer
+"""
+    const AKV = AbstractKiteViewer
 
-# Short alias for the AbstractKiteViewer. 
-# """
-# const AKV = AbstractKiteViewer
+Short alias for the AbstractKiteViewer. 
+"""
+const AKV = AbstractKiteViewer
 
-# # struct that stores the state of the 3D viewer
-# mutable struct Viewer3D <: AKV
-#     scene::Scene
-#     layout::GridLayout
-#     scene3D::LScene
-#     cam::Camera3D
-#     screen::GLMakie.Screen
-#     btn_RESET::Button
-#     btn_ZOOM_in::Button
-#     btn_ZOOM_out::Button
-#     btn_PLAY::Button
-#     btn_AUTO::Button
-#     btn_PARKING::Button
-#     btn_STOP::Button
-#     step::Int64
-#     energy::Float64
-#     show_kite::Bool
-#     stop::Bool
-# end
+# struct that stores the state of the 3D viewer
+mutable struct Viewer3D <: AKV
+    scene::Scene
+    layout::GridLayout
+    scene3D::LScene
+    cam::Camera3D
+    screen::GLMakie.Screen
+    btn_RESET::Button
+    btn_ZOOM_in::Button
+    btn_ZOOM_out::Button
+    btn_PLAY::Button
+    btn_AUTO::Button
+    btn_PARKING::Button
+    btn_STOP::Button
+    step::Int64
+    energy::Float64
+    show_kite::Bool
+    stop::Bool
+end
 
-# function clear_viewer(kv::AKV)
-#     kv.stop = false
-#     kv.step = 1
-#     kv.energy = 0
-#     status[] = "Running..."
-# end
+function clear_viewer(kv::AKV)
+    kv.stop = false
+    kv.step = 1
+    kv.energy = 0
+    status[] = "Running..."
+end
 
-# function stop(kv::AKV)
-#     kv.stop = true
-#     status[]="Stopped"
-# end
+function stop(kv::AKV)
+    kv.stop = true
+    status[]="Stopped"
+end
 
-# function set_status(kv::AKV, status_text)
-#     status[] = status_text
-# end
+function set_status(kv::AKV, status_text)
+    status[] = status_text
+end
 
 # function Viewer3D(show_kite=true, autolabel="Autopilot") 
 #     scene, layout = layoutscene(resolution = (840, 900), backgroundcolor = RGBf(0.7, 0.8, 1))
