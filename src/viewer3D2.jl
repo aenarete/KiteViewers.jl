@@ -124,6 +124,7 @@ function Viewer3D(show_kite=true, autolabel="Autopilot")
 
     fig = Figure(size=(840, 900), backgroundcolor=RGBf(0.7, 0.8, 1))
     sub_fig = fig[1,1]
+    scene2D = LScene(fig[3,1], show_axis=false, height=15)
     scene3D = LScene(sub_fig, show_axis=false, scenekw=(limits=Rect(-7,-10.0,0, 11,10,11), size=(800, 800)))
     # hidedecorations!(scene3D.sub_fig, grid = false)
 
@@ -142,13 +143,13 @@ function Viewer3D(show_kite=true, autolabel="Autopilot")
     text!(scene3D, "x", position = Point3f0(17, 0,0), fontsize = fontsize2, align = (:center, :center), show_axis = false)
     text!(scene3D, "y", position = Point3f0( 0, 14.5, 0), fontsize = fontsize2, align = (:center, :center), show_axis = false)
 
-    text!(sub_fig, status, position = Point2f0( 20, 0), fontsize = TEXT_SIZE, align = (:left, :bottom), show_axis = false)
+    text!(scene2D, status, position = Point2f0( 20, 0), fontsize = TEXT_SIZE, align = (:left, :bottom), show_axis = false, space=:pixel)
     status[]="Stopped"
 
     fig[2, 1] = buttongrid = GridLayout(tellwidth=false)
     l_sublayout = GridLayout()
     fig[1:3, 1] = l_sublayout
-    l_sublayout[:v] = [scene3D, buttongrid]
+    l_sublayout[:v] = [scene3D, buttongrid, scene2D]
 
     btn_RESET       = Button(sub_fig, label = "RESET")
     btn_ZOOM_in     = Button(sub_fig, label = "Zoom +")
