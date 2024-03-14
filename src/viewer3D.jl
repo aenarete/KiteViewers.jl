@@ -124,6 +124,7 @@ function Viewer3D(show_kite=true, autolabel="Autopilot")
     text!(scene3D, "y", position = Point3f0( 0, 14.5, 0), fontsize = fontsize2, align = (:center, :center), show_axis = false)
 
     text!(scene2D, status, position = Point2f0( 20, 0), fontsize = TEXT_SIZE, align = (:left, :bottom), show_axis = false, space=:pixel)
+    textnode2[]="depower\nsteering:"
     status[]="Stopped"
 
     fig[2, 1] = buttongrid = GridLayout(tellwidth=false)
