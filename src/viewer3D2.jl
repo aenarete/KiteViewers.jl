@@ -123,7 +123,6 @@ function Viewer3D(show_kite=true, autolabel="Autopilot")
     #     cam = cameracontrols(scene3D.scene)
 
     fig = Figure(size=(840, 900), backgroundcolor=RGBf(0.7, 0.8, 1))
-    # just a try
     scene = fig[1,1]
     scene3D = LScene(scene, scenekw=(show_axis=false, limits=Rect(-7,-10.0,0, 11,10,11), size=(800, 800)))
 
@@ -135,7 +134,7 @@ function Viewer3D(show_kite=true, autolabel="Autopilot")
     PLAYING[1] = false
     GUI_ACTIVE[1] = true
 
-    # reset_view(cam, scene3D)
+    reset_view(cam, scene3D)
 
     fontsize[]  = TEXT_SIZE
     fontsize2[] = AXIS_LABEL_SIZE
@@ -171,8 +170,6 @@ function Viewer3D(show_kite=true, autolabel="Autopilot")
     buttongrid[1, 1:7] = [btn_PLAY_PAUSE, btn_ZOOM_in, btn_ZOOM_out, btn_RESET, btn_STOP, sw, label]
 
     display(fig)
-    # old code, working with GLMakie 4.7 
-    # Viewer3D(scene, layout, scene3D, cam, gl_screen, btn_RESET, btn_ZOOM_in, btn_ZOOM_out)
     Viewer3D(fig, scene3D, cam, btn_RESET, btn_ZOOM_in, btn_ZOOM_out)
 
     FLYING[1] = false
