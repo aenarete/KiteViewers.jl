@@ -129,7 +129,6 @@ function Viewer3D(show_kite=true, autolabel="Autopilot")
     create_coordinate_system(scene3D)
     cam = cameracontrols(scene3D.scene)
 
-
     FLYING[1] = false
     PLAYING[1] = false
     GUI_ACTIVE[1] = true
@@ -145,16 +144,7 @@ function Viewer3D(show_kite=true, autolabel="Autopilot")
     text!(scene, status, position = Point2f0( 20, 0), fontsize = TEXT_SIZE, align = (:left, :bottom), show_axis = false)
     status[]="Stopped"
 
-    # layout[1, 1] = scene3D
-    # layout[2, 1] = buttongrid = GridLayout(tellwidth = false)
-
-    # l_sublayout = GridLayout()
-    # layout[1:3, 1] = l_sublayout
-    # l_sublayout[:v] = [scene3D, buttongrid]
-
-    # fig[1, 1] = scene3D
     fig[2, 1] = buttongrid = GridLayout(tellwidth=false)
-
     l_sublayout = GridLayout()
     fig[1:3, 1] = l_sublayout
     l_sublayout[:v] = [scene3D, buttongrid]
