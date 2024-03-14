@@ -178,16 +178,16 @@ function update_system(kv::AKV, state::SysState; scale=1.0, kite_scale=1.0)
     end
 end
 
-function reset_view(cam, scene3D)
-    update_cam!(scene3D.scene, [-15.425113, -18.925116, 5.5], [-1.5, -5.0, 5.5])
-end
+# function reset_view(cam, scene3D)
+#     update_cam!(scene3D.scene, [-15.425113, -18.925116, 5.5], [-1.5, -5.0, 5.5])
+# end
 
-function zoom_scene(camera, scene, zoom=1.0f0)
-    @extractvalue camera (fov, near, lookat, eyeposition, upvector)
-    dir_vector = eyeposition - lookat
-    new_eyeposition = lookat + dir_vector * (2.0f0 - zoom)
-    update_cam!(scene, new_eyeposition, lookat)
-end
+# function zoom_scene(camera, scene, zoom=1.0f0)
+#     @extractvalue camera (fov, near, lookat, eyeposition, upvector)
+#     dir_vector = eyeposition - lookat
+#     new_eyeposition = lookat + dir_vector * (2.0f0 - zoom)
+#     update_cam!(scene, new_eyeposition, lookat)
+# end
 
 function reset_and_zoom(camera, scene3D, zoom)
     reset_view(camera, scene3D)

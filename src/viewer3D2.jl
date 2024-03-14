@@ -36,8 +36,8 @@ SOFTWARE. =#
     steering  = [0.0]
     textnode  = Observable("")  # lower left
     textnode2  = Observable("") # upper right
-    textsize  = Observable(TEXT_SIZE)
-    textsize2 = Observable(AXIS_LABEL_SIZE)
+    fontsize  = Observable(TEXT_SIZE)
+    fontsize2 = Observable(AXIS_LABEL_SIZE)
     status = Observable("")
     p1 = Observable(Vector{Point2f}(undef, 6000)) # 5 min
     p2 = Observable(Vector{Point2f}(undef, 6000)) # 5 min
@@ -68,24 +68,36 @@ Short alias for the AbstractKiteViewer.
 """
 const AKV = AbstractKiteViewer
 
-# struct that stores the state of the 3D viewer
-mutable struct Viewer3D <: AKV
-    scene::Scene
-    layout::GridLayout
+# # struct that stores the state of the 3D viewer
+# mutable struct Viewer3D <: AKV
+#     scene::Scene
+#     layout::GridLayout
+#     scene3D::LScene
+#     cam::Camera3D
+#     screen::GLMakie.Screen
+#     btn_RESET::Button
+#     btn_ZOOM_in::Button
+#     btn_ZOOM_out::Button
+#     btn_PLAY::Button
+#     btn_AUTO::Button
+#     btn_PARKING::Button
+#     btn_STOP::Button
+#     step::Int64
+#     energy::Float64
+#     show_kite::Bool
+#     stop::Bool
+# end
+
+mutable struct Viewer3D
+    # scene::Scene
+    fig::Figure
+    # layout::GridLayout
     scene3D::LScene
     cam::Camera3D
-    screen::GLMakie.Screen
+    # screen::GLMakie.Screen
     btn_RESET::Button
     btn_ZOOM_in::Button
     btn_ZOOM_out::Button
-    btn_PLAY::Button
-    btn_AUTO::Button
-    btn_PARKING::Button
-    btn_STOP::Button
-    step::Int64
-    energy::Float64
-    show_kite::Bool
-    stop::Bool
 end
 
 function clear_viewer(kv::AKV)
@@ -118,19 +130,64 @@ function Viewer3D(show_kite=true, autolabel="Autopilot")
     create_coordinate_system(scene3D)
     cam = cameracontrols(scene3D.scene)
 
+
+    FLYING[1] = false
+    PLAYING[1] = false
+    GUI_ACTIVE[1] = true
+
+    # reset_view(cam, scene3D)
+
+    fontsize[]  = TEXT_SIZE
+    fontsize2[] = AXIS_LABEL_SIZE
+    text!(scene3D, "z", position = Point3f0(0, 0, 14.6), fontsize = fontsize2, align = (:center, :center), show_axis = false)
+    text!(scene3D, "x", position = Point3f0(17, 0,0), fontsize = fontsize2, align = (:center, :center), show_axis = false)
+    text!(scene3D, "y", position = Point3f0( 0, 14.5, 0), fontsize = fontsize2, align = (:center, :center), show_axis = false)
+
+    text!(scene, status, position = Point2f0( 20, 0), fontsize = TEXT_SIZE, align = (:left, :bottom), show_axis = false)
+    status[]="Stopped"
+
+    # layout[1, 1] = scene3D
+    # layout[2, 1] = buttongrid = GridLayout(tellwidth = false)
+
+    # l_sublayout = GridLayout()
+    # layout[1:3, 1] = l_sublayout
+    # l_sublayout[:v] = [scene3D, buttongrid]
+
+    # fig[1, 1] = scene3D
+    fig[2, 1] = buttongrid = GridLayout(tellwidth=true)
+
+    l_sublayout = GridLayout()
+    fig[1:3, 1] = l_sublayout
+    l_sublayout[:v] = [scene3D, buttongrid]
+
+    btn_RESET       = Button(scene, label = "RESET")
+    btn_ZOOM_in     = Button(scene, label = "Zoom +")
+    btn_ZOOM_out    = Button(scene, label = "Zoom -")
+    btn_PLAY_PAUSE  = Button(scene, label = @lift($running ? "PAUSE" : " PLAY  "))
+    btn_STOP        = Button(scene, label = "STOP")
+    sw = Toggle(scene, active = false)
+    label = Label(scene, "repeat")
+    
+    buttongrid[1, 1:7] = [btn_PLAY_PAUSE, btn_ZOOM_in, btn_ZOOM_out, btn_RESET, btn_STOP, sw, label]
+
+    display(fig)
+    # old code, working with GLMakie 4.7 
+    # Viewer3D(scene, layout, scene3D, cam, gl_screen, btn_RESET, btn_ZOOM_in, btn_ZOOM_out)
+    Viewer3D(fig, scene3D, cam, btn_RESET, btn_ZOOM_in, btn_ZOOM_out)
+
 #     FLYING[1] = false
 #     PLAYING[1] = false
 #     GUI_ACTIVE[1] = true
 
 #     reset_view(cam, scene3D)
 
-#     textsize[]  = TEXT_SIZE
-#     textsize2[] = AXIS_LABEL_SIZE
-#     text!(scene3D, "z", position = Point3f(0, 0, 14.6), textsize = textsize2, align = (:center, :center), show_axis = false)
-#     text!(scene3D, "x", position = Point3f(17, 0,0), textsize = textsize2, align = (:center, :center), show_axis = false)
-#     text!(scene3D, "y", position = Point3f( 0, 14.5, 0), textsize = textsize2, align = (:center, :center), show_axis = false)
+#     fontsize[]  = TEXT_SIZE
+#     fontsize2[] = AXIS_LABEL_SIZE
+#     text!(scene3D, "z", position = Point3f(0, 0, 14.6), fontsize = fontsize2, align = (:center, :center), show_axis = false)
+#     text!(scene3D, "x", position = Point3f(17, 0,0), fontsize = fontsize2, align = (:center, :center), show_axis = false)
+#     text!(scene3D, "y", position = Point3f( 0, 14.5, 0), fontsize = fontsize2, align = (:center, :center), show_axis = false)
 
-#     text!(scene, status, position = Point2f( 20, 0), textsize = TEXT_SIZE, align = (:left, :bottom), show_axis = false)
+#     text!(scene, status, position = Point2f( 20, 0), fontsize = TEXT_SIZE, align = (:left, :bottom), show_axis = false)
 #     status[]="Stopped"
 
 #     layout[1, 1] = scene3D
@@ -176,6 +233,7 @@ function Viewer3D(show_kite=true, autolabel="Autopilot")
 #     end
 #     status[] = "Stopped"
 #     return s
+    scene3D
 end
 
 # function save_png(viewer; filename="video", index = 1)
