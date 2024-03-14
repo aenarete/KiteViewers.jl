@@ -104,7 +104,7 @@ function set_status(kv::AKV, status_text)
     status[] = status_text
 end
 
-# function Viewer3D(show_kite=true, autolabel="Autopilot") 
+function Viewer3D(show_kite=true, autolabel="Autopilot") 
 #     scene, layout = layoutscene(resolution = (840, 900), backgroundcolor = RGBf(0.7, 0.8, 1))
 #     scene3D = LScene(scene, scenekw = (show_axis=false, limits = Rect(-7,-10.0,0, 11,10,11), resolution = (800, 800)), raw=false)
 #     create_coordinate_system(scene3D)
@@ -168,7 +168,7 @@ end
 #     end
 #     status[] = "Stopped"
 #     return s
-# end
+end
 
 # function save_png(viewer; filename="video", index = 1)
 #     buffer = IOBuffer()
