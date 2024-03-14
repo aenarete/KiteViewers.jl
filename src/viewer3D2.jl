@@ -153,7 +153,7 @@ function Viewer3D(show_kite=true, autolabel="Autopilot")
     # l_sublayout[:v] = [scene3D, buttongrid]
 
     # fig[1, 1] = scene3D
-    fig[2, 1] = buttongrid = GridLayout(tellwidth=true)
+    fig[2, 1] = buttongrid = GridLayout(tellwidth=false)
 
     l_sublayout = GridLayout()
     fig[1:3, 1] = l_sublayout
