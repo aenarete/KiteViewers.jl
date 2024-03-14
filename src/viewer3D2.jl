@@ -175,11 +175,11 @@ function Viewer3D(show_kite=true, autolabel="Autopilot")
     # Viewer3D(scene, layout, scene3D, cam, gl_screen, btn_RESET, btn_ZOOM_in, btn_ZOOM_out)
     Viewer3D(fig, scene3D, cam, btn_RESET, btn_ZOOM_in, btn_ZOOM_out)
 
-#     FLYING[1] = false
-#     PLAYING[1] = false
-#     GUI_ACTIVE[1] = true
+    FLYING[1] = false
+    PLAYING[1] = false
+    GUI_ACTIVE[1] = true
 
-#     reset_view(cam, scene3D)
+    reset_view(cam, scene3D)
 
 #     fontsize[]  = TEXT_SIZE
 #     fontsize2[] = AXIS_LABEL_SIZE
@@ -233,7 +233,7 @@ function Viewer3D(show_kite=true, autolabel="Autopilot")
 #     end
 #     status[] = "Stopped"
 #     return s
-    scene3D
+     scene3D
 end
 
 # function save_png(viewer; filename="video", index = 1)
