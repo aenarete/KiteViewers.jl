@@ -13,13 +13,27 @@ or implement a real-time viewer for a system outside of Julia this package will 
 any statement `using KiteViewers` in the examples with `using KiteSimulators`.
 
 ## Installation
-Download [Julia 1.6](http://www.julialang.org) or later, if you haven't already.
+Download and install [Julia 1.9](http://www.julialang.org) or later, if you haven't already.
+Make sure you have the package `TestEnv` in your global environment. If you are not sure, run:
+```bash
+julia -e 'using Pkg; Pkg.add("TestEnv")'
+```
+If you don't have a project yet, create one with:
+```bash
+mkdir MyProject
+cd MyProject
+julia --project="."
+```
+and then add the package `KiteViewers` to your project by executing:
 ```julia
 using Pkg
 pkg"add KiteViewers"
 ``` 
-at the Julia prompt. You can run the unit tests with the command:
+at the Julia prompt. 
+
+You can run the unit tests with the command:
 ```julia
+using Pkg
 pkg"test KiteViewers"
 ```
 This package should work on Linux, Windows and Mac. If you find a bug, please file an issue.
@@ -76,6 +90,8 @@ state=demo_state_4p(segments+1)
 update_system(viewer, state, kite_scale=0.25)
 ```
 <p align="center"><img src="./kite_4p.png" width="500" /></p>
+
+You can find more examples in the folder examples.
 
 ## Advanced usage
 For more examples see: [KiteSimulators](https://github.com/aenarete/KiteSimulators.jl)
