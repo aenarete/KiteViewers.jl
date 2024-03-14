@@ -16,7 +16,7 @@ if ! isdir(get_data_path())
 end
 
 include("viewer3D2.jl")
-# include("common.jl")
+include("common.jl")
 
 @with_kw mutable struct KiteLogger
     states::Vector{SysState{7}} = SysState{7}[]
