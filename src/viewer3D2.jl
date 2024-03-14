@@ -204,8 +204,8 @@ function Viewer3D(show_kite=true, autolabel="Autopilot")
      s
 end
 
-# function save_png(viewer; filename="video", index = 1)
-#     buffer = IOBuffer()
-#     @printf(buffer, "%06i", index) 
-#     save(filename * String(take!(buffer)) * ".png", viewer.scene)
-# end
+function save_png(viewer; filename="video", index = 1)
+    buffer = IOBuffer()
+    @printf(buffer, "%06i", index) 
+    save(filename * String(take!(buffer)) * ".png", viewer.scene)
+end
