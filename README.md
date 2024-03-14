@@ -14,7 +14,7 @@ any statement `using KiteViewers` in the examples with `using KiteSimulators`.
 
 ## Installation
 Download and install [Julia 1.9](http://www.julialang.org) or later, if you haven't already.
-Make sure you have the package `TestEnv` in your global environment. If you are not sure, run:
+Make sure you have the package `TestEnv` in your global environment if you want to run the examples. If you are not sure, run:
 ```bash
 julia -e 'using Pkg; Pkg.add("TestEnv")'
 ```
