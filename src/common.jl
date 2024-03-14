@@ -63,8 +63,8 @@ function init_system(scene; show_kite=true)
     if se().fixed_font != ""
         font=se().fixed_font
     end
-    text!(scene, textnode, position = Point3f(-5.2, 3.5, -1), textsize = textsize, font=font, align = (:left, :top))
-    text!(scene, textnode2, position = Point3f(11, -2.5, 18), textsize = textsize, font=font, align = (:left, :top))
+    text!(scene, textnode, position  = Point2f(50, 100), fontsize=TEXT_SIZE, font=font, align = (:left, :top), show_axis = false, space=:pixel)
+    text!(scene, textnode2, position  = Point2f(630, 750), fontsize=TEXT_SIZE, font=font, align = (:left, :bottom), show_axis = false, space=:pixel)
 end
 
 # update the kite power system, consisting of the tether, the kite and the state (text and numbers)
@@ -179,7 +179,7 @@ function update_system(kv::AKV, state::SysState; scale=1.0, kite_scale=1.0)
 end
 
 function reset_view(cam, scene3D)
-    update_cam!(scene3D.scene, [-15.425113, -18.925116, 5.5], [-1.5, -5.0, 5.5])
+    update_cam!(scene3D.scene, Vec3f(-15.425113, -18.925116, 5.5), Vec3f(-1.5, -5.0, 5.5))
 end
 
 function zoom_scene(camera, scene, zoom=1.0f0)

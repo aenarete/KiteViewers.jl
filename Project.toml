@@ -1,7 +1,7 @@
 name = "KiteViewers"
 uuid = "2e593061-95e7-45e4-95f4-df0491f2e601"
 authors = ["Uwe Fechner <fechner@aenarete.eu> and contributors"]
-version = "0.2.5"
+version = "0.4.0"
 
 [deps]
 FileIO = "5789e2e9-d7fb-5bc7-8068-2c6fae9b9549"
@@ -16,22 +16,21 @@ Printf = "de0858da-6303-5e67-8744-51eddeeeb8d7"
 Reexport = "189a3867-3050-52da-a836-e630ba90ab69"
 Rotations = "6038ab10-8711-5258-84ad-4b1120ba62dc"
 StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
-TestEnv = "1e6cf692-eddd-4d53-88a5-2d735e33781b"
 Timers = "21f18d07-b854-4dab-86f0-c15a3821819a"
 
 [compat]
 FileIO = "1"
-GLMakie = "=0.4.7"
-GeometryBasics = "0.4"
-KiteUtils = "=0.4.8"
+GLMakie = "~0.9"
+GeometryBasics = "0.4.10"
+Joysticks = "0.1.2, 0.1.4"
+KiteUtils = "~0.5"
 Parameters = "0.12"
-Rotations = "1.2, 1.3"
-StaticArrays = "~1.4"
-TestEnv = "1"
+Pkg = "1.9, 1.10"
 Reexport = "1"
+Rotations = "1.2, 1.3"
+StaticArrays = "~1.9"
 Timers = "0.1.5"
-Joysticks = "~0.1.2, ~0.1.4"
-julia = "1.6, 1.7, 1.8, 1.9, 1.10"
+julia = "1.9, 1.10"
 
 [extras]
 KiteModels = "b94af626-7959-4878-9336-2adc27959007"

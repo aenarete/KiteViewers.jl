@@ -30,27 +30,27 @@ SOFTWARE. =#
     GUI_ACTIVE = [false]
     AXIS_LABEL_SIZE = 30
     TEXT_SIZE = 16
-    running   = Node(false)
+    running   = Observable(false)
     starting  = [0]
     zoom      = [1.0]
     steering  = [0.0]
-    textnode  = Node("")  # lower left
-    textnode2  = Node("") # upper right
-    textsize  = Node(TEXT_SIZE)
-    textsize2 = Node(AXIS_LABEL_SIZE)
-    status = Node("")
-    p1 = Node(Vector{Point2f}(undef, 6000)) # 5 min
-    p2 = Node(Vector{Point2f}(undef, 6000)) # 5 min
-    pos_x = Node(0.0f0)
+    textnode  = Observable("")  # lower left
+    textnode2  = Observable("") # upper right
+    fontsize  = Observable(TEXT_SIZE)
+    fontsize2 = Observable(AXIS_LABEL_SIZE)
+    status = Observable("")
+    p1 = Observable(Vector{Point2f}(undef, 6000)) # 5 min
+    p2 = Observable(Vector{Point2f}(undef, 6000)) # 5 min
+    pos_x = Observable(0.0f0)
 
     points          = Vector{Point3f}(undef, se().segments+1+4)
-    quat            = Node(Quaternionf0(0,0,0,1))                                     # orientation of the kite
-    kite_pos        = Node(Point3f(1,0,0))                                           # position of the kite
-    positions       = Node([Point3f(x,0,0) for x in 1:se().segments+KITE_SPRINGS])   # positions of the tether segments
-    part_positions  = Node([Point3f(x,0,0) for x in 1:se().segments+1+4])            # positions of the tether particles
-    markersizes     = Node([Point3f(1,1,1) for x in 1:se().segments+KITE_SPRINGS])   # includes the segment length
-    rotations       = Node([Point3f(1,0,0) for x in 1:se().segments+KITE_SPRINGS])   # unit vectors corresponding with
-                                                                                      #   the orientation of the segments 
+    quat            = Observable(Quaternionf(0,0,0,1))                                     # orientation of the kite
+    kite_pos        = Observable(Point3f(1,0,0))                                           # position of the kite
+    positions       = Observable([Point3f(x,0,0) for x in 1:se().segments+KITE_SPRINGS])   # positions of the tether segments
+    part_positions  = Observable([Point3f(x,0,0) for x in 1:se().segments+1+4])            # positions of the tether particles
+    markersizes     = Observable([Point3f(1,1,1) for x in 1:se().segments+KITE_SPRINGS])   # includes the segment length
+    rotations       = Observable([Point3f(1,0,0) for x in 1:se().segments+KITE_SPRINGS])   # unit vectors corresponding with
+                                                                                           #   the orientation of the segments 
 end 
 
 """
@@ -68,10 +68,8 @@ Short alias for the AbstractKiteViewer.
 """
 const AKV = AbstractKiteViewer
 
-# struct that stores the state of the 3D viewer
 mutable struct Viewer3D <: AKV
-    scene::Scene
-    layout::GridLayout
+    fig::Figure
     scene3D::LScene
     cam::Camera3D
     screen::GLMakie.Screen
@@ -105,8 +103,11 @@ function set_status(kv::AKV, status_text)
 end
 
 function Viewer3D(show_kite=true, autolabel="Autopilot") 
-    scene, layout = layoutscene(resolution = (840, 900), backgroundcolor = RGBf(0.7, 0.8, 1))
-    scene3D = LScene(scene, scenekw = (show_axis=false, limits = Rect(-7,-10.0,0, 11,10,11), resolution = (800, 800)), raw=false)
+    fig = Figure(size=(840, 900), backgroundcolor=RGBf(0.7, 0.8, 1))
+    sub_fig = fig[1,1]
+    scene2D = LScene(fig[3,1], show_axis=false, height=16)
+    scene3D = LScene(sub_fig, show_axis=false, scenekw=(limits=Rect(-7,-10.0,0, 11,10,11), size=(800, 800)))
+
     create_coordinate_system(scene3D)
     cam = cameracontrols(scene3D.scene)
 
@@ -116,37 +117,41 @@ function Viewer3D(show_kite=true, autolabel="Autopilot")
 
     reset_view(cam, scene3D)
 
-    textsize[]  = TEXT_SIZE
-    textsize2[] = AXIS_LABEL_SIZE
-    text!(scene3D, "z", position = Point3f(0, 0, 14.6), textsize = textsize2, align = (:center, :center), show_axis = false)
-    text!(scene3D, "x", position = Point3f(17, 0,0), textsize = textsize2, align = (:center, :center), show_axis = false)
-    text!(scene3D, "y", position = Point3f( 0, 14.5, 0), textsize = textsize2, align = (:center, :center), show_axis = false)
+    fontsize[]  = TEXT_SIZE
+    fontsize2[] = AXIS_LABEL_SIZE
+    text!(scene3D, "z", position = Point3f0(0, 0, 14.6), fontsize = fontsize2, align = (:center, :center), show_axis = false)
+    text!(scene3D, "x", position = Point3f0(17, 0,0), fontsize = fontsize2, align = (:center, :center), show_axis = false)
+    text!(scene3D, "y", position = Point3f0( 0, 14.5, 0), fontsize = fontsize2, align = (:center, :center), show_axis = false)
 
-    text!(scene, status, position = Point2f( 20, 0), textsize = TEXT_SIZE, align = (:left, :bottom), show_axis = false)
+    text!(scene2D, status, position = Point2f0( 20, 0), fontsize = TEXT_SIZE, align = (:left, :bottom), show_axis = false, space=:pixel)
+    textnode2[]="depower\nsteering:"
     status[]="Stopped"
 
-    layout[1, 1] = scene3D
-    layout[2, 1] = buttongrid = GridLayout(tellwidth = false)
-
+    fig[2, 1] = buttongrid = GridLayout(tellwidth=false)
     l_sublayout = GridLayout()
-    layout[1:3, 1] = l_sublayout
-    l_sublayout[:v] = [scene3D, buttongrid]
+    fig[1:3, 1] = l_sublayout
+    l_sublayout[:v] = [scene3D, buttongrid, scene2D]
 
-    btn_RESET       = Button(scene, label = "RESET")
-    btn_ZOOM_in     = Button(scene, label = "Zoom +")
-    btn_ZOOM_out    = Button(scene, label = "Zoom -")
-    btn_PLAY_PAUSE  = Button(scene, label = @lift($running ? "PAUSE" : " PLAY  "))
-    btn_AUTO        = Button(scene, label = autolabel)
-    btn_PARKING     = Button(scene, label = "Parking")
-    btn_STOP        = Button(scene, label = "STOP")
-    sw = Toggle(scene, active = false)
-    label = Label(scene, "repeat")
+    btn_RESET       = Button(sub_fig, label = "RESET")
+    btn_ZOOM_in     = Button(sub_fig, label = "Zoom +")
+    btn_ZOOM_out    = Button(sub_fig, label = "Zoom -")
+    btn_PLAY_PAUSE  = Button(sub_fig, label = @lift($running ? "PAUSE" : " PLAY  "))
+    btn_AUTO        = Button(sub_fig, label = autolabel)
+    btn_PARKING     = Button(sub_fig, label = "Parking")  
+    btn_STOP        = Button(sub_fig, label = "STOP")
+    sw = Toggle(sub_fig, active = false)
+    label = Label(sub_fig, "repeat")
     
     buttongrid[1, 1:9] = [btn_PLAY_PAUSE, btn_ZOOM_in, btn_ZOOM_out, btn_RESET, btn_AUTO, btn_PARKING, btn_STOP, sw, label]
+    gl_screen = display(fig)
 
-    gl_screen = display(scene)
-    s = Viewer3D(scene, layout, scene3D, cam, gl_screen, btn_RESET, btn_ZOOM_in, btn_ZOOM_out, btn_PLAY_PAUSE, btn_AUTO, btn_PARKING, btn_STOP, 0, 0, show_kite, false)
+    FLYING[1] = false
+    PLAYING[1] = false
+    GUI_ACTIVE[1] = true
 
+    reset_view(cam, scene3D)
+
+    s = Viewer3D(fig, scene3D, cam, gl_screen, btn_RESET, btn_ZOOM_in, btn_ZOOM_out, btn_PLAY_PAUSE, btn_AUTO, btn_PARKING, btn_STOP, 0, 0, show_kite, false)
     init_system(s.scene3D; show_kite=show_kite)
 
     camera = cameracontrols(s.scene3D.scene)
@@ -167,7 +172,7 @@ function Viewer3D(show_kite=true, autolabel="Autopilot")
         reset_and_zoom(camera, s.scene3D, zoom[1])
     end
     status[] = "Stopped"
-    return s
+     s
 end
 
 function save_png(viewer; filename="video", index = 1)
