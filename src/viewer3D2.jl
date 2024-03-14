@@ -44,7 +44,7 @@ SOFTWARE. =#
     pos_x = Observable(0.0f0)
 
     points          = Vector{Point3f}(undef, se().segments+1+4)
-    quat            = Observable(Quaternionf0(0,0,0,1))                                    # orientation of the kite
+    quat            = Observable(Quaternionf(0,0,0,1))                                     # orientation of the kite
     kite_pos        = Observable(Point3f(1,0,0))                                           # position of the kite
     positions       = Observable([Point3f(x,0,0) for x in 1:se().segments+KITE_SPRINGS])   # positions of the tether segments
     part_positions  = Observable([Point3f(x,0,0) for x in 1:se().segments+1+4])            # positions of the tether particles
