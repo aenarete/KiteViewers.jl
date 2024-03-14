@@ -30,27 +30,27 @@ SOFTWARE. =#
     GUI_ACTIVE = [false]
     AXIS_LABEL_SIZE = 30
     TEXT_SIZE = 16
-    # running   = Node(false)
-    # starting  = [0]
-    # zoom      = [1.0]
-    # steering  = [0.0]
-    # textnode  = Node("")  # lower left
-    # textnode2  = Node("") # upper right
-    # textsize  = Node(TEXT_SIZE)
-    # textsize2 = Node(AXIS_LABEL_SIZE)
-    # status = Node("")
-    # p1 = Node(Vector{Point2f}(undef, 6000)) # 5 min
-    # p2 = Node(Vector{Point2f}(undef, 6000)) # 5 min
-    # pos_x = Node(0.0f0)
+    running   = Observable(false)
+    starting  = [0]
+    zoom      = [1.0]
+    steering  = [0.0]
+    textnode  = Observable("")  # lower left
+    textnode2  = Observable("") # upper right
+    textsize  = Observable(TEXT_SIZE)
+    textsize2 = Observable(AXIS_LABEL_SIZE)
+    status = Observable("")
+    p1 = Observable(Vector{Point2f}(undef, 6000)) # 5 min
+    p2 = Observable(Vector{Point2f}(undef, 6000)) # 5 min
+    pos_x = Observable(0.0f0)
 
-    # points          = Vector{Point3f}(undef, se().segments+1+4)
-    # quat            = Node(Quaternionf0(0,0,0,1))                                     # orientation of the kite
-    # kite_pos        = Node(Point3f(1,0,0))                                           # position of the kite
-    # positions       = Node([Point3f(x,0,0) for x in 1:se().segments+KITE_SPRINGS])   # positions of the tether segments
-    # part_positions  = Node([Point3f(x,0,0) for x in 1:se().segments+1+4])            # positions of the tether particles
-    # markersizes     = Node([Point3f(1,1,1) for x in 1:se().segments+KITE_SPRINGS])   # includes the segment length
-    # rotations       = Node([Point3f(1,0,0) for x in 1:se().segments+KITE_SPRINGS])   # unit vectors corresponding with
-    #                                                                                   #   the orientation of the segments 
+    points          = Vector{Point3f}(undef, se().segments+1+4)
+    quat            = Observable(Quaternionf0(0,0,0,1))                                    # orientation of the kite
+    kite_pos        = Observable(Point3f(1,0,0))                                           # position of the kite
+    positions       = Observable([Point3f(x,0,0) for x in 1:se().segments+KITE_SPRINGS])   # positions of the tether segments
+    part_positions  = Observable([Point3f(x,0,0) for x in 1:se().segments+1+4])            # positions of the tether particles
+    markersizes     = Observable([Point3f(1,1,1) for x in 1:se().segments+KITE_SPRINGS])   # includes the segment length
+    rotations       = Observable([Point3f(1,0,0) for x in 1:se().segments+KITE_SPRINGS])   # unit vectors corresponding with
+                                                                                           #   the orientation of the segments 
 end 
 
 # """
