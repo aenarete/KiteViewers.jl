@@ -125,11 +125,6 @@ function set_status(kv::AKV, status_text)
 end
 
 function Viewer3D(show_kite=true, autolabel="Autopilot") 
-    # scene, layout = layoutscene(resolution = (840, 900), backgroundcolor = RGBf(0.7, 0.8, 1))
-    # scene3D = LScene(scene, scenekw = (show_axis=false, limits = Rect(-7,-10.0,0, 11,10,11), resolution = (800, 800)), raw=false)
-    # create_coordinate_system(scene3D)
-    #     cam = cameracontrols(scene3D.scene)
-
     fig = Figure(size=(840, 900), backgroundcolor=RGBf(0.7, 0.8, 1))
     sub_fig = fig[1,1]
     scene2D = LScene(fig[3,1], show_axis=false, height=16)
