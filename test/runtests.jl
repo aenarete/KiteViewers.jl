@@ -1,8 +1,7 @@
 using KiteViewers, KiteUtils
 using Test
 
-datapath = joinpath(dirname(dirname(pathof(KiteViewers))), "data")
-KiteUtils.set_data_path(datapath)
+set_data_path()
 
 cd("..")
 include("test_steering.jl")
