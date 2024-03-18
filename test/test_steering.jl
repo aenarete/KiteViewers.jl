@@ -2,6 +2,7 @@ using KiteViewers, KiteModels, KitePodModels, Rotations, Timers
 
 # change this to KPS3 or KPS4
 const Model = KPS4
+set_data_path()
 
 if ! @isdefined kcu;  const kcu = KCU(se());   end
 if ! @isdefined kps4; const kps4 = Model(kcu); end
