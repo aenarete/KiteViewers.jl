@@ -1,15 +1,8 @@
-println("--> 1")
 using KiteUtils
 set_data_path()
-println(get_data_path())
-println("--> 2") 
 using KiteViewers
 set_data_path()
-println(get_data_path())
-println("--> 3")
 using Test
-
-
 
 cd("..")
 include("test_steering.jl")
