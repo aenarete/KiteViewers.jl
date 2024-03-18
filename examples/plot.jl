@@ -4,11 +4,13 @@ if ! ("Plots" ∈ keys(Pkg.project().dependencies))
 end
 import PyPlot as plt
 
-function plot1(X, Y; label="", fig="")
+function plot1(X, Y; xlabel="time [s]", ylabel="", fig="")
     if fig != ""
         plt.figure(fig)
     end
-    plt.plot(X, Y; label)
+    plt.xlabel(xlabel, fontsize=14);
+    plt.ylabel(ylabel, fontsize=14);
+    plt.plot(X, Y; label=ylabel)
     plt.grid(true)
     nothing
 end
