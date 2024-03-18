@@ -43,9 +43,9 @@ function simulate(integrator, steps)
         end
         t_sim = @elapsed KiteModels.next_step!(kps4, integrator, dt=dt)
         t_gc = 0.0
-        if t_sim < 0.08*dt
-            t_gc = @elapsed GC.gc(false)
-        end
+        # if t_sim < 0.08*dt
+        #     t_gc = @elapsed GC.gc(false)
+        # end
         t_show = 0.0
         if mod(i, TIME_LAPSE_RATIO) == 0 || i == steps
             t_show = @elapsed update_system(viewer, SysState(kps4); scale = 0.08, kite_scale=3.0)
@@ -101,11 +101,11 @@ toc()
 play()
 stop(viewer)
 if PLOT_PERFORMANCE
-    using Plots
+    include("plot.jl")
     if true
-        plt=plot(range(dt,TIME,step=dt), time_vec_gc, ylabel="time [%]", xlabel="Simulation time [s]", label="GC time")
-        plt=plot!(range(dt,TIME,step=dt), time_vec_sim, label="sim_time")
-        plt=plot!(range(dt,TIME,step=dt), time_vec_sim.+time_vec_gc, label="total_time")
+        plotx(range(dt,TIME,step=dt), time_vec_gc, time_vec_sim, time_vec_sim.+time_vec_gc;
+              labels=["GC time","sim_time","total_time"],
+              fig="depower_simple_timing")
     else
         plt2=plot(range(3*TIME_LAPSE_RATIO*dt,TIME,step=dt*TIME_LAPSE_RATIO), time_vec_tot[4:end],  xlabel="Simulation time [s]", ylabel="time per frame [ms]", legend=false)
     end
