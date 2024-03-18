@@ -102,11 +102,12 @@ play()
 stop(viewer)
 if PLOT_PERFORMANCE
     include("plot.jl")
-    if true
+    if false
         plotx(range(dt,TIME,step=dt), time_vec_gc, time_vec_sim, time_vec_sim.+time_vec_gc;
               labels=["GC time","sim_time","total_time"],
               fig="depower_simple_timing")
     else
-        plt2=plot(range(3*TIME_LAPSE_RATIO*dt,TIME,step=dt*TIME_LAPSE_RATIO), time_vec_tot[4:end],  xlabel="Simulation time [s]", ylabel="time per frame [ms]", legend=false)
+        plot1(range(3*TIME_LAPSE_RATIO*dt,TIME,step=dt*TIME_LAPSE_RATIO), time_vec_tot[3:end],
+              ylabel="time per frame [ms]")
     end
 end
