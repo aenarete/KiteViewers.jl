@@ -3,7 +3,7 @@ using KiteUtils
 set_data_path()
 println(get_data_path())
 println("--> 2") 
-using KiteKiteviewers
+using KiteViewers
 set_data_path()
 println(get_data_path())
 println("--> 3")
