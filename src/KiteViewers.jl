@@ -11,9 +11,8 @@ export clear_viewer, update_system, save_png, stop, set_status  # functions
 
 const KITE_SPRINGS = 8 
 
-if ! isdir(get_data_path())
-    datapath = joinpath(dirname(dirname(pathof(KiteViewers))), "data")
-    KiteUtils.set_data_path(datapath)
+function __init__()
+    set_data_path(joinpath(pwd(), "data"))
 end
 
 include("viewer3D.jl")
