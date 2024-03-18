@@ -119,11 +119,11 @@ function Viewer3D(show_kite=true, autolabel="Autopilot")
 
     fontsize[]  = TEXT_SIZE
     fontsize2[] = AXIS_LABEL_SIZE
-    text!(scene3D, "z", position = Point3f0(0, 0, 14.6), fontsize = fontsize2, align = (:center, :center), show_axis = false)
-    text!(scene3D, "x", position = Point3f0(17, 0,0), fontsize = fontsize2, align = (:center, :center), show_axis = false)
-    text!(scene3D, "y", position = Point3f0( 0, 14.5, 0), fontsize = fontsize2, align = (:center, :center), show_axis = false)
+    text!(scene3D, "z", position = Point3f(0, 0, 14.6), fontsize = fontsize2, align = (:center, :center), show_axis = false)
+    text!(scene3D, "x", position = Point3f(17, 0,0), fontsize = fontsize2, align = (:center, :center), show_axis = false)
+    text!(scene3D, "y", position = Point3f( 0, 14.5, 0), fontsize = fontsize2, align = (:center, :center), show_axis = false)
 
-    text!(scene2D, status, position = Point2f0( 20, 0), fontsize = TEXT_SIZE, align = (:left, :bottom), show_axis = false, space=:pixel)
+    text!(scene2D, status, position = Point2f( 20, 0), fontsize = TEXT_SIZE, align = (:left, :bottom), show_axis = false, space=:pixel)
     textnode2[]="depower\nsteering:"
     status[]="Stopped"
 
