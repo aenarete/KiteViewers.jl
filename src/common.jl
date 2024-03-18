@@ -63,7 +63,7 @@ function init_system(scene; show_kite=true)
     if se().fixed_font != ""
         font=se().fixed_font
     end
-    text!(scene, textnode, position  = Point2f(50, 100), fontsize=TEXT_SIZE, font=font, align = (:left, :top), show_axis = false, space=:pixel)
+    text!(scene, textnode, position  = Point2f(50, 110), fontsize=TEXT_SIZE, font=font, align = (:left, :top), show_axis = false, space=:pixel)
     text!(scene, textnode2, position  = Point2f(630, 750), fontsize=TEXT_SIZE, font=font, align = (:left, :bottom), show_axis = false, space=:pixel)
 end
 
