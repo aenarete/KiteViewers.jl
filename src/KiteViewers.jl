@@ -12,7 +12,9 @@ export clear_viewer, update_system, save_png, stop, set_status  # functions
 const KITE_SPRINGS = 8 
 
 function __init__()
-    set_data_path(joinpath(pwd(), "data"))
+    if isdir(joinpath(pwd(), "data")) && isfile(joinpath(pwd(), "data", "system.yaml"))
+        set_data_path(joinpath(pwd(), "data"))
+    end
 end
 
 include("viewer3D.jl")
