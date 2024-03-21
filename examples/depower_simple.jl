@@ -12,7 +12,7 @@ if ! @isdefined kcu;  const kcu = KCU(se());   end
 if ! @isdefined kps4; const kps4 = Model(kcu); end
 
 # the following values can be changed to match your interest
-const dt = 0.05
+dt::Float64 = 0.05
 const TIME = 50
 const TIME_LAPSE_RATIO = 5
 const STEPS = Int64(round(TIME/dt))
@@ -26,7 +26,7 @@ if Model==KPS3 SHOW_KITE = true end
 if ! @isdefined time_vec_gc; const time_vec_gc = zeros(STEPS); end
 if ! @isdefined time_vec_sim; const time_vec_sim = zeros(STEPS); end
 if ! @isdefined time_vec_tot; const time_vec_tot = zeros(div(STEPS, TIME_LAPSE_RATIO)); end
-if ! @isdefined viewer; const viewer = Viewer3D(SHOW_KITE); end
+viewer::Viewer3D = Viewer3D(SHOW_KITE)
 
 function simulate(integrator, steps)
     start = integrator.p.iter

@@ -18,7 +18,7 @@ if ! @isdefined js;
 end
 
 # the following values can be changed to match your interest
-dt = 0.05
+dt::Float64 = 0.05
 MAX_TIME=3600
 TIME_LAPSE_RATIO = 1
 SHOW_KITE = true

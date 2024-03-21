@@ -12,7 +12,7 @@ if ! @isdefined kcu;  const kcu = KCU(se());   end
 if ! @isdefined kps4; const kps4 = Model(kcu); end
 
 # the following values can be changed to match your interest
-dt = 0.05
+dt::Float64 = 0.05
 TIME = 45
 TIME_LAPSE_RATIO = 5
 STEPS = Int64(round(TIME/dt))
