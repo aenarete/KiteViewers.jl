@@ -171,8 +171,11 @@ function Viewer3D(show_kite=true, autolabel="Autopilot")
         zoom[1] /= 1.2
         reset_and_zoom(camera, s.scene3D, zoom[1])
     end
+    on(s.btn_STOP.clicks) do c
+        stop(s)
+    end
     status[] = "Stopped"
-     s
+    s
 end
 
 function save_png(viewer; filename="video", index = 1)
