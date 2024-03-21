@@ -24,9 +24,9 @@ TIME_LAPSE_RATIO = 1
 SHOW_KITE = true
 # end of user parameter section #
 
-if ! @isdefined viewer; const viewer = Viewer3D(SHOW_KITE); end
 if ! @isdefined time_vec_tot; const time_vec_tot = zeros(Int(MAX_TIME/dt)); end
 if ! @isdefined time_vec_gc; const time_vec_gc = zeros(Int(MAX_TIME/dt)); end
+viewer::Viewer3D = Viewer3D(SHOW_KITE)
 
 steps=0
 

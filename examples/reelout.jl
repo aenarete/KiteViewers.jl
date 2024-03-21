@@ -26,7 +26,7 @@ PLOT_PERFORMANCE = false
 # end of user parameter section #
 
 if ! @isdefined time_vec; const time_vec = zeros(div(STEPS, TIME_LAPSE_RATIO)); end
-if ! @isdefined viewer; const viewer = Viewer3D(SHOW_KITE); end
+viewer::Viewer3D = Viewer3D(SHOW_KITE)
 
 # ffmpeg -r:v 20 -i "video%06d.png" -codec:v libx264 -preset veryslow -pix_fmt yuv420p -crf 10 -an "video.mp4"
 

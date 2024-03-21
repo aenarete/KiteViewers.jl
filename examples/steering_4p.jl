@@ -20,7 +20,7 @@ STATISTIC = false
 SHOW_KITE = true
 # end of user parameter section #
 
-if ! @isdefined viewer; const viewer = Viewer3D(SHOW_KITE); end
+viewer::Viewer3D = Viewer3D(SHOW_KITE)
 
 function update_system2(kps)
     sys_state = SysState(kps)
