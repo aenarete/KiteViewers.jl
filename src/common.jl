@@ -154,28 +154,6 @@ function update_system(kv::AKV, state::SysState; scale=1.0, kite_scale=1.0)
         quat[]     = Quaternionf(q0[2], q0[3], q0[4], q0[1]) # the constructor expects the order x,y,z,w
         kite_pos[] = Point3f(state.X[segments+1], state.Y[segments+1], state.Z[segments+1]) * scale
     end
-
-    # calculate power and energy
-    power = state.force * state.v_reelout
-    dt = 1/se().sample_freq
-    if abs(power) < 0.001
-        power = 0
-    end
-    kv.energy += (power * dt)
-    kv.step+=1
-
-    # print state values
-    if mod(kv.step, 2) == 1
-        msg = "time:      $(@sprintf("%7.2f", state.time)) s\n" *
-            "height:    $(@sprintf("%7.2f", height)) m     "  * "length:  $(@sprintf("%7.2f", state.l_tether)) m\n" *
-            "elevation: $(@sprintf("%7.2f", state.elevation/pi*180.0)) °     " * "heading: $(@sprintf("%7.2f", state.heading/pi*180.0)) °\n" *
-            "azimuth:   $(@sprintf("%7.2f", azimuth/pi*180.0)) °     " * "course:  $(@sprintf("%7.2f", state.course/pi*180.0)) °\n" *
-            "v_reelout: $(@sprintf("%7.2f", state.v_reelout)) m/s   " * "p_mech: $(@sprintf("%8.2f", power)) W\n" *
-            "force:     $(@sprintf("%7.2f", state.force    )) N     " * "energy: $(@sprintf("%8.2f", kv.energy/3600)) Wh\n"
-        textnode[] = msg
-        textnode2[] = "depower:  $(@sprintf("%5.2f", state.depower*100)) %\n" *
-                      "steering: $(@sprintf("%5.2f", state.steering*100)) %"
-    end
 end
 
 function reset_view(cam, scene3D)
