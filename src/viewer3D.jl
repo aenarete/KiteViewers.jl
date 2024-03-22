@@ -70,7 +70,6 @@ const AKV = AbstractKiteViewer
 
 mutable struct Viewer3D <: AKV
     fig::Figure
-    scene3D::LScene
     screen::GLMakie.Screen
     btn_PLAY::Button
     btn_AUTO::Button
@@ -79,7 +78,7 @@ end
 function Viewer3D(show_kite=true, autolabel="Autopilot") 
     fig = Figure(size=(840, 900), backgroundcolor=RGBf(0.7, 0.8, 1))
     sub_fig = fig[1,1]
-    scene3D = LScene(sub_fig, show_axis=false, scenekw=(limits=Rect(-7,-10.0,0, 11,10,11), size=(800, 800)))
+    # scene3D = LScene(sub_fig, show_axis=false, scenekw=(limits=Rect(-7,-10.0,0, 11,10,11), size=(800, 800)))
 
     fontsize[]  = TEXT_SIZE
     fontsize2[] = AXIS_LABEL_SIZE
@@ -87,7 +86,7 @@ function Viewer3D(show_kite=true, autolabel="Autopilot")
     fig[2, 1] = buttongrid = GridLayout(tellwidth=false)
     l_sublayout = GridLayout()
     fig[1:3, 1] = l_sublayout
-    l_sublayout[:v] = [scene3D, buttongrid]
+    l_sublayout[:v] = [buttongrid]
 
     btn_PLAY_PAUSE  = Button(sub_fig, label = @lift($running ? "PAUSE" : " RUN "))
     btn_AUTO        = Button(sub_fig, label = autolabel)
@@ -95,7 +94,7 @@ function Viewer3D(show_kite=true, autolabel="Autopilot")
     buttongrid[1, 1:2] = [btn_PLAY_PAUSE, btn_AUTO]
     gl_screen = display(fig)
 
-    s = Viewer3D(fig, scene3D, gl_screen, btn_PLAY_PAUSE, btn_AUTO)
+    s = Viewer3D(fig, gl_screen, btn_PLAY_PAUSE, btn_AUTO)
 
     s
 end
