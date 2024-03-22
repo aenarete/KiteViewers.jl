@@ -32,7 +32,6 @@ function Viewer3D()
     Viewer3D(fig, gl_screen, btn_PLAY_PAUSE, btn_AUTO)
 end
 
-
 @setup_workload begin
 	@compile_workload begin
 		viewer=Viewer3D()
