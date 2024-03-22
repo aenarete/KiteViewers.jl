@@ -1,7 +1,7 @@
 module KiteViewers
 
 using PrecompileTools: @setup_workload, @compile_workload 
-using GLMakie, Parameters
+using GLMakie
 
 export Viewer3D
 
