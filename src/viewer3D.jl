@@ -71,7 +71,6 @@ const AKV = AbstractKiteViewer
 mutable struct Viewer3D <: AKV
     fig::Figure
     scene3D::LScene
-    cam::Camera3D
     screen::GLMakie.Screen
     btn_RESET::Button
     btn_ZOOM_in::Button
@@ -104,24 +103,9 @@ function Viewer3D(show_kite=true, autolabel="Autopilot")
     scene2D = LScene(fig[3,1], show_axis=false, height=16)
     scene3D = LScene(sub_fig, show_axis=false, scenekw=(limits=Rect(-7,-10.0,0, 11,10,11), size=(800, 800)))
 
-    cam = cameracontrols(scene3D.scene)
-
-    FLYING[1] = false
-    PLAYING[1] = false
-    GUI_ACTIVE[1] = true
-
-    reset_view(cam, scene3D)
-
     fontsize[]  = TEXT_SIZE
     fontsize2[] = AXIS_LABEL_SIZE
-    text!(scene3D, "z", position = Point3f(0, 0, 14.6), fontsize = fontsize2, align = (:center, :center), show_axis = false)
-    text!(scene3D, "x", position = Point3f(17, 0,0), fontsize = fontsize2, align = (:center, :center), show_axis = false)
-    text!(scene3D, "y", position = Point3f( 0, 14.5, 0), fontsize = fontsize2, align = (:center, :center), show_axis = false)
-
-    text!(scene2D, status, position = Point2f( 20, 0), fontsize = TEXT_SIZE, align = (:left, :bottom), show_axis = false, space=:pixel)
-    textnode2[]="depower\nsteering:"
-    status[]="Stopped"
-
+ 
     fig[2, 1] = buttongrid = GridLayout(tellwidth=false)
     l_sublayout = GridLayout()
     fig[1:3, 1] = l_sublayout
@@ -134,13 +118,11 @@ function Viewer3D(show_kite=true, autolabel="Autopilot")
     btn_AUTO        = Button(sub_fig, label = autolabel)
     btn_PARKING     = Button(sub_fig, label = "Parking")  
     btn_STOP        = Button(sub_fig, label = "STOP")
-    sw = Toggle(sub_fig, active = false)
-    label = Label(sub_fig, "repeat")
     
-    buttongrid[1, 1:9] = [btn_PLAY_PAUSE, btn_ZOOM_in, btn_ZOOM_out, btn_RESET, btn_AUTO, btn_PARKING, btn_STOP, sw, label]
+    buttongrid[1, 1:7] = [btn_PLAY_PAUSE, btn_ZOOM_in, btn_ZOOM_out, btn_RESET, btn_AUTO, btn_PARKING, btn_STOP]
     gl_screen = display(fig)
 
-    s = Viewer3D(fig, scene3D, cam, gl_screen, btn_RESET, btn_ZOOM_in, btn_ZOOM_out, btn_PLAY_PAUSE, btn_AUTO, btn_PARKING, btn_STOP)
+    s = Viewer3D(fig, scene3D, gl_screen, btn_RESET, btn_ZOOM_in, btn_ZOOM_out, btn_PLAY_PAUSE, btn_AUTO, btn_PARKING, btn_STOP)
 
     s
 end
