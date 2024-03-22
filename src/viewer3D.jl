@@ -76,26 +76,9 @@ mutable struct Viewer3D <: AKV
     btn_AUTO::Button
 end
 
-function clear_viewer(kv::AKV)
-    kv.stop = false
-    kv.step = 1
-    kv.energy = 0
-    status[] = "Running..."
-end
-
-function stop(kv::AKV)
-    kv.stop = true
-    status[]="Stopped"
-end
-
-function set_status(kv::AKV, status_text)
-    status[] = status_text
-end
-
 function Viewer3D(show_kite=true, autolabel="Autopilot") 
     fig = Figure(size=(840, 900), backgroundcolor=RGBf(0.7, 0.8, 1))
     sub_fig = fig[1,1]
-    scene2D = LScene(fig[3,1], show_axis=false, height=16)
     scene3D = LScene(sub_fig, show_axis=false, scenekw=(limits=Rect(-7,-10.0,0, 11,10,11), size=(800, 800)))
 
     fontsize[]  = TEXT_SIZE
@@ -104,7 +87,7 @@ function Viewer3D(show_kite=true, autolabel="Autopilot")
     fig[2, 1] = buttongrid = GridLayout(tellwidth=false)
     l_sublayout = GridLayout()
     fig[1:3, 1] = l_sublayout
-    l_sublayout[:v] = [scene3D, buttongrid, scene2D]
+    l_sublayout[:v] = [scene3D, buttongrid]
 
     btn_PLAY_PAUSE  = Button(sub_fig, label = @lift($running ? "PAUSE" : " RUN "))
     btn_AUTO        = Button(sub_fig, label = autolabel)
