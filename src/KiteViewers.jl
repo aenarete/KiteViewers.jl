@@ -1,8 +1,7 @@
 module KiteViewers
 
 using PrecompileTools: @setup_workload, @compile_workload 
-using GeometryBasics, Rotations, GLMakie, FileIO, LinearAlgebra, Printf, Parameters, Reexport
-import GeometryBasics:Point3f, GeometryBasics.Point2f
+using GeometryBasics, Rotations, GLMakie, Parameters
 
 export Viewer3D
 
