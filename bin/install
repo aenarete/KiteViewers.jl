@@ -1,2 +1,0 @@
-julia -e 'using Pkg; Pkg.add("TestEnv")'
-julia --project -e 'using Pkg; Pkg.update()'
