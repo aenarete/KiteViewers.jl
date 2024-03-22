@@ -14,7 +14,7 @@ mutable struct Viewer3D
 end
 
 function Viewer3D() 
-    fig = Figure(size=(200, 200), backgroundcolor=RGBf(0.7, 0.8, 1))
+    fig = Figure(size=(200, 200))
     sub_fig = fig[1,1]
     fig[2, 1] = buttongrid = GridLayout(tellwidth=false)
 
