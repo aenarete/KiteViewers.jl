@@ -19,7 +19,7 @@ function Viewer3D()
     fig[2, 1] = buttongrid = GridLayout(tellwidth=false)
 
     btn_PLAY_PAUSE  = Button(sub_fig, label = @lift($running ? "PAUSE" : " RUN "))
-    btn_AUTO        = Button(sub_fig, label = "Autolabel")
+    btn_AUTO        = Button(sub_fig)
     
     buttongrid[1, 1:2] = [btn_PLAY_PAUSE, btn_AUTO]
     gl_screen = display(fig)
