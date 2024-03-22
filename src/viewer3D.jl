@@ -145,36 +145,8 @@ function Viewer3D(show_kite=true, autolabel="Autopilot")
     buttongrid[1, 1:9] = [btn_PLAY_PAUSE, btn_ZOOM_in, btn_ZOOM_out, btn_RESET, btn_AUTO, btn_PARKING, btn_STOP, sw, label]
     gl_screen = display(fig)
 
-    FLYING[1] = false
-    PLAYING[1] = false
-    GUI_ACTIVE[1] = true
-
-    reset_view(cam, scene3D)
-
     s = Viewer3D(fig, scene3D, cam, gl_screen, btn_RESET, btn_ZOOM_in, btn_ZOOM_out, btn_PLAY_PAUSE, btn_AUTO, btn_PARKING, btn_STOP, 0, 0, show_kite, false)
-    init_system(s.scene3D; show_kite=show_kite)
 
-    camera = cameracontrols(s.scene3D.scene)
-    reset_view(camera, s.scene3D)
-
-    on(s.btn_RESET.clicks) do c
-        reset_view(camera, s.scene3D)
-        zoom[1] = 1.0
-    end
-
-    on(s.btn_ZOOM_in.clicks) do c    
-        zoom[1] *= 1.2
-        reset_and_zoom(camera, s.scene3D, zoom[1])
-    end
-
-    on(s.btn_ZOOM_out.clicks) do c
-        zoom[1] /= 1.2
-        reset_and_zoom(camera, s.scene3D, zoom[1])
-    end
-    on(s.btn_STOP.clicks) do c
-        stop(s)
-    end
-    status[] = "Stopped"
     s
 end
 
