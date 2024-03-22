@@ -77,8 +77,6 @@ mutable struct Viewer3D <: AKV
     btn_ZOOM_out::Button
     btn_PLAY::Button
     btn_AUTO::Button
-    btn_PARKING::Button
-    btn_STOP::Button
 end
 
 function clear_viewer(kv::AKV)
@@ -116,13 +114,11 @@ function Viewer3D(show_kite=true, autolabel="Autopilot")
     btn_ZOOM_out    = Button(sub_fig, label = "Zoom -")
     btn_PLAY_PAUSE  = Button(sub_fig, label = @lift($running ? "PAUSE" : " RUN "))
     btn_AUTO        = Button(sub_fig, label = autolabel)
-    btn_PARKING     = Button(sub_fig, label = "Parking")  
-    btn_STOP        = Button(sub_fig, label = "STOP")
     
-    buttongrid[1, 1:7] = [btn_PLAY_PAUSE, btn_ZOOM_in, btn_ZOOM_out, btn_RESET, btn_AUTO, btn_PARKING, btn_STOP]
+    buttongrid[1, 1:5] = [btn_PLAY_PAUSE, btn_ZOOM_in, btn_ZOOM_out, btn_RESET, btn_AUTO]
     gl_screen = display(fig)
 
-    s = Viewer3D(fig, scene3D, gl_screen, btn_RESET, btn_ZOOM_in, btn_ZOOM_out, btn_PLAY_PAUSE, btn_AUTO, btn_PARKING, btn_STOP)
+    s = Viewer3D(fig, scene3D, gl_screen, btn_RESET, btn_ZOOM_in, btn_ZOOM_out, btn_PLAY_PAUSE, btn_AUTO)
 
     s
 end
