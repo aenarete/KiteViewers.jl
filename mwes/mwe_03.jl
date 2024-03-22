@@ -1,4 +1,4 @@
 using KiteViewers
-viewer=Viewer3D()
+Viewer3D()
 
 KiteViewers.running[]=true
