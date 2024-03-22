@@ -18,7 +18,6 @@ function __init__()
 end
 
 include("viewer3D.jl")
-include("common.jl")
 
 @setup_workload begin
 	@compile_workload begin
