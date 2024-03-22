@@ -20,10 +20,6 @@ end
 include("viewer3D.jl")
 include("common.jl")
 
-@with_kw mutable struct KiteLogger
-    states::Vector{SysState{7}} = SysState{7}[]
-end
-
 @setup_workload begin
 	@compile_workload begin
 		viewer=Viewer3D()
