@@ -16,7 +16,7 @@ end
 function Viewer3D() 
     fig = Figure(size=(200, 200))
     sub_fig = fig[1,1]
-    fig[2, 1] = buttongrid = GridLayout(tellwidth=false)
+    fig[2, 1] = buttongrid = GridLayout()
 
     btn_PLAY_PAUSE  = Button(sub_fig, label = @lift($running ? "PAUSE" : " RUN "))
     btn_AUTO        = Button(sub_fig)
