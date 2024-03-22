@@ -75,7 +75,7 @@ mutable struct Viewer3D <: AKV
     btn_AUTO::Button
 end
 
-function Viewer3D(show_kite=true, autolabel="Autopilot") 
+function Viewer3D() 
     fig = Figure(size=(200, 200), backgroundcolor=RGBf(0.7, 0.8, 1))
     sub_fig = fig[1,1]
  
@@ -85,7 +85,7 @@ function Viewer3D(show_kite=true, autolabel="Autopilot")
     l_sublayout[:v] = [buttongrid]
 
     btn_PLAY_PAUSE  = Button(sub_fig, label = @lift($running ? "PAUSE" : " RUN "))
-    btn_AUTO        = Button(sub_fig, label = autolabel)
+    btn_AUTO        = Button(sub_fig, label = "Autolabel")
     
     buttongrid[1, 1:2] = [btn_PLAY_PAUSE, btn_AUTO]
     gl_screen = display(fig)
