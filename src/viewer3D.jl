@@ -82,6 +82,7 @@ mutable struct Viewer3D <: AKV
     btn_AUTO::Button
     btn_PARKING::Button
     btn_STOP::Button
+    sw::Toggle
     step::Int64
     energy::Float64
     show_kite::Bool
@@ -167,7 +168,7 @@ function Viewer3D(show_kite=true, autolabel="Autopilot"; precompile=false)
 
     reset_view(cam, scene3D)
 
-    s = Viewer3D(fig, scene3D, cam, gl_screen, btn_RESET, btn_ZOOM_in, btn_ZOOM_out, btn_PLAY_PAUSE, btn_AUTO, btn_PARKING, btn_STOP, 0, 0, show_kite, false)
+    s = Viewer3D(fig, scene3D, cam, gl_screen, btn_RESET, btn_ZOOM_in, btn_ZOOM_out, btn_PLAY_PAUSE, btn_AUTO, btn_PARKING, btn_STOP, sw, 0, 0, show_kite, false)
     init_system(s.scene3D; show_kite=show_kite)
 
     camera = cameracontrols(s.scene3D.scene)
@@ -193,12 +194,12 @@ function Viewer3D(show_kite=true, autolabel="Autopilot"; precompile=false)
     end
     on(s.btn_PLAY.clicks) do c
         running[] = ! running[]
-        s.stop = ! KiteViewers.running[]
         if running[]
             pause(s)
         else
             set_status(s, last_status)
         end
+        s.stop = ! running[]
     end
     status[] = "Stopped"
     s
