@@ -173,8 +173,8 @@ function update_system(kv::AKV, state::SysState; scale=1.0, kite_scale=1.0)
             "v_reelout: $(@sprintf("%7.2f", state.v_reelout)) m/s   " * "p_mech: $(@sprintf("%8.2f", power)) W\n" *
             "force:     $(@sprintf("%7.2f", state.force    )) N     " * "energy: $(@sprintf("%8.2f", kv.energy/3600)) Wh\n"
         textnode[] = msg
-        textnode2[] = "depower:  $(@sprintf("%5.2f", state.depower*100)) %\n" *
-                      "steering: $(@sprintf("%5.2f", state.steering*100)) %"
+        textnode2[] = "depower:  $(@sprintf("%6.2f", state.depower*100)) %\n" *
+                      "steering: $(@sprintf("%6.2f", state.steering*100)) %"
     end
 end
 
