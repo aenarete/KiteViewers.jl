@@ -118,7 +118,8 @@ end
 
 function Viewer3D(show_kite=true, autolabel="Autopilot"; precompile=false) 
     global last_status
-    fig = Figure(size=(840, 900), backgroundcolor=RGBf(0.7, 0.8, 1))
+    WIDTH=840
+    fig = Figure(size=(WIDTH, 900), backgroundcolor=RGBf(0.7, 0.8, 1))
     sub_fig = fig[1,1]
     scene2D = LScene(fig[3,1], show_axis=false, height=16)
     scene3D = LScene(sub_fig, show_axis=false, scenekw=(limits=Rect(-7,-10.0,0, 11,10,11), size=(800, 800)))
@@ -170,7 +171,7 @@ function Viewer3D(show_kite=true, autolabel="Autopilot"; precompile=false)
     reset_view(cam, scene3D)
 
     s = Viewer3D(fig, scene3D, cam, gl_screen, btn_RESET, btn_ZOOM_in, btn_ZOOM_out, btn_PLAY_PAUSE, btn_AUTO, btn_PARKING, btn_STOP, sw, 0, 0, show_kite, false)
-    init_system(s.scene3D; show_kite=show_kite)
+    txt2 = init_system(s.scene3D; show_kite=show_kite)
 
     camera = cameracontrols(s.scene3D.scene)
     reset_view(camera, s.scene3D)
@@ -203,8 +204,10 @@ function Viewer3D(show_kite=true, autolabel="Autopilot"; precompile=false)
             running[]=true
         end
         s.stop = ! running[]
-    on(scene.px_area) do x
-        println("New value of scene.px_area is $x")
+    end
+    on(fig.scene.events.window_area) do x
+        dx = x.widths[1]-WIDTH
+        txt2.position[] = Point2f(630.0+dx, 750.0)
     end
     status[] = "Stopped"
     s
