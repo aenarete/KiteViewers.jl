@@ -194,12 +194,13 @@ function Viewer3D(show_kite=true, autolabel="Autopilot"; precompile=false)
         stop(s)
     end
     on(s.btn_PLAY.clicks) do c
-        running[] = ! running[]
         if running[]
             last_status=status[]
             status[]="Paused"
+            running[]=false
         else
             set_status(s, last_status)
+            running[]=true
         end
         s.stop = ! running[]
     end
