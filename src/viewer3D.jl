@@ -203,6 +203,8 @@ function Viewer3D(show_kite=true, autolabel="Autopilot"; precompile=false)
             running[]=true
         end
         s.stop = ! running[]
+    on(scene.px_area) do x
+        println("New value of scene.px_area is $x")
     end
     status[] = "Stopped"
     s
