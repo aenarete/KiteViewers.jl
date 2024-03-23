@@ -117,6 +117,7 @@ function set_status(kv::AKV, status_text)
 end
 
 function Viewer3D(show_kite=true, autolabel="Autopilot"; precompile=false) 
+    global last_status
     fig = Figure(size=(840, 900), backgroundcolor=RGBf(0.7, 0.8, 1))
     sub_fig = fig[1,1]
     scene2D = LScene(fig[3,1], show_axis=false, height=16)
