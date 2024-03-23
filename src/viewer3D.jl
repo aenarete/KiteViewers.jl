@@ -53,6 +53,8 @@ SOFTWARE. =#
                                                                                            #   the orientation of the segments 
 end 
 
+last_status::String=""
+
 """
     abstract type AbstractKiteViewer
 
@@ -87,23 +89,29 @@ mutable struct Viewer3D <: AKV
 end
 
 function clear_viewer(kv::AKV)
-    kv.stop = false
     kv.step = 1
     kv.energy = 0
-    status[] = "Running..."
+    stop(kv)
 end
 
 function stop(kv::AKV)
     kv.stop = true
     status[]="Stopped"
+    running[]=false
 end
 
 function pause(kv::AKV)
+    global last_status
     kv.stop = true
+    last_status=status[]
     status[]="Paused"
 end
 
 function set_status(kv::AKV, status_text)
+    global last_status
+    if status_tex == "Paused"
+        last_status = status[]
+    end
     status[] = status_text
 end
 
@@ -185,6 +193,12 @@ function Viewer3D(show_kite=true, autolabel="Autopilot"; precompile=false)
     end
     on(s.btn_PLAY.clicks) do c
         running[] = ! running[]
+        viewer.stop = ! KiteViewers.running[]
+        if ! running[]
+            set_status(s, "Paused")
+        else
+            set_status(s, last_status)
+        end
     end
     status[] = "Stopped"
     s
