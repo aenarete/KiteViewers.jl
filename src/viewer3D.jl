@@ -98,11 +98,16 @@ function stop(kv::AKV)
     status[]="Stopped"
 end
 
+function pause(kv::AKV)
+    kv.stop = true
+    status[]="Paused"
+end
+
 function set_status(kv::AKV, status_text)
     status[] = status_text
 end
 
-function Viewer3D(show_kite=true, autolabel="Autopilot") 
+function Viewer3D(show_kite=true, autolabel="Autopilot"; precompile=false) 
     fig = Figure(size=(840, 900), backgroundcolor=RGBf(0.7, 0.8, 1))
     sub_fig = fig[1,1]
     scene2D = LScene(fig[3,1], show_axis=false, height=16)
@@ -135,7 +140,11 @@ function Viewer3D(show_kite=true, autolabel="Autopilot")
     btn_RESET       = Button(sub_fig, label = "RESET")
     btn_ZOOM_in     = Button(sub_fig, label = "Zoom +")
     btn_ZOOM_out    = Button(sub_fig, label = "Zoom -")
-    btn_PLAY_PAUSE  = Button(sub_fig, label = @lift($running ? "PAUSE" : " RUN "))
+    if precompile
+        btn_PLAY_PAUSE  = Button(sub_fig, label = " RUN ")
+    else
+        btn_PLAY_PAUSE  = Button(sub_fig, label = @lift($running ? "PAUSE" : " RUN "))
+    end
     btn_AUTO        = Button(sub_fig, label = autolabel)
     btn_PARKING     = Button(sub_fig, label = "Parking")  
     btn_STOP        = Button(sub_fig, label = "STOP")
@@ -173,6 +182,9 @@ function Viewer3D(show_kite=true, autolabel="Autopilot")
     end
     on(s.btn_STOP.clicks) do c
         stop(s)
+    end
+    on(s.btn_PLAY.clicks) do c
+        running[] = ! running[]
     end
     status[] = "Stopped"
     s
