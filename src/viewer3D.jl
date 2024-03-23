@@ -118,8 +118,9 @@ end
 
 function Viewer3D(show_kite=true, autolabel="Autopilot"; precompile=false) 
     global last_status
-    WIDTH=840
-    fig = Figure(size=(WIDTH, 900), backgroundcolor=RGBf(0.7, 0.8, 1))
+    WIDTH  = 840
+    HEIGHT = 900
+    fig = Figure(size=(WIDTH, HEIGHT), backgroundcolor=RGBf(0.7, 0.8, 1))
     sub_fig = fig[1,1]
     scene2D = LScene(fig[3,1], show_axis=false, height=16)
     scene3D = LScene(sub_fig, show_axis=false, scenekw=(limits=Rect(-7,-10.0,0, 11,10,11), size=(800, 800)))
@@ -206,8 +207,9 @@ function Viewer3D(show_kite=true, autolabel="Autopilot"; precompile=false)
         s.stop = ! running[]
     end
     on(fig.scene.events.window_area) do x
-        dx = x.widths[1]-WIDTH
-        txt2.position[] = Point2f(630.0+dx, 750.0)
+        dx = x.widths[1] - WIDTH
+        dy = x.widths[2] - HEIGHT
+        txt2.position[] = Point2f(630.0+dx, 750.0+dy)
     end
     status[] = "Stopped"
     s
