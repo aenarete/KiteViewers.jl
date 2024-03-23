@@ -109,7 +109,7 @@ end
 
 function set_status(kv::AKV, status_text)
     global last_status
-    if status_tex == "Paused"
+    if status_text != "Paused"
         last_status = status[]
     end
     status[] = status_text
@@ -138,7 +138,6 @@ function Viewer3D(show_kite=true, autolabel="Autopilot"; precompile=false)
 
     text!(scene2D, status, position = Point2f( 20, 0), fontsize = TEXT_SIZE, align = (:left, :bottom), show_axis = false, space=:pixel)
     textnode2[]="depower\nsteering:"
-    status[]="Stopped"
 
     fig[2, 1] = buttongrid = GridLayout(tellwidth=false)
     l_sublayout = GridLayout()
@@ -173,6 +172,7 @@ function Viewer3D(show_kite=true, autolabel="Autopilot"; precompile=false)
 
     camera = cameracontrols(s.scene3D.scene)
     reset_view(camera, s.scene3D)
+    set_status(s, "Stopped")
 
     on(s.btn_RESET.clicks) do c
         reset_view(camera, s.scene3D)
@@ -193,9 +193,9 @@ function Viewer3D(show_kite=true, autolabel="Autopilot"; precompile=false)
     end
     on(s.btn_PLAY.clicks) do c
         running[] = ! running[]
-        viewer.stop = ! KiteViewers.running[]
-        if ! running[]
-            set_status(s, "Paused")
+        s.stop = ! KiteViewers.running[]
+        if running[]
+            pause(s)
         else
             set_status(s, last_status)
         end
