@@ -82,6 +82,8 @@ mutable struct Viewer3D <: AKV
     btn_AUTO::Button
     btn_PARKING::Button
     btn_STOP::Button
+    menu::Menu
+    btn_OK::Button
     sw::Toggle
     step::Int64
     energy::Float64
@@ -172,7 +174,8 @@ function Viewer3D(show_kite=true, autolabel="Autopilot"; precompile=false)
     sw = Toggle(sub_fig, active = false)
     label = Label(sub_fig, "repeat")
     
-    buttongrid[1, 1:9] = [btn_PLAY_PAUSE, btn_ZOOM_in, btn_ZOOM_out, btn_RESET, btn_AUTO, btn_PARKING, btn_STOP, sw, label]
+    buttongrid[1, 1:9] = [btn_PLAY_PAUSE, btn_ZOOM_in, btn_ZOOM_out, btn_RESET, btn_AUTO, 
+                          btn_PARKING, btn_STOP, sw, label]
     gl_screen = display(fig)
 
     FLYING[1] = false
@@ -181,7 +184,9 @@ function Viewer3D(show_kite=true, autolabel="Autopilot"; precompile=false)
 
     reset_view(cam, scene3D)
 
-    s = Viewer3D(fig, scene3D, cam, gl_screen, btn_RESET, btn_ZOOM_in, btn_ZOOM_out, btn_PLAY_PAUSE, btn_AUTO, btn_PARKING, btn_STOP, sw, 0, 0, show_kite, false)
+    s = Viewer3D(fig, scene3D, cam, gl_screen, btn_RESET, btn_ZOOM_in, btn_ZOOM_out, 
+                 btn_PLAY_PAUSE, btn_AUTO, btn_PARKING, btn_STOP, menu1, btn_OK,
+                 sw, 0, 0, show_kite, false)
     txt2 = init_system(s.scene3D; show_kite=show_kite)
 
     camera = cameracontrols(s.scene3D.scene)
