@@ -39,6 +39,7 @@ SOFTWARE. =#
     fontsize  = Observable(TEXT_SIZE)
     fontsize2 = Observable(AXIS_LABEL_SIZE)
     status = Observable("")
+    plot_file = Observable("")
     p1 = Observable(Vector{Point2f}(undef, 6000)) # 5 min
     p2 = Observable(Vector{Point2f}(undef, 6000)) # 5 min
     pos_x = Observable(0.0f0)
@@ -125,7 +126,7 @@ function Viewer3D(show_kite=true, autolabel="Autopilot"; precompile=false)
     fig = Figure(size=(WIDTH, HEIGHT), backgroundcolor=RGBf(0.7, 0.8, 1))
     sub_fig = fig[1,1]
     menu1 = Menu(fig, bbox = fig.scene.viewport, 
-                 options = ["plot", "save as .jld2", "save as .pdf"], default = "plot")
+                 options = ["plot", "load plot", "save plot"], default = "plot")
     menu1.width[] =120
     menu1.halign[]=:left
     menu1.valign[]=:top
@@ -153,6 +154,8 @@ function Viewer3D(show_kite=true, autolabel="Autopilot"; precompile=false)
     text!(scene3D, "y", position = Point3f( 0, 14.5, 0), fontsize = fontsize2, align = (:center, :center), show_axis = false)
 
     text!(scene2D, status, position = Point2f( 20, 0), fontsize = TEXT_SIZE, align = (:left, :bottom), show_axis = false, space=:pixel)
+    text!(scene2D, plot_file, position = Point2f( 420, 0), fontsize = TEXT_SIZE, align = (:left, :bottom), show_axis = false, space=:pixel)
+
     textnode2[]="depower\nsteering:"
 
     fig[2, 1] = buttongrid = GridLayout(tellwidth=false)
