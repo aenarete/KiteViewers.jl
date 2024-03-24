@@ -122,6 +122,16 @@ function Viewer3D(show_kite=true, autolabel="Autopilot"; precompile=false)
     HEIGHT = 900
     fig = Figure(size=(WIDTH, HEIGHT), backgroundcolor=RGBf(0.7, 0.8, 1))
     sub_fig = fig[1,1]
+    menu1 = Menu(fig, bbox = fig.scene.viewport, 
+                 options = ["plot", "save as .jld2", "save as .pdf"], default = "plot")
+    menu1.width[] =120
+    menu1.halign[]=:left
+    menu1.valign[]=:top
+    menu1.alignmode[]=Outside(30)
+    btn_OK         = Button(fig, bbox=fig.scene.viewport, label = "OK")
+    btn_OK.halign[]=:left
+    btn_OK.valign[]=:top
+    btn_OK.alignmode[]=Outside(160, 0, 0, 30)
     scene2D = LScene(fig[3,1], show_axis=false, height=16)
     scene3D = LScene(sub_fig, show_axis=false, scenekw=(limits=Rect(-7,-10.0,0, 11,10,11), size=(800, 800)))
 
@@ -209,7 +219,7 @@ function Viewer3D(show_kite=true, autolabel="Autopilot"; precompile=false)
     on(fig.scene.events.window_area) do x
         dx = x.widths[1] - WIDTH
         dy = x.widths[2] - HEIGHT
-        txt2.position[] = Point2f(630.0+dx, 750.0+dy)
+        txt2.position[] = Point2f(630.0+dx, 735.0+dy)
     end
     status[] = "Stopped"
     s

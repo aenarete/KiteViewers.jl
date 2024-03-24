@@ -64,7 +64,7 @@ function init_system(scene; show_kite=true)
         font=se().fixed_font
     end
     text!(scene, textnode, position  = Point2f(50, 110), fontsize=TEXT_SIZE, font=font, align = (:left, :top), show_axis = false, space=:pixel)
-    text!(scene, textnode2, position  = Point2f(630, 750), fontsize=TEXT_SIZE, font=font, align = (:left, :bottom), show_axis = false, space=:pixel)
+    text!(scene, textnode2, position  = Point2f(630, 735), fontsize=TEXT_SIZE, font=font, align = (:left, :bottom), show_axis = false, space=:pixel)
 end
 
 # update the kite power system, consisting of the tether, the kite and the state (text and numbers)
