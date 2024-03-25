@@ -1,7 +1,7 @@
 name = "KiteViewers"
 uuid = "2e593061-95e7-45e4-95f4-df0491f2e601"
 authors = ["Uwe Fechner <fechner@aenarete.eu> and contributors"]
-version = "0.4.6"
+version = "0.4.7"
 
 [deps]
 FileIO = "5789e2e9-d7fb-5bc7-8068-2c6fae9b9549"
@@ -24,7 +24,7 @@ FileIO = "1"
 GLMakie = "~0.9"
 GeometryBasics = "0.4.10"
 Joysticks = "0.1.2, 0.1.4"
-KiteUtils = "~0.5"
+KiteUtils = "0.6"
 Parameters = "0.12"
 Pkg = "1.9, 1.10"
 PrecompileTools = "1.2"
