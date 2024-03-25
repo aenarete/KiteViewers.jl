@@ -126,7 +126,7 @@ function Viewer3D(show_kite=true, autolabel="Autopilot"; precompile=false)
     fig = Figure(size=(WIDTH, HEIGHT), backgroundcolor=RGBf(0.7, 0.8, 1))
     sub_fig = fig[1,1]
     menu1 = Menu(fig, bbox = fig.scene.viewport, 
-                 options = ["plot", "load plot", "save plot"], default = "plot")
+                 options = ["plot_main", "plot_timing", "load simulation", "save simulation"], default = "plot")
     menu1.width[] =120
     menu1.halign[]=:left
     menu1.valign[]=:top
