@@ -84,6 +84,7 @@ mutable struct Viewer3D <: AKV
     btn_PARKING::Button
     btn_STOP::Button
     menu::Menu
+    menu_rel_tol::Menu
     btn_OK::Button
     sw::Toggle
     step::Int64
@@ -126,7 +127,7 @@ function Viewer3D(show_kite=true, autolabel="Autopilot"; precompile=false)
     fig = Figure(size=(WIDTH, HEIGHT), backgroundcolor=RGBf(0.7, 0.8, 1))
     sub_fig = fig[1,1]
     menu1 = Menu(fig, bbox = fig.scene.viewport, 
-                 options = ["plot_main", "plot_timing", "load simulation", "save simulation"], default = "plot_main")
+                 options = ["plot_main", "plot_control", "plot_elev_az", "plot_timing", "load simulation", "save simulation"], default = "plot_main")
     menu1.width[] =120
     menu1.halign[]=:left
     menu1.valign[]=:top
@@ -198,7 +199,7 @@ function Viewer3D(show_kite=true, autolabel="Autopilot"; precompile=false)
     reset_view(cam, scene3D)
 
     s = Viewer3D(fig, scene3D, cam, gl_screen, btn_RESET, btn_ZOOM_in, btn_ZOOM_out, 
-                 btn_PLAY_PAUSE, btn_AUTO, btn_PARKING, btn_STOP, menu1, btn_OK,
+                 btn_PLAY_PAUSE, btn_AUTO, btn_PARKING, btn_STOP, menu1, menu2, btn_OK,
                  sw, 0, 0, show_kite, false)
     txt2 = init_system(s.scene3D; show_kite=show_kite)
 
