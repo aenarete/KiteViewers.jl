@@ -131,6 +131,16 @@ function Viewer3D(show_kite=true, autolabel="Autopilot"; precompile=false)
     menu1.halign[]=:left
     menu1.valign[]=:top
     menu1.alignmode[]=Outside(30)
+    menu2 = Menu(fig, bbox = fig.scene.viewport, 
+                 options = ["0.001", "0.0001", "0.00001", "0.000001"], default = "0.001")
+    menu2.width[] =120
+    menu2.halign[]=:left
+    menu2.valign[]=:top
+    menu2.alignmode[]=Outside(30, 0, 0, 60)
+    label2 = Label(fig, "rel_tol", bbox=fig.scene.viewport)
+    label2.halign[]=:left
+    label2.valign[]=:top
+    label2.alignmode=Outside(160, 0, 0, 70)
     btn_OK         = Button(fig, bbox=fig.scene.viewport, label = "OK")
     btn_OK.halign[]=:left
     btn_OK.valign[]=:top
