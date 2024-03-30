@@ -44,13 +44,13 @@ SOFTWARE. =#
     p2 = Observable(Vector{Point2f}(undef, 6000)) # 5 min
     pos_x = Observable(0.0f0)
 
-    points          = Vector{Point3f}(undef, se().segments+1+4)
+    # points          = Vector{Point3f}(undef, se().segments+1+4)
     quat            = Observable(Quaternionf(0,0,0,1))                                     # orientation of the kite
     kite_pos        = Observable(Point3f(1,0,0))                                           # position of the kite
-    positions       = Observable([Point3f(x,0,0) for x in 1:se().segments+KITE_SPRINGS])   # positions of the tether segments
-    part_positions  = Observable([Point3f(x,0,0) for x in 1:se().segments+1+4])            # positions of the tether particles
-    markersizes     = Observable([Point3f(1,1,1) for x in 1:se().segments+KITE_SPRINGS])   # includes the segment length
-    rotations       = Observable([Point3f(1,0,0) for x in 1:se().segments+KITE_SPRINGS])   # unit vectors corresponding with
+    # positions       = Observable([Point3f(x,0,0) for x in 1:se().segments+KITE_SPRINGS])   # positions of the tether segments
+    # part_positions  = Observable([Point3f(x,0,0) for x in 1:se().segments+1+4])            # positions of the tether particles
+    # markersizes     = Observable([Point3f(1,1,1) for x in 1:se().segments+KITE_SPRINGS])   # includes the segment length
+    # rotations       = Observable([Point3f(1,0,0) for x in 1:se().segments+KITE_SPRINGS])   # unit vectors corresponding with
                                                                                            #   the orientation of the segments 
 end 
 
@@ -76,6 +76,12 @@ mutable struct Viewer3D <: AKV
     scene3D::LScene
     cam::Camera3D
     screen::GLMakie.Screen
+    points::Vector{Point{3, Float32}}
+    positions::Observable{Vector{GeometryBasics.Point{3, Float32}}}
+    part_positions::Observable{Vector{GeometryBasics.Point{3, Float32}}}
+    markersizes::Observable{Vector{GeometryBasics.Point{3, Float32}}}
+    rotations::Observable{Vector{GeometryBasics.Point{3, Float32}}}
+    set::Settings
     btn_RESET::Button
     btn_ZOOM_in::Button
     btn_ZOOM_out::Button
@@ -120,7 +126,11 @@ function set_status(kv::AKV, status_text)
     status[] = status_text
 end
 
-function Viewer3D(show_kite=true, autolabel="Autopilot"; precompile=false) 
+function Viewer3D(show_kite=true, autolabel="Autopilot"; precompile=false)
+    set = se()
+    Viewer3D(set, show_kite, autolabel; precompile) 
+end
+function Viewer3D(set::Settings, show_kite=true, autolabel="Autopilot"; precompile=false) 
     global last_status
     WIDTH  = 840
     HEIGHT = 900
@@ -197,11 +207,16 @@ function Viewer3D(show_kite=true, autolabel="Autopilot"; precompile=false)
     GUI_ACTIVE[1] = true
 
     reset_view(cam, scene3D)
-
-    s = Viewer3D(fig, scene3D, cam, gl_screen, btn_RESET, btn_ZOOM_in, btn_ZOOM_out, 
+    points=Vector{Point3f}(undef, se().segments+1+4)
+    pos=Observable([Point3f(x,0,0) for x in 1:set.segments+KITE_SPRINGS])
+    part_pos=Observable([Point3f(x,0,0) for x in 1:se().segments+1+4])  
+    markersizes     = Observable([Point3f(1,1,1) for x in 1:se().segments+KITE_SPRINGS])
+    rotations       = Observable([Point3f(1,0,0) for x in 1:se().segments+KITE_SPRINGS]) 
+    s = Viewer3D(fig, scene3D, cam, gl_screen, points, pos, part_pos, markersizes, 
+                 rotations, set, btn_RESET, btn_ZOOM_in, btn_ZOOM_out, 
                  btn_PLAY_PAUSE, btn_AUTO, btn_PARKING, btn_STOP, menu1, menu2, btn_OK,
                  sw, 0, 0, show_kite, false)
-    txt2 = init_system(s.scene3D; show_kite=show_kite)
+    txt2 = init_system(s, s.scene3D; show_kite=show_kite)
 
     camera = cameracontrols(s.scene3D.scene)
     reset_view(camera, s.scene3D)

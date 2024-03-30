@@ -42,11 +42,11 @@ function create_coordinate_system(scene, points = 10, max_x = 15.0)
 end
 
 # draw the kite power system, consisting of the tether, the kite and the state (text and numbers)
-function init_system(scene; show_kite=true)
+function init_system(kv::AbstractKiteViewer, scene; show_kite=true)
     sphere = Sphere(Point3f(0, 0, 0), Float32(0.07 * SCALE))
-    meshscatter!(scene, part_positions, marker=sphere, markersize=1.0, color=:yellow)
+    meshscatter!(scene, kv.part_positions, marker=sphere, markersize=1.0, color=:yellow)
     cyl = Cylinder(Point3f(0,0,-0.5), Point3f(0,0,0.5), Float32(0.035 * SCALE))        
-    meshscatter!(scene, positions, marker=cyl, rotations=rotations, markersize=markersizes, color=:yellow)
+    meshscatter!(scene, kv.positions, marker=cyl, rotations=kv.rotations, markersize=kv.markersizes, color=:yellow)
     if show_kite
         meshscatter!(scene, kite_pos, marker=KITE, markersize = 0.25, rotations=quat, color=:blue)
     end
@@ -60,8 +60,8 @@ function init_system(scene; show_kite=true)
     else
         font="Courier New"
     end
-    if se().fixed_font != ""
-        font=se().fixed_font
+    if kv.set.fixed_font != ""
+        font=kv.set.fixed_font
     end
     text!(scene, textnode, position  = Point2f(50, 110), fontsize=TEXT_SIZE, font=font, align = (:left, :top), show_axis = false, space=:pixel)
     text!(scene, textnode2, position  = Point2f(630, 735), fontsize=TEXT_SIZE, font=font, align = (:left, :bottom), show_axis = false, space=:pixel)
@@ -69,95 +69,94 @@ end
 
 # update the kite power system, consisting of the tether, the kite and the state (text and numbers)
 function update_system(kv::AKV, state::SysState; scale=1.0, kite_scale=1.0)
-    segments=se().segments
     azimuth = state.azimuth
     if azimuth ≈ 0 # suppress -0 and replace it with 0
         azimuth=zero(azimuth)
     end
-    fourpoint = length(state.Z) > segments+1
+    fourpoint = length(state.Z) > kv.set.segments+1
     if fourpoint
         height = state.Z[end-2]
     else
         height = state.Z[end]
     end
     # move the particles to the correct position
-    for i in range(1, length=se().segments+1)
-        points[i] = Point3f(state.X[i], state.Y[i], state.Z[i]) * scale
+    for i in range(1, length=kv.set.segments+1)
+        kv.points[i] = Point3f(state.X[i], state.Y[i], state.Z[i]) * scale
     end
     if fourpoint
-        pos_pod = Point3f(state.X[segments+1], state.Y[segments+1], state.Z[segments+1]) * scale
+        pos_pod = Point3f(state.X[kv.set.segments+1], state.Y[kv.set.segments+1], state.Z[kv.set.segments+1]) * scale
         # enlarge 4 point kite
-        for i in segments+2:length(state.Z)
+        for i in kv.set.segments+2:length(state.Z)
             pos_abs = Point3f(state.X[i], state.Y[i], state.Z[i]) * scale
             pos_rel = pos_abs-pos_pod
-            points[i] = pos_abs + (kite_scale-1.0) * pos_rel
+            kv.points[i] = pos_abs + (kite_scale-1.0) * pos_rel
         end
     end
-    part_positions[] = [(points[k]) for k in 1:length(state.Z)]
+    kv.part_positions[] = [(kv.points[k]) for k in 1:length(state.Z)]
 
     function calc_positions(s)
-        tmp = [(points[k] + points[k+1])/2 for k in 1:segments]
+        tmp = [(kv.points[k] + kv.points[k+1])/2 for k in 1:kv.set.segments]
         if fourpoint
-            push!(tmp, (points[s+1]+points[s+4]) / 2) # S6
-            push!(tmp, (points[s+2]+points[s+5]) / 2) # S8
-            push!(tmp, (points[s+3]+points[s+5]) / 2) # S7
-            push!(tmp, (points[s+2]+points[s+4]) / 2) # S2
-            push!(tmp, (points[s+1]+points[s+5]) / 2) # S5
-            push!(tmp, (points[s+4]+points[s+3]) / 2) # S4
-            push!(tmp, (points[s+1]+points[s+2]) / 2) # S1
-            push!(tmp, (points[s+3]+points[s+2]) / 2) # S9
+            push!(tmp, (kv.points[s+1]+kv.points[s+4]) / 2) # S6
+            push!(tmp, (kv.points[s+2]+kv.points[s+5]) / 2) # S8
+            push!(tmp, (kv.points[s+3]+kv.points[s+5]) / 2) # S7
+            push!(tmp, (kv.points[s+2]+kv.points[s+4]) / 2) # S2
+            push!(tmp, (kv.points[s+1]+kv.points[s+5]) / 2) # S5
+            push!(tmp, (kv.points[s+4]+kv.points[s+3]) / 2) # S4
+            push!(tmp, (kv.points[s+1]+kv.points[s+2]) / 2) # S1
+            push!(tmp, (kv.points[s+3]+kv.points[s+2]) / 2) # S9
         end
         tmp
     end
     function calc_markersizes(s)
-        tmp = [Point3f(1, 1, norm(points[k+1] - points[k])) for k in 1:segments]
+        tmp = [Point3f(1, 1, norm(kv.points[k+1] - kv.points[k])) for k in 1:kv.set.segments]
         if fourpoint
-            push!(tmp, Point3f(1, 1, norm(points[s+1] - points[s+4]))) # S6
-            push!(tmp, Point3f(1, 1, norm(points[s+2] - points[s+5]))) # S8
-            push!(tmp, Point3f(1, 1, norm(points[s+3] - points[s+5]))) # S7
-            push!(tmp, Point3f(1, 1, norm(points[s+2] - points[s+4]))) # S2
-            push!(tmp, Point3f(1, 1, norm(points[s+1] - points[s+5]))) # S5
-            push!(tmp, Point3f(1, 1, norm(points[s+4] - points[s+3]))) # S4
-            push!(tmp, Point3f(1, 1, norm(points[s+1] - points[s+2]))) # S1
-            push!(tmp, Point3f(1, 1, norm(points[s+3] - points[s+2]))) # S9
+            push!(tmp, Point3f(1, 1, norm(kv.points[s+1] - kv.points[s+4]))) # S6
+            push!(tmp, Point3f(1, 1, norm(kv.points[s+2] - kv.points[s+5]))) # S8
+            push!(tmp, Point3f(1, 1, norm(kv.points[s+3] - kv.points[s+5]))) # S7
+            push!(tmp, Point3f(1, 1, norm(kv.points[s+2] - kv.points[s+4]))) # S2
+            push!(tmp, Point3f(1, 1, norm(kv.points[s+1] - kv.points[s+5]))) # S5
+            push!(tmp, Point3f(1, 1, norm(kv.points[s+4] - kv.points[s+3]))) # S4
+            push!(tmp, Point3f(1, 1, norm(kv.points[s+1] - kv.points[s+2]))) # S1
+            push!(tmp, Point3f(1, 1, norm(kv.points[s+3] - kv.points[s+2]))) # S9
         end
         tmp
     end
     function calc_rotations(s)
-        tmp = [normalize(points[k+1] - points[k]) for k in 1:segments]
+        tmp = [normalize(kv.points[k+1] - kv.points[k]) for k in 1:kv.set.segments]
         if fourpoint
-            push!(tmp, normalize(points[s+1] - points[s+4]))
-            push!(tmp, normalize(points[s+2] - points[s+5]))
-            push!(tmp, normalize(points[s+3] - points[s+5]))
-            push!(tmp, normalize(points[s+2] - points[s+4]))
-            push!(tmp, normalize(points[s+1] - points[s+5]))
-            push!(tmp, normalize(points[s+4] - points[s+3]))
-            push!(tmp, normalize(points[s+1] - points[s+2]))
-            push!(tmp, normalize(points[s+3] - points[s+2]))
+            push!(tmp, normalize(kv.points[s+1] - kv.points[s+4]))
+            push!(tmp, normalize(kv.points[s+2] - kv.points[s+5]))
+            push!(tmp, normalize(kv.points[s+3] - kv.points[s+5]))
+            push!(tmp, normalize(kv.points[s+2] - kv.points[s+4]))
+            push!(tmp, normalize(kv.points[s+1] - kv.points[s+5]))
+            push!(tmp, normalize(kv.points[s+4] - kv.points[s+3]))
+            push!(tmp, normalize(kv.points[s+1] - kv.points[s+2]))
+            push!(tmp, normalize(kv.points[s+3] - kv.points[s+2]))
         end
         tmp
     end
 
     # move, scale and turn the cylinder correctly
-    positions[]   = calc_positions(segments)
-    markersizes[] = calc_markersizes(segments)
-    rotations[]   = calc_rotations(segments)
+    kv.positions[]   = calc_positions(kv.set.segments)
+    kv.markersizes[] = calc_markersizes(kv.set.segments)
+    kv.rotations[]   = calc_rotations(kv.set.segments)
 
     if fourpoint
-        s = segments
+        s = kv.set.segments
         q0 = state.orient                                     # SVector in the order w,x,y,z
         quat[]     = Quaternionf(q0[2], q0[3], q0[4], q0[1])  # the constructor expects the order x,y,z,w
-        kite_pos[] = 0.8 * 0.5 * (points[s+4] + points[s+5]) + 0.2 * points[s+1]
+        kite_pos[] = 0.8 * 0.5 * (kv.points[s+4] + kv.points[s+5]) + 0.2 * kv.points[s+1]
     else
         # move and turn the kite to the new position
         q0 = state.orient                                     # SVector in the order w,x,y,z
         quat[]     = Quaternionf(q0[2], q0[3], q0[4], q0[1]) # the constructor expects the order x,y,z,w
-        kite_pos[] = Point3f(state.X[segments+1], state.Y[segments+1], state.Z[segments+1]) * scale
+        kite_pos[] = Point3f(state.X[kv.set.segments+1], state.Y[kv.set.segments+1], state.Z[kv.set.segments+1]) * scale
     end
 
     # calculate power and energy
     power = state.force * state.v_reelout
-    dt = 1/se().sample_freq
+    dt = 1/kv.set.sample_freq
     if abs(power) < 0.001
         power = 0
     end
