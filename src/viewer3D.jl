@@ -44,14 +44,8 @@ SOFTWARE. =#
     p2 = Observable(Vector{Point2f}(undef, 6000)) # 5 min
     pos_x = Observable(0.0f0)
 
-    # points          = Vector{Point3f}(undef, se().segments+1+4)
     quat            = Observable(Quaternionf(0,0,0,1))                                     # orientation of the kite
     kite_pos        = Observable(Point3f(1,0,0))                                           # position of the kite
-    # positions       = Observable([Point3f(x,0,0) for x in 1:se().segments+KITE_SPRINGS])   # positions of the tether segments
-    # part_positions  = Observable([Point3f(x,0,0) for x in 1:se().segments+1+4])            # positions of the tether particles
-    # markersizes     = Observable([Point3f(1,1,1) for x in 1:se().segments+KITE_SPRINGS])   # includes the segment length
-    # rotations       = Observable([Point3f(1,0,0) for x in 1:se().segments+KITE_SPRINGS])   # unit vectors corresponding with
-                                                                                           #   the orientation of the segments 
 end 
 
 last_status::String=""
@@ -207,11 +201,12 @@ function Viewer3D(set::Settings, show_kite=true, autolabel="Autopilot"; precompi
     GUI_ACTIVE[1] = true
 
     reset_view(cam, scene3D)
-    points=Vector{Point3f}(undef, se().segments+1+4)
-    pos=Observable([Point3f(x,0,0) for x in 1:set.segments+KITE_SPRINGS])
-    part_pos=Observable([Point3f(x,0,0) for x in 1:se().segments+1+4])  
-    markersizes     = Observable([Point3f(1,1,1) for x in 1:se().segments+KITE_SPRINGS])
-    rotations       = Observable([Point3f(1,0,0) for x in 1:se().segments+KITE_SPRINGS]) 
+    points=Vector{Point3f}(undef, set.segments+1+4)
+    pos=Observable([Point3f(x,0,0) for x in 1:set.segments+KITE_SPRINGS]) # positions of the tether segments
+    part_pos=Observable([Point3f(x,0,0) for x in 1:set.segments+1+4])     # positions of the tether particles
+    markersizes     = Observable([Point3f(1,1,1) for x in 1:set.segments+KITE_SPRINGS]) # includes the segment length
+    rotations       = Observable([Point3f(1,0,0) for x in 1:set.segments+KITE_SPRINGS]) #unit vectors corresponding with
+                                                                                        #the orientation of the segments 
     s = Viewer3D(fig, scene3D, cam, gl_screen, points, pos, part_pos, markersizes, 
                  rotations, set, btn_RESET, btn_ZOOM_in, btn_ZOOM_out, 
                  btn_PLAY_PAUSE, btn_AUTO, btn_PARKING, btn_STOP, menu1, menu2, btn_OK,
