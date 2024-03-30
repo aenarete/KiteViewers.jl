@@ -43,7 +43,6 @@ SOFTWARE. =#
     p1 = Observable(Vector{Point2f}(undef, 6000)) # 5 min
     p2 = Observable(Vector{Point2f}(undef, 6000)) # 5 min
     pos_x = Observable(0.0f0)
-
     quat            = Observable(Quaternionf(0,0,0,1))                                     # orientation of the kite
     kite_pos        = Observable(Point3f(1,0,0))                                           # position of the kite
 end 
@@ -83,9 +82,9 @@ mutable struct Viewer3D <: AKV
     btn_AUTO::Button
     btn_PARKING::Button
     btn_STOP::Button
-    menu::Menu
-    menu_rel_tol::Menu
-    btn_OK::Button
+    menu::Union{Menu, Nothing}
+    menu_rel_tol::Union{Menu, Nothing}
+    btn_OK::Union{Button, Nothing}
     sw::Toggle
     step::Int64
     energy::Float64
@@ -124,32 +123,39 @@ function Viewer3D(show_kite=true, autolabel="Autopilot"; precompile=false)
     set = se()
     Viewer3D(set, show_kite, autolabel; precompile) 
 end
-function Viewer3D(set::Settings, show_kite=true, autolabel="Autopilot"; precompile=false) 
+function Viewer3D(set::Settings, show_kite=true, autolabel="Autopilot"; precompile=false, menus=false) 
     global last_status
     WIDTH  = 840
     HEIGHT = 900
     fig = Figure(size=(WIDTH, HEIGHT), backgroundcolor=RGBf(0.7, 0.8, 1))
     sub_fig = fig[1,1]
-    menu1 = Menu(fig, bbox = fig.scene.viewport, 
-                 options = ["plot_main", "plot_control", "plot_elev_az", "plot_timing", "load simulation", "save simulation"], default = "plot_main")
-    menu1.width[] =120
-    menu1.halign[]=:left
-    menu1.valign[]=:top
-    menu1.alignmode[]=Outside(30)
-    menu2 = Menu(fig, bbox = fig.scene.viewport, 
-                 options = ["0.001", "0.0001", "0.00001", "0.000001"], default = "0.001")
-    menu2.width[] =120
-    menu2.halign[]=:left
-    menu2.valign[]=:top
-    menu2.alignmode[]=Outside(30, 0, 0, 60)
-    label2 = Label(fig, "rel_tol", bbox=fig.scene.viewport)
-    label2.halign[]=:left
-    label2.valign[]=:top
-    label2.alignmode=Outside(160, 0, 0, 70)
-    btn_OK         = Button(fig, bbox=fig.scene.viewport, label = "OK")
-    btn_OK.halign[]=:left
-    btn_OK.valign[]=:top
-    btn_OK.alignmode[]=Outside(160, 0, 0, 30)
+    if menus
+        menu1 = Menu(fig, bbox = fig.scene.viewport, 
+                    options = ["plot_main", "plot_control", "plot_elev_az", "plot_timing", "load simulation", "save simulation"], default = "plot_main")
+        menu1.width[] =120
+        menu1.halign[]=:left
+        menu1.valign[]=:top
+        menu1.alignmode[]=Outside(30)
+        menu2 = Menu(fig, bbox = fig.scene.viewport, 
+                    options = ["0.001", "0.0001", "0.00001", "0.000001"], default = "0.001")
+        menu2.width[] =120
+        menu2.halign[]=:left
+        menu2.valign[]=:top
+        menu2.alignmode[]=Outside(30, 0, 0, 60)
+        label2 = Label(fig, "rel_tol", bbox=fig.scene.viewport)
+        label2.halign[]=:left
+        label2.valign[]=:top
+        label2.alignmode=Outside(160, 0, 0, 70)
+        btn_OK         = Button(fig, bbox=fig.scene.viewport, label = "OK")
+        btn_OK.halign[]=:left
+        btn_OK.valign[]=:top
+        btn_OK.alignmode[]=Outside(160, 0, 0, 30)
+    else
+        menu1=nothing
+        menu2=nothing
+        btn_OK=nothing
+    end
+
     scene2D = LScene(fig[3,1], show_axis=false, height=16)
     scene3D = LScene(sub_fig, show_axis=false, scenekw=(limits=Rect(-7,-10.0,0, 11,10,11), size=(800, 800)))
 
