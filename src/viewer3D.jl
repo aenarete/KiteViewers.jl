@@ -88,6 +88,7 @@ mutable struct Viewer3D <: AKV
     btn_OK::Union{Button, Nothing}
     sw::Toggle
     step::Int64
+    mod_text::Int64 # 4 means at 40Hz update rate the text is updated only at 10Hz
     energy::Float64
     show_kite::Bool
     stop::Bool
@@ -225,10 +226,11 @@ function Viewer3D(set::Settings, show_kite=true, autolabel="Autopilot"; precompi
     markersizes     = Observable([Point3f(1,1,1) for x in 1:set.segments+KITE_SPRINGS]) # includes the segment length
     rotations       = Observable([Point3f(1,0,0) for x in 1:set.segments+KITE_SPRINGS]) #unit vectors corresponding with
                                                                                         #the orientation of the segments 
+    mod_text = 4
     s = Viewer3D(fig, scene3D, cam, gl_screen, points, pos, part_pos, markersizes, 
                  rotations, set, btn_RESET, btn_ZOOM_in, btn_ZOOM_out, 
                  btn_PLAY_PAUSE, btn_AUTO, btn_PARKING, btn_STOP, menu1, menu2, menu3, btn_OK,
-                 sw, 0, 0, show_kite, false)
+                 sw, 0, mod_text, 0, show_kite, false)
     txt2 = init_system(s, s.scene3D; show_kite=show_kite)
 
     camera = cameracontrols(s.scene3D.scene)
