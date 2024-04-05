@@ -84,6 +84,7 @@ mutable struct Viewer3D <: AKV
     btn_STOP::Button
     menu::Union{Menu, Nothing}
     menu_rel_tol::Union{Menu, Nothing}
+    menu_time_lapse::Union{Menu, Nothing}
     btn_OK::Union{Button, Nothing}
     sw::Toggle
     step::Int64
@@ -146,6 +147,16 @@ function Viewer3D(set::Settings, show_kite=true, autolabel="Autopilot"; precompi
         label2.halign[]=:left
         label2.valign[]=:top
         label2.alignmode=Outside(160, 0, 0, 70)
+        menu3 = Menu(fig, bbox = fig.scene.viewport, 
+                options = ["1x", "2x", "3x", "4x", "6x", "8x"], default = "4x")
+        menu3.width[] =120
+        menu3.halign[]=:left
+        menu3.valign[]=:top
+        menu3.alignmode[]=Outside(30, 0, 0, 90)
+        label3 = Label(fig, "time_lapse", bbox=fig.scene.viewport)
+        label3.halign[]=:left
+        label3.valign[]=:top
+        label3.alignmode=Outside(160, 0, 0, 100)
         btn_OK         = Button(fig, bbox=fig.scene.viewport, label = "OK")
         btn_OK.halign[]=:left
         btn_OK.valign[]=:top
@@ -153,6 +164,7 @@ function Viewer3D(set::Settings, show_kite=true, autolabel="Autopilot"; precompi
     else
         menu1=nothing
         menu2=nothing
+        menu3=nothing
         btn_OK=nothing
     end
 
@@ -215,7 +227,7 @@ function Viewer3D(set::Settings, show_kite=true, autolabel="Autopilot"; precompi
                                                                                         #the orientation of the segments 
     s = Viewer3D(fig, scene3D, cam, gl_screen, points, pos, part_pos, markersizes, 
                  rotations, set, btn_RESET, btn_ZOOM_in, btn_ZOOM_out, 
-                 btn_PLAY_PAUSE, btn_AUTO, btn_PARKING, btn_STOP, menu1, menu2, btn_OK,
+                 btn_PLAY_PAUSE, btn_AUTO, btn_PARKING, btn_STOP, menu1, menu2, menu3, btn_OK,
                  sw, 0, 0, show_kite, false)
     txt2 = init_system(s, s.scene3D; show_kite=show_kite)
 
