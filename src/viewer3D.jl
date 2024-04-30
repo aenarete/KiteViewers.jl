@@ -85,6 +85,7 @@ mutable struct Viewer3D <: AKV
     menu::Union{Menu, Nothing}
     menu_rel_tol::Union{Menu, Nothing}
     menu_time_lapse::Union{Menu, Nothing}
+    menu_project::Union{Menu, Nothing}
     t_sim::Union{Textbox, Nothing}
     btn_OK::Union{Button, Nothing}
     sw::Toggle
@@ -149,6 +150,7 @@ function Viewer3D(set::Settings, show_kite=true, autolabel="Autopilot"; precompi
         label2.halign[]=:left
         label2.valign[]=:top
         label2.alignmode=Outside(160, 0, 0, 70)
+        
         menu3 = Menu(fig, bbox = fig.scene.viewport, 
                 options = ["1x", "2x", "3x", "4x", "6x", "8x"], default = "4x")
         menu3.width[] =120
@@ -159,17 +161,28 @@ function Viewer3D(set::Settings, show_kite=true, autolabel="Autopilot"; precompi
         label3.halign[]=:left
         label3.valign[]=:top
         label3.alignmode=Outside(160, 0, 0, 100)
+
+        menu4 = Menu(fig, bbox = fig.scene.viewport, 
+                options = ["load...", "save as...", "edit..."], default = "load...")
+        menu4.width[] =120
+        menu4.halign[]=:left
+        menu4.valign[]=:top
+        menu4.alignmode[]=Outside(30, 0, 0, 120)
+        label4 = Label(fig, "project", bbox=fig.scene.viewport)
+        label4.halign[]=:left
+        label4.valign[]=:top
+        label4.alignmode=Outside(160, 0, 0, 130)
+
         tb = Textbox(fig, bbox = fig.scene.viewport, placeholder = "Simulation time",
                      validator = UInt16, stored_string="460")
         tb.width[] =120
         tb.halign[]=:left
         tb.valign[]=:top
-        tb.alignmode[]=Outside(30, 0, 0, 130)
-        # tb.stored_string[]="460"
+        tb.alignmode[]=Outside(30, 0, 0, 160)
         label3 = Label(fig, "t_sim [s]", bbox=fig.scene.viewport)
         label3.halign[]=:left
         label3.valign[]=:top
-        label3.alignmode=Outside(160, 0, 0, 137)
+        label3.alignmode=Outside(160, 0, 0, 167)
         btn_OK         = Button(fig, bbox=fig.scene.viewport, label = "OK")
         btn_OK.halign[]=:left
         btn_OK.valign[]=:top
@@ -178,6 +191,7 @@ function Viewer3D(set::Settings, show_kite=true, autolabel="Autopilot"; precompi
         menu1=nothing
         menu2=nothing
         menu3=nothing
+        menu4=nothing
         tb = nothing
         btn_OK=nothing
     end
@@ -242,7 +256,7 @@ function Viewer3D(set::Settings, show_kite=true, autolabel="Autopilot"; precompi
     mod_text = 4
     s = Viewer3D(fig, scene3D, cam, gl_screen, points, pos, part_pos, markersizes, 
                  rotations, set, btn_RESET, btn_ZOOM_in, btn_ZOOM_out, 
-                 btn_PLAY_PAUSE, btn_AUTO, btn_PARKING, btn_STOP, menu1, menu2, menu3, tb, btn_OK,
+                 btn_PLAY_PAUSE, btn_AUTO, btn_PARKING, btn_STOP, menu1, menu2, menu3, menu4, tb, btn_OK,
                  sw, 0, mod_text, 0, show_kite, false)
     txt2 = init_system(s, s.scene3D; show_kite=show_kite)
 
