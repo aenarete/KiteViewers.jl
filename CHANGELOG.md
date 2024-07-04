@@ -1,5 +1,10 @@
 # Changelog
 
+### KiteViewers v0.4.13 - 2024-07-04
+#### Changed
+- fix pre-compilation on Ubuntu 24.04
+- smaller font size on Windows
+
 ### KiteViewers v0.4.12 - 2024-04-30
 #### Added
 - add menu_project for loading, saving and editing projects
