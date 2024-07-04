@@ -20,6 +20,11 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. =#
 
+if Sys.iswindows()
+    TEXT_SIZE::Int64 = 15
+else
+    TEXT_SIZE::Int64 = 16
+end
 @consts begin
     SCALE = 1.2 
     INITIAL_HEIGHT =  80.0*se().zoom # meter, for demo
@@ -29,7 +34,6 @@ SOFTWARE. =#
     PLAYING    = [false]
     GUI_ACTIVE = [false]
     AXIS_LABEL_SIZE = 30
-    TEXT_SIZE = 16
     running   = Observable(false)
     starting  = [0]
     zoom      = [1.0]
