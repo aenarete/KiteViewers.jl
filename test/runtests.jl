@@ -1,7 +1,7 @@
 using KiteUtils
 set_data_path()
 using KiteViewers
-set_data_path()
+set_data_path(joinpath(dirname(dirname(pathof(KiteViewers))), "data"))
 using Test
 
 cd("..")
