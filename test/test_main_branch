@@ -1,0 +1,14 @@
+#!/bin/bash -eu
+
+cd ~/repos
+rm -rf julia_tmp
+mkdir julia_tmp
+export JULIA_DEPOT_PATH="~/julia_tmp"
+rm -rf viewer_test
+mkdir viewer_test
+cd viewer_test
+echo "Installing KiteViewers..."
+julia --project="." -e "using Pkg; Pkg.update(); pkg\"add KiteViewers#main\"; Pkg.instantiate()"
+echo "Running the tests..."
+julia --project -e "using Pkg; Pkg.test(\"KiteViewers\")"
+echo "Done."
