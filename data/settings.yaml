@@ -20,7 +20,7 @@ initial:
 solver:
     abs_tol: 0.0006        # absolute tolerance of the DAE solver [m, m/s]
     rel_tol: 0.001         # relative tolerance of the DAE solver [-]
-    solver: "IDA"          # DAE solver, IDA or DFBDF or DImplicitEuler
+    solver: "DFBDF"        # DAE solver, IDA or DFBDF or DImplicitEuler
     linear_solver: "GMRES" # can be GMRES or LapackDense or Dense (only for IDA)
     max_order: 4           # maximal order, usually between 3 and 5 (IDA and DFBDF)
     max_iter:  200         # max number of iterations of the steady-state-solver
