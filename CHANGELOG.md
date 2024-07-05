@@ -1,8 +1,9 @@
 # Changelog
 
-### KiteViewers v0.4.13 - 2024-07-04
+### KiteViewers v0.4.13 - 2024-07-05
 #### Changed
 - fix pre-compilation on Ubuntu 24.04
+- fix tests
 - smaller font size on Windows
 
 ### KiteViewers v0.4.12 - 2024-04-30
