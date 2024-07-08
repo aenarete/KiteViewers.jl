@@ -1,8 +1,9 @@
 # Changelog
 
-### KiteViewers v0.4.13 - 2024-07-05
+### KiteViewers v0.4.13 - 2024-07-08
 #### Changed
 - fix pre-compilation on Ubuntu 24.04
+- replace `test_sterring.jl` with `test_parking.jl`
 - fix tests
 - smaller font size on Windows
 
