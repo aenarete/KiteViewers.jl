@@ -77,7 +77,7 @@ mutable struct Viewer3D <: AKV
     positions::Observable{Vector{GeometryBasics.Point{3, Float32}}}
     part_positions::Observable{Vector{GeometryBasics.Point{3, Float32}}}
     markersizes::Observable{Vector{GeometryBasics.Point{3, Float32}}}
-    rotations::Observable{Vector{GeometryBasics.Point{3, Float32}}}
+    rotation::Observable{Vector{GeometryBasics.Point{3, Float32}}}
     set::Settings
     btn_RESET::Button
     btn_ZOOM_in::Button
@@ -214,12 +214,12 @@ function Viewer3D(set::Settings, show_kite=true, autolabel="Autopilot"; precompi
 
     fontsize[]  = TEXT_SIZE
     fontsize2[] = AXIS_LABEL_SIZE
-    text!(scene3D, "z", position = Point3f(0, 0, 14.6), fontsize = fontsize2, align = (:center, :center), show_axis = false)
-    text!(scene3D, "x", position = Point3f(17, 0,0), fontsize = fontsize2, align = (:center, :center), show_axis = false)
-    text!(scene3D, "y", position = Point3f( 0, 14.5, 0), fontsize = fontsize2, align = (:center, :center), show_axis = false)
+    text!(scene3D, "z", position = Point3f(0, 0, 14.6), fontsize = fontsize2, align = (:center, :center))
+    text!(scene3D, "x", position = Point3f(17, 0,0), fontsize = fontsize2, align = (:center, :center))
+    text!(scene3D, "y", position = Point3f( 0, 14.5, 0), fontsize = fontsize2, align = (:center, :center))
 
-    text!(scene2D, status, position = Point2f( 20, 0), fontsize = TEXT_SIZE, align = (:left, :bottom), show_axis = false, space=:pixel)
-    text!(scene2D, plot_file, position = Point2f( 420, 0), fontsize = TEXT_SIZE, align = (:left, :bottom), show_axis = false, space=:pixel)
+    text!(scene2D, status, position = Point2f( 20, 0), fontsize = TEXT_SIZE, align = (:left, :bottom), space=:pixel)
+    text!(scene2D, plot_file, position = Point2f( 420, 0), fontsize = TEXT_SIZE, align = (:left, :bottom), space=:pixel)
 
     textnode2[]="depower\nsteering:"
 
@@ -255,11 +255,11 @@ function Viewer3D(set::Settings, show_kite=true, autolabel="Autopilot"; precompi
     pos=Observable([Point3f(x,0,0) for x in 1:set.segments+KITE_SPRINGS]) # positions of the tether segments
     part_pos=Observable([Point3f(x,0,0) for x in 1:set.segments+1+4])     # positions of the tether particles
     markersizes     = Observable([Point3f(1,1,1) for x in 1:set.segments+KITE_SPRINGS]) # includes the segment length
-    rotations       = Observable([Point3f(1,0,0) for x in 1:set.segments+KITE_SPRINGS]) #unit vectors corresponding with
+    rotation       = Observable([Point3f(1,0,0) for x in 1:set.segments+KITE_SPRINGS]) #unit vectors corresponding with
                                                                                         #the orientation of the segments 
     mod_text = 4
     s = Viewer3D(fig, scene3D, cam, gl_screen, points, pos, part_pos, markersizes, 
-                 rotations, set, btn_RESET, btn_ZOOM_in, btn_ZOOM_out, 
+                 rotation, set, btn_RESET, btn_ZOOM_in, btn_ZOOM_out, 
                  btn_PLAY_PAUSE, btn_AUTO, btn_PARKING, btn_STOP, menu1, menu2, menu3, menu4, tb, btn_OK,
                  sw, 0, mod_text, 0, show_kite, false)
     txt2 = init_system(s, s.scene3D; show_kite=show_kite)

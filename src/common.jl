@@ -46,9 +46,9 @@ function init_system(kv::AbstractKiteViewer, scene; show_kite=true)
     sphere = Sphere(Point3f(0, 0, 0), Float32(0.07 * SCALE))
     meshscatter!(scene, kv.part_positions, marker=sphere, markersize=1.0, color=:yellow)
     cyl = Cylinder(Point3f(0,0,-0.5), Point3f(0,0,0.5), Float32(0.035 * SCALE))        
-    meshscatter!(scene, kv.positions, marker=cyl, rotations=kv.rotations, markersize=kv.markersizes, color=:yellow)
+    meshscatter!(scene, kv.positions, marker=cyl, rotation=kv.rotation, markersize=kv.markersizes, color=:yellow)
     if show_kite
-        meshscatter!(scene, kite_pos, marker=KITE, markersize = 0.25, rotations=quat, color=:blue)
+        meshscatter!(scene, kite_pos, marker=KITE, markersize = 0.25, rotation=quat, color=:blue)
     end
     if Sys.islinux()
         lin_font="/usr/share/fonts/truetype/ttf-bitstream-vera/VeraMono.ttf"
@@ -63,8 +63,8 @@ function init_system(kv::AbstractKiteViewer, scene; show_kite=true)
     if kv.set.fixed_font != ""
         font=kv.set.fixed_font
     end
-    text!(scene, textnode, position  = Point2f(50, 110), fontsize=TEXT_SIZE, font=font, align = (:left, :top), show_axis = false, space=:pixel)
-    text!(scene, textnode2, position  = Point2f(630, 735), fontsize=TEXT_SIZE, font=font, align = (:left, :bottom), show_axis = false, space=:pixel)
+    text!(scene, textnode, position  = Point2f(50, 110), fontsize=TEXT_SIZE, font=font, align = (:left, :top), space=:pixel)
+    text!(scene, textnode2, position  = Point2f(630, 735), fontsize=TEXT_SIZE, font=font, align = (:left, :bottom), space=:pixel)
 end
 
 # update the kite power system, consisting of the tether, the kite and the state (text and numbers)
@@ -140,7 +140,7 @@ function update_system(kv::AKV, state::SysState; scale=1.0, kite_scale=1.0)
     # move, scale and turn the cylinder correctly
     kv.positions[]   = calc_positions(kv.set.segments)
     kv.markersizes[] = calc_markersizes(kv.set.segments)
-    kv.rotations[]   = calc_rotations(kv.set.segments)
+    kv.rotation[]   = calc_rotations(kv.set.segments)
 
     if fourpoint
         s = kv.set.segments
