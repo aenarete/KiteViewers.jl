@@ -4,7 +4,6 @@ authors = ["Uwe Fechner <fechner@aenarete.eu> and contributors"]
 version = "0.4.13"
 
 [deps]
-GLFW_jll = "0656b61e-2033-5cc2-a64a-77c0f6c09b89"
 FileIO = "5789e2e9-d7fb-5bc7-8068-2c6fae9b9549"
 GLMakie = "e9467ef8-e4e7-5192-8a1a-b1aee30e663a"
 GeometryBasics = "5c1252a2-5f33-56bf-86c9-59e7332b4326"
@@ -21,7 +20,6 @@ StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
 Timers = "21f18d07-b854-4dab-86f0-c15a3821819a"
 
 [compat]
-GLFW_jll = "=3.3.9"
 FileIO = "1"
 GLMakie = "~0.9"
 GeometryBasics = "0.4.10"
