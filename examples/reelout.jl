@@ -74,5 +74,6 @@ if PLOT_PERFORMANCE
     savefig("performance.png")
     display(plt)
 end
-# mean with :Dense integrator: 6.66% CPU time, 15 times realtime
-# mean with :GMRES integrator: 1.96% CPU time, 51 times realtime
+# mean with :Dense integrator: 6.66% CPU time,  15 times realtime
+# mean with :GMRES integrator: 1.96% CPU time,  51 times realtime
+# mean with DFBDF solver:      0.28% CPU time, 352 times realtime on Ryzen laptop
