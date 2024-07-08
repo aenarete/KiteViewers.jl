@@ -22,7 +22,7 @@ STATISTIC = false
 SHOW_VIEWER = true
 SHOW_KITE = true
 SAVE_PNG  = false
-PLOT_PERFORMANCE = false
+PLOT_PERFORMANCE = true
 # end of user parameter section #
 
 if ! @isdefined time_vec; const time_vec = zeros(div(STEPS, TIME_LAPSE_RATIO)); end
@@ -65,13 +65,14 @@ function simulate(integrator, steps; log=false)
     (integrator.p.iter - start) / steps
 end
 
-integrator = KiteModels.init_sim!(kps4, stiffness_factor=0.04, prn=STATISTIC)
+integrator = KiteModels.init_sim!(kps4, stiffness_factor=0.5, prn=STATISTIC)
 
 av_steps = simulate(integrator, STEPS, log=SAVE_PNG)
 if PLOT_PERFORMANCE
     using Plots
-    plot(range(0.5,TIME,step=0.5), time_vec, ylabel="CPU time [%]", xlabel="Simulation time [s]", legend=false)
+    plt=plot(range(0.25,TIME,step=0.25), time_vec, ylabel="CPU time [%]", xlabel="Simulation time [s]", legend=false)
     savefig("performance.png")
+    display(plt)
 end
 # mean with :Dense integrator: 6.66% CPU time, 15 times realtime
 # mean with :GMRES integrator: 1.96% CPU time, 51 times realtime
