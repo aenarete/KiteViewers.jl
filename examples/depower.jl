@@ -8,14 +8,13 @@ using KiteViewers, KiteModels, KitePodModels, Rotations
 # example program that shows
 # a. how to create a video
 # b. how to create a performance plot (simulation speed vs time)
-const Model = KPS4
 
-if ! @isdefined kcu;  const kcu = KCU(se());   end
-if ! @isdefined kps4; const kps4 = Model(kcu); end
+kcu::KCU = KCU(se())
+kps4::KPS4 = KPS4(kcu)
 
 # the following values can be changed to match your interest
 dt::Float64 = 0.05
-TIME = 40
+TIME = 60
 TIME_LAPSE_RATIO = 5
 STEPS = Int64(round(TIME/dt))
 STATISTIC = false
@@ -24,8 +23,6 @@ SHOW_KITE = true
 SAVE_PNG  = false
 PLOT_PERFORMANCE = false
 # end of user parameter section #
-
-if Model==KPS3 SHOW_KITE = true end
 
 if ! @isdefined time_vec; const time_vec = zeros(div(STEPS, TIME_LAPSE_RATIO)); end
 viewer::Viewer3D = Viewer3D(SHOW_KITE)
@@ -67,7 +64,7 @@ function simulate(integrator, steps; log=false)
     (integrator.p.iter - start) / steps
 end
 
-integrator = KiteModels.init_sim!(kps4, stiffness_factor=0.04, prn=STATISTIC)
+integrator = KiteModels.init_sim!(kps4, stiffness_factor=0.5, prn=STATISTIC)
 
 av_steps = simulate(integrator, STEPS, log=SAVE_PNG)
 if PLOT_PERFORMANCE
