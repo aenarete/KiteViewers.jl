@@ -1,5 +1,10 @@
 # Changelog
 
+### KiteViewers v0.4.14 - 2024-07-15
+#### Changed
+- upgrade to GLMakie 0.10
+- improve example reelout.jl
+
 ### KiteViewers v0.4.13 - 2024-07-08
 #### Changed
 - fix pre-compilation on Ubuntu 24.04
