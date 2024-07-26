@@ -1,10 +1,22 @@
 # http example
-using HTTP
-using JSON3
+using HTTP, JSON3, KiteUtils
 
 url = "http://localhost:8080"
 
-function get_data(url)
-    response = HTTP.get(url)
-    return JSON3.read(response.body)
+function init()
+    response = HTTP.get(url*"/init")
+    if response.status == 200
+        return JSON3.read(response.body)
+    else
+        return nothing
+    end
+end
+
+function sys_state()
+    response = HTTP.get(url*"/sys_state")
+    if response.status == 200
+        return JSON3.read(response.body)
+    else
+        return nothing
+    end
 end
