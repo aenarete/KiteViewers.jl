@@ -1,5 +1,9 @@
 # Changelog
 
+### Unreleased
+#### Changed
+- update KiteUtils to 0.7
+
 ### KiteViewers v0.4.14 - 2024-07-15
 #### Changed
 - upgrade to GLMakie 0.10
