@@ -20,3 +20,6 @@ function sys_state()
         return nothing
     end
 end
+
+# TODO: convert JSON into a SystemState object
+
