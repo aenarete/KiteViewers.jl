@@ -1,4 +1,4 @@
-Dict(:time      => 0,
+sys_state_dict = Dict(:time      => 0,
     :t_sim     => 0,
     :sys_state => 0,
     :e_mech    => 0,
