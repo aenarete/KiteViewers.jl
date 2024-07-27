@@ -90,11 +90,14 @@ function show_messages()
                 started = true
             end
             if ss.time != last_time
-                println("time: ", ss.time)
+                println("time: ", round(ss.time, digits=2))
+                if ss.time - last_time > 0.051
+                    println("time step: ", round(ss.time - last_time, digits=2))
+                end
                 last_time = ss.time
             end
         end
-        sleep(0.0025)
+        sleep(0.02)
     end
 end
 
