@@ -1,3 +1,7 @@
+using StaticArrays
+
+const MyFloat = Float64
+
 sys_state_dict = Dict(:time      => 0,
     :t_sim     => 0,
     :sys_state => 0,
@@ -16,21 +20,70 @@ sys_state_dict = Dict(:time      => 0,
     :vel_kite  => [0, 0, 0],
     :X         => Union{Float64, Int64}[0, 8.90221, 17.5546, 25.9174, 33.9673, 41.687, 49.0618, 49.2317, 50.7465, 50.4513, 50.4513],
     :Y         => Union{Float64, Int64}[0, 0, 0, 0, 0, 0, 0, 0, 0, 2.84247, -2.84247],
-    :Z         => Union{Float64, Int64}[0, 23.41, 46.9136, 70.5217, 94.2383, 118.064, 142.0, 147.029, 149.031, 146.739, 146.739],
-    :var_01    => 0,
-    :var_02    => 0,
-    :var_03    => 0,
-    :var_04    => 0,
-    :var_05    => 0,
-    :var_06    => 0,
-    :var_07    => 0,
-    :var_08    => 0,
-    :var_09    => 0,
-    :var_10    => 0,
-    :var_11    => 0,
-    :var_12    => 0,
-    :var_13    => 0,
-    :var_14    => 0,
-    :var_15    => 0,
-    :var_16    => 0
+    :Z         => Union{Float64, Int64}[0, 23.41, 46.9136, 70.5217, 94.2383, 118.064, 142.0, 147.029, 149.031, 146.739, 146.739]
 )
+
+P = 11
+mutable struct SysState{P}
+    "time since start of simulation in seconds"
+    time::Float64
+    "time needed for one simulation timestep"
+    t_sim::Float64
+    "state of system state control"
+    sys_state::Int16
+    "mechanical energy [Wh]"
+    e_mech::Float64
+    "orientation of the kite (quaternion, order w,x,y,z)"
+    orient::MVector{4, Float32}
+    "elevation angle in radians"
+    elevation::MyFloat
+    "azimuth angle in radians"
+    azimuth::MyFloat
+    "tether length [m]"
+    l_tether::MyFloat
+    "reel out velocity [m/s]"
+    v_reelout::MyFloat
+    "tether force [N]"
+    force::MyFloat
+    "depower settings [0..1]"
+    depower::MyFloat
+    "steering settings [-1..1]"
+    steering::MyFloat
+    "heading angle in radian"
+    heading::MyFloat
+    "course angle in radian"
+    course::MyFloat
+    "norm of apparent wind speed [m/s]"
+    v_app::MyFloat
+    "velocity vector of the kite"
+    vel_kite::MVector{3, MyFloat}
+    "vector of particle positions in x"
+    X::MVector{P, MyFloat}
+    "vector of particle positions in y"
+    Y::MVector{P, MyFloat}
+    "vector of particle positions in z"
+    Z::MVector{P, MyFloat}
+end 
+
+function sys_state_dict2struct(sys_state_dict)
+    SysState{P}(sys_state_dict[:time],
+        sys_state_dict[:t_sim],
+        sys_state_dict[:sys_state],
+        sys_state_dict[:e_mech],
+        sys_state_dict[:orient],
+        sys_state_dict[:elevation],
+        sys_state_dict[:azimuth],
+        sys_state_dict[:l_tether],
+        sys_state_dict[:v_reelout],
+        sys_state_dict[:force],
+        sys_state_dict[:depower],
+        sys_state_dict[:steering],
+        sys_state_dict[:heading],
+        sys_state_dict[:course],
+        sys_state_dict[:v_app],
+        sys_state_dict[:vel_kite],
+        sys_state_dict[:X],
+        sys_state_dict[:Y],
+        sys_state_dict[:Z]
+    )
+end
