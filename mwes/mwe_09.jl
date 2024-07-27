@@ -1,4 +1,4 @@
-using StaticArrays
+using StaticArrays, StructTypes, JSON3
 
 const MyFloat = Float64
 
@@ -65,27 +65,11 @@ mutable struct SysState{P}
     Z::MVector{P, MyFloat}
 end 
 
+
+StructTypes.StructType(::Type{SysState{P}}) = StructTypes.Mutable()
+
 function sys_state_dict2struct(sys_state_dict)
-    SysState{P}(sys_state_dict[:time],
-        sys_state_dict[:t_sim],
-        sys_state_dict[:sys_state],
-        sys_state_dict[:e_mech],
-        sys_state_dict[:orient],
-        sys_state_dict[:elevation],
-        sys_state_dict[:azimuth],
-        sys_state_dict[:l_tether],
-        sys_state_dict[:v_reelout],
-        sys_state_dict[:force],
-        sys_state_dict[:depower],
-        sys_state_dict[:steering],
-        sys_state_dict[:heading],
-        sys_state_dict[:course],
-        sys_state_dict[:v_app],
-        sys_state_dict[:vel_kite],
-        sys_state_dict[:X],
-        sys_state_dict[:Y],
-        sys_state_dict[:Z]
-    )
+   JSON3.read(sys_state_dict, SysState{P})
 end
 
 sys_state_dict2struct(sys_state_dict)
