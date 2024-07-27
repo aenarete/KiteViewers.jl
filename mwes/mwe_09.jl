@@ -71,5 +71,3 @@ StructTypes.StructType(::Type{SysState{P}}) = StructTypes.Mutable()
 function sys_state_dict2struct(sys_state_dict)
    JSON3.read(sys_state_dict, SysState{P})
 end
-
-sys_state_dict2struct(sys_state_dict)
