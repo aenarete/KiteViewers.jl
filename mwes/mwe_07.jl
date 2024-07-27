@@ -12,7 +12,7 @@ function init()
     end
 end
 
-function get_sys_state()
+function get_sys_state_dict()
     response = HTTP.get(url*"/sys_state")
     if response.status == 200
         return JSON3.read(response.body)
@@ -21,21 +21,51 @@ function get_sys_state()
     end
 end
 
-function get_sys_state2()
+function sys_state_dict2struct(sys_state_dict)
+    P = length(sys_state_dict.Z)
+    SysState{P}(sys_state_dict[:time],
+        sys_state_dict[:t_sim],
+        sys_state_dict[:sys_state],
+        sys_state_dict[:e_mech],
+        sys_state_dict[:orient],
+        sys_state_dict[:elevation],
+        sys_state_dict[:azimuth],
+        sys_state_dict[:l_tether],
+        sys_state_dict[:v_reelout],
+        sys_state_dict[:force],
+        sys_state_dict[:depower],
+        sys_state_dict[:steering],
+        sys_state_dict[:heading],
+        sys_state_dict[:course],
+        sys_state_dict[:v_app],
+        sys_state_dict[:vel_kite],
+        sys_state_dict[:X],
+        sys_state_dict[:Y],
+        sys_state_dict[:Z],
+        sys_state_dict[:var_01],
+        sys_state_dict[:var_02],
+        sys_state_dict[:var_03],
+        sys_state_dict[:var_04],
+        sys_state_dict[:var_05],
+        sys_state_dict[:var_06],
+        sys_state_dict[:var_07],
+        sys_state_dict[:var_08],
+        sys_state_dict[:var_09],
+        sys_state_dict[:var_10],
+        sys_state_dict[:var_11],
+        sys_state_dict[:var_12],
+        sys_state_dict[:var_13],
+        sys_state_dict[:var_14],
+        sys_state_dict[:var_15],
+        sys_state_dict[:var_16]
+    )
+end
+
+function get_sys_state()
     response = HTTP.get(url*"/sys_state")
     if response.status == 200
-        return (response.body)
+        return sys_state_dict2struct(JSON3.read(response.body))
     else
         return nothing
     end
 end
-
-
-
-# TODO: convert JSON into a SysState object
-
-# JSON3.@generatetypes ss
-# StructTypes.StructType(::Type{SysState{P}}) = StructTypes.Struct()
-# ss = get_sys_state()
-# P = length(ss.Z)
-# sys_state = JSON3.read(get_sys_state(), SysState{P})
