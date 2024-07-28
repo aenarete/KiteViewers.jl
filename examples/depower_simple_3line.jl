@@ -19,7 +19,7 @@ const STEPS = Int64(round(TIME/dt))
 STATISTIC = true
 SHOW_KITE = true
 PLOT_PERFORMANCE = false
-set_data_path("/home/bart/Code/work/data/")
+# USE 3L SETTINGS!
 update_settings()
 # end of user parameter section #
 
