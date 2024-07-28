@@ -1,8 +1,9 @@
 # Changelog
 
-### Unreleased
+### KiteViewers v0.4.15 - 2024-07-28
 #### Changed
 - update KiteUtils to 0.7
+- add example show_messages.jl that receives html messages
 
 ### KiteViewers v0.4.14 - 2024-07-15
 #### Changed
