@@ -47,7 +47,7 @@ function simulate(integrator, steps; log=false)
         if i > 300
             v_ro += acc*dt
         end
-        KiteModels.next_step!(kps4, integrator, v_ro=v_ro, dt=dt)     
+        KiteModels.next_step!(kps4, integrator; set_speed=v_ro, dt=dt)     
         if mod(i, TIME_LAPSE_RATIO) == 0 || i == steps
             if SHOW_VIEWER update_system2(kps4) end
             if log

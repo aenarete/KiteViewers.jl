@@ -41,7 +41,7 @@ function simulate(integrator, steps)
         elseif i == 640
             set_depower_steering(kps4.kcu, 0.35, 0.0)    
         end
-        t_sim = @elapsed KiteModels.next_step!(kps4, integrator, dt=dt)
+        t_sim = @elapsed KiteModels.next_step!(kps4, integrator; set_speed=0, dt=dt)
         t_gc = 0.0
         # if t_sim < 0.08*dt
         #     t_gc = @elapsed GC.gc(false)
