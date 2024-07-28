@@ -51,7 +51,7 @@ function simulate(integrator, steps)
         t_show = 0.0
         # println(SysState(kps4_3l))
         if mod(i, TIME_LAPSE_RATIO) == 0 || i == steps
-            t_show = @elapsed update_system(viewer, SysState(kps4_3l); scale = 0.08, kite_scale=3.0)
+            t_show = @elapsed update_system(viewer, SysState(kps4_3l); scale = 0.08, kite_scale=5.0)
             println("i ", i)
             println(viewer.points)
             end_time_ns = time_ns()

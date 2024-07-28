@@ -76,8 +76,6 @@ function update_system(kv::AKV, state::SysState; scale=1.0, kite_scale=1.0)
     threepoint = length(state.Z) == kv.set.segments+1 # check if this is true
     fourpoint = length(state.Z) == kv.set.segments+5
     fourpoint_3l = length(state.Z) == kv.set.segments*3+6
-    println(length(state.Z))
-    println(kv.set.segments*3+6)
     if fourpoint
         height = state.Z[end-2]
     else
@@ -99,8 +97,15 @@ function update_system(kv::AKV, state::SysState; scale=1.0, kite_scale=1.0)
             end
         end
     elseif fourpoint_3l
-        for i in 1:length(state.Z)
+        for i in 3:3:length(state.Z) # middle points
             kv.points[i] = Point3f(state.X[i], state.Y[i], state.Z[i]) * scale
+        end
+        for i in 1:3:length(state.Z) # left and right points, get bigger distance to eachother
+            left = Point3f(state.X[i], state.Y[i], state.Z[i]) * scale
+            right = Point3f(state.X[i+1], state.Y[i+1], state.Z[i+1]) * scale
+            y_local = left - right
+            kv.points[i] = left + (kite_scale-1.0) * y_local
+            kv.points[i+1] = right - (kite_scale-1.0) * y_local
         end
         # # enlarge 3line kite
         # last_middle_line_pos = Point3f(state.X[kv.set.segments+3], state.Y[kv.set.segments+3], state.Z[kv.set.segments+3]) * scale
