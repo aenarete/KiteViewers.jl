@@ -1,11 +1,11 @@
 # Changelog
 
-### KiteViewers v0.4.15 - 2024-07-28
-- bugfix in function clear_viewer()
+### KiteViewers v0.4.16 - 2024-07-28
+- bugfix in function clear_viewer(), rename parameter `stop` to `stop_`
 
 ### KiteViewers v0.4.15 - 2024-07-28
 #### Changed
-- add optional, boolean parameter `stop_` to the function clear_viewer()
+- add optional, boolean parameter `stop` to the function clear_viewer()
 - update KiteUtils to 0.7
 - add example show_messages.jl that receives html messages
 - fix the older examples
