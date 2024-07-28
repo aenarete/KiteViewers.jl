@@ -251,7 +251,7 @@ function Viewer3D(set::Settings, show_kite=true, autolabel="Autopilot"; precompi
     GUI_ACTIVE[1] = true
 
     reset_view(cam, scene3D)
-    points=Vector{Point3f}(undef, set.segments+1+4)
+    points=Vector{Point3f}(undef, set.segments*3+6)
     pos=Observable([Point3f(x,0,0) for x in 1:set.segments+KITE_SPRINGS]) # positions of the tether segments
     part_pos=Observable([Point3f(x,0,0) for x in 1:set.segments+1+4])     # positions of the tether particles
     markersizes     = Observable([Point3f(1,1,1) for x in 1:set.segments+KITE_SPRINGS]) # includes the segment length

@@ -6,19 +6,21 @@ end
 
 using KiteViewers, KiteModels, KitePodModels, Rotations
 
-const Model = KPS4
+const Model = KPS4_3L
 
 if ! @isdefined kcu;  const kcu = KCU(se());   end
-if ! @isdefined kps4; const kps4 = Model(kcu); end
+if ! @isdefined kps4_3l; const kps4_3l = Model(kcu); end
 
 # the following values can be changed to match your interest
-dt::Float64 = 0.05
+dt::Float64 = 0.3
 const TIME = 50
 const TIME_LAPSE_RATIO = 1
 const STEPS = Int64(round(TIME/dt))
 STATISTIC = true
 SHOW_KITE = true
-PLOT_PERFORMANCE = true
+PLOT_PERFORMANCE = false
+set_data_path("/home/bart/Code/work/data/")
+update_settings()
 # end of user parameter section #
 
 if Model==KPS3 SHOW_KITE = true end
@@ -37,18 +39,21 @@ function simulate(integrator, steps)
     max_time = 0
     for i in 1:steps
         if i == 300
-            set_depower_steering(kps4.kcu, 0.30, 0.0)
+            # set_depower_steering(kps4_3l.kcu, 0.30, 0.0)
         elseif i == 640
-            set_depower_steering(kps4.kcu, 0.35, 0.0)    
+            # set_depower_steering(kps4_3l.kcu, 0.35, 0.0)    
         end
-        t_sim = @elapsed KiteModels.next_step!(kps4, integrator, set_speed=0.0, dt=dt)
+        t_sim = @elapsed KiteModels.next_step!(kps4_3l, integrator, dt=dt)
         t_gc = 0.0
         # if t_sim < 0.08*dt
         #     t_gc = @elapsed GC.gc(false)
         # end
         t_show = 0.0
+        # println(SysState(kps4_3l))
         if mod(i, TIME_LAPSE_RATIO) == 0 || i == steps
-            t_show = @elapsed update_system(viewer, SysState(kps4); scale = 0.08, kite_scale=3.0)
+            t_show = @elapsed update_system(viewer, SysState(kps4_3l); scale = 0.08, kite_scale=3.0)
+            println("i ", i)
+            println(viewer.points)
             end_time_ns = time_ns()
             wait_until(start_time_ns + dt*1e9, always_sleep=true)
             mtime = 0
@@ -81,7 +86,7 @@ function simulate(integrator, steps)
 end
 
 function play()
-    integrator = KiteModels.init_sim!(kps4, stiffness_factor=0.04, prn=STATISTIC)
+    integrator = KiteModels.init_sim!(kps4_3l, stiffness_factor=0.04, prn=STATISTIC)
     simulate(integrator, STEPS)
 end
 
