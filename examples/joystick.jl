@@ -35,7 +35,7 @@ end
 function simulate(integrator)
     start = integrator.p.iter
     start_time_ns = time_ns()
-    clear_viewer(viewer; stop=false)
+    clear_viewer(viewer; stop_=false)
     i=1
     j=0; k=0
     GC.gc()
