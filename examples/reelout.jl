@@ -39,7 +39,7 @@ function simulate(integrator, steps; log=false)
     time_ = 0.0
     v_ro = 0.0
     acc = 0.1
-    clear_viewer(viewer; stop=false)
+    clear_viewer(viewer; stop_=false)
     for i in 1:steps
         iter = kps4.iter
         if i > 300
