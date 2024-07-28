@@ -54,7 +54,7 @@ viewer=Viewer3D(show_kite)
 
 ## Exported functions
 ```julia
-clear_viewer(kv::AKV)
+clear_viewer(kv::AKV; stop=true)
 update_system(kv::AKV, state::SysState; scale=1.0, kite_scale=3.5)
 save_png(kv::AKV; filename="video", index = 1)
 stop(kv::AKV)

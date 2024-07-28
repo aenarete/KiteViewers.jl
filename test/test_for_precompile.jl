@@ -37,7 +37,7 @@ let
                 set_depower_steering(kps4.kcu, 0.25, 0.0)            
             end
             # KitePodModels.on_timer(kcu, dt)
-            KiteModels.next_step!(kps4, integrator, dt=dt)     
+            KiteModels.next_step!(kps4, integrator; set_speed=0, dt=dt)     
             update_system2(kps4)
             # sleep(dt/5)    
             wait_until(start_time_ns+i*dt/TIME_LAPSE_RATIO*1e9)     
@@ -45,7 +45,7 @@ let
         (integrator.p.iter - start) / steps
     end
 
-    integrator = KiteModels.init_sim!(kps4, stiffness_factor=0.04, prn=STATISTIC)
+    integrator = KiteModels.init_sim!(kps4, stiffness_factor=0.5, prn=STATISTIC)
 
     av_steps = simulate(integrator, STEPS)
     plot(1:10)

@@ -27,7 +27,7 @@ PLOT_PERFORMANCE = false
 
 SHOW_KITE = false
 
-if ! @isdefined time_vec; const time_vec = zeros(div(STEPS, TIME_LAPSE_RATIO)); end
+time_vec::Vector{Float64} = zeros(div(STEPS, TIME_LAPSE_RATIO))
 viewer::Viewer3D = Viewer3D(SHOW_KITE)
 
 # viewer=Viewer3D(true);
