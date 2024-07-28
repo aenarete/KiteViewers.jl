@@ -37,6 +37,7 @@ function simulate(integrator, steps)
     KiteViewers.clear_viewer(viewer)
     GC.gc()
     max_time = 0
+    sys_state = SysState(kps4_3l)
     for i in 1:steps
         if i == 300
             # set_depower_steering(kps4_3l.kcu, 0.30, 0.0)
@@ -51,7 +52,8 @@ function simulate(integrator, steps)
         t_show = 0.0
         # println(SysState(kps4_3l))
         if mod(i, TIME_LAPSE_RATIO) == 0 || i == steps
-            t_show = @elapsed update_system(viewer, SysState(kps4_3l); scale = 0.08, kite_scale=5.0)
+            update_sys_state!(sys_state, kps4_3l)
+            t_show = @elapsed update_system(viewer, sys_state; scale = 0.08, kite_scale=5.0)
             println("i ", i)
             println(viewer.points)
             end_time_ns = time_ns()
