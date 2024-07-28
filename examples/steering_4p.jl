@@ -5,11 +5,8 @@ end
 
 using KiteViewers, KiteModels, KitePodModels, Rotations
 
-# change this to KPS3 or KPS4
-const Model = KPS4
-
-if ! @isdefined kcu;  const kcu = KCU(se());   end
-if ! @isdefined kps4; const kps4 = Model(kcu); end
+kcu::KCU = KCU(se())
+kps4::KPS4 = KPS4(kcu)
 
 # the following values can be changed to match your interest
 dt::Float64 = 0.05
@@ -30,7 +27,7 @@ end
 function simulate(integrator, steps)
     start = integrator.p.iter
     start_time_ns = time_ns()
-    clear_viewer(viewer)
+    clear_viewer(viewer; stop=false)
     for i in 1:steps
         if i == 300
             set_depower_steering(kps4.kcu, 0.25, 0.2)
@@ -53,7 +50,7 @@ function simulate(integrator, steps)
     (integrator.p.iter - start) / steps
 end
 
-integrator = KiteModels.init_sim!(kps4, stiffness_factor=0.04, prn=STATISTIC)
+integrator = KiteModels.init_sim!(kps4, stiffness_factor=0.5, prn=STATISTIC)
 
 av_steps = simulate(integrator, STEPS)
 nothing

@@ -5,11 +5,8 @@ end
 
 using KiteViewers, KiteModels, KitePodModels, Joysticks
 
-# change this to KPS3 or KPS4
-const Model = KPS4
-
-if ! @isdefined kcu;    const kcu = KCU(se());   end
-if ! @isdefined kps4;   const kps4 = Model(kcu); end
+kcu::KCU = KCU(se())
+kps4::KPS4 = KPS4(kcu)
 if ! @isdefined js;
     const js = open_joystick();
     const jsaxes = JSState(); 
@@ -38,7 +35,7 @@ end
 function simulate(integrator)
     start = integrator.p.iter
     start_time_ns = time_ns()
-    clear_viewer(viewer)
+    clear_viewer(viewer; stop=false)
     i=1
     j=0; k=0
     GC.gc()
@@ -89,7 +86,7 @@ end
 
 function play()
     global steps
-    integrator = KiteModels.init_sim!(kps4, stiffness_factor=0.04)
+    integrator = KiteModels.init_sim!(kps4, stiffness_factor=0.5)
     steps = simulate(integrator)
     GC.enable(true)
 end

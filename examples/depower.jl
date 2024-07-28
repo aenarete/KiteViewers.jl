@@ -5,10 +5,6 @@ end
 
 using KiteViewers, KiteModels, KitePodModels, Rotations
 
-# example program that shows
-# a. how to create a video
-# b. how to create a performance plot (simulation speed vs time)
-
 kcu::KCU = KCU(se())
 kps4::KPS4 = KPS4(kcu)
 
@@ -24,7 +20,7 @@ SAVE_PNG  = false
 PLOT_PERFORMANCE = false
 # end of user parameter section #
 
-if ! @isdefined time_vec; const time_vec = zeros(div(STEPS, TIME_LAPSE_RATIO)); end
+time_vec::Vector{Float64} = zeros(div(STEPS, TIME_LAPSE_RATIO))
 viewer::Viewer3D = Viewer3D(SHOW_KITE)
 
 # ffmpeg -r:v 20 -i "video%06d.png" -codec:v libx264 -preset veryslow -pix_fmt yuv420p -crf 10 -an "video.mp4"

@@ -6,22 +6,19 @@ end
 
 using KiteViewers, KiteModels, KitePodModels, Rotations
 
-const Model = KPS4
-
-if ! @isdefined kcu;  const kcu = KCU(se());   end
-if ! @isdefined kps4; const kps4 = Model(kcu); end
+kcu::KCU = KCU(se())
+kps4::KPS4 = KPS4(kcu)
 
 # the following values can be changed to match your interest
 dt::Float64 = 0.05
-const TIME = 50
-const TIME_LAPSE_RATIO = 5
-const STEPS = Int64(round(TIME/dt))
+TIME = 35
+TIME_LAPSE_RATIO = 5
+STEPS = Int64(round(TIME/dt))
 STATISTIC = false
+SHOW_VIEWER = true
 SHOW_KITE = true
 PLOT_PERFORMANCE = true
 # end of user parameter section #
-
-if Model==KPS3 SHOW_KITE = true end
 
 if ! @isdefined time_vec_gc; const time_vec_gc = zeros(STEPS); end
 if ! @isdefined time_vec_sim; const time_vec_sim = zeros(STEPS); end
@@ -29,11 +26,13 @@ if ! @isdefined time_vec_tot; const time_vec_tot = zeros(div(STEPS, TIME_LAPSE_R
 viewer::Viewer3D = Viewer3D(SHOW_KITE)
 
 function simulate(integrator, steps)
+    println("Start simulation for $steps steps")
     start = integrator.p.iter
     start_time_ns = time_ns()
     j=0; k=0
     KiteViewers.clear_viewer(viewer)
     GC.gc()
+    GC.enable(false)
     max_time = 0
     for i in 1:steps
         if i == 300
@@ -68,12 +67,12 @@ function simulate(integrator, steps)
             end
             time_tot = end_time_ns - start_time_ns
             start_time_ns = time_ns()
-            time_vec_tot[div(i, TIME_LAPSE_RATIO)] = time_tot/1e9/dt*1000*dt
+            time_vec_tot[div(i, TIME_LAPSE_RATIO)] = time_tot/1e9*1000 # calculate time in ms
         end
       
         time_vec_gc[i]=t_gc/dt*100.0
         time_vec_sim[i]=t_sim/dt*100.0
-        if viewer.stop break end
+        # if viewer.stop break end
     end
     misses=j/k * 100
     println("\nMissed the deadline for $(round(misses, digits=2)) %. Max time: $(round((max_time*1e-6), digits=1)) ms")
@@ -81,8 +80,9 @@ function simulate(integrator, steps)
 end
 
 function play()
-    integrator = KiteModels.init_sim!(kps4, stiffness_factor=0.04, prn=STATISTIC)
+    integrator = KiteModels.init_sim!(kps4, stiffness_factor=0.5, prn=STATISTIC)
     simulate(integrator, STEPS)
+    GC.enable(true)
 end
 
 on(viewer.btn_PLAY.clicks) do c

@@ -100,10 +100,12 @@ mutable struct Viewer3D <: AKV
     stop::Bool
 end
 
-function clear_viewer(kv::AKV)
+function clear_viewer(kv::AKV; stop=true)
     kv.step = 1
     kv.energy = 0
-    stop(kv)
+    if stop
+        stop(kv)
+    end
 end
 
 function stop(kv::AKV)
