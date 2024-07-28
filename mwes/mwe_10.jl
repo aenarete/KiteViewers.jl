@@ -24,7 +24,7 @@ sys_state_dict = Dict(:time      => 0,
 )
 
 P = 11
-mutable struct SysState{P}
+Base.@kwdef mutable struct SysState{P}
     "time since start of simulation in seconds"
     time::Float64
     "time needed for one simulation timestep"
@@ -63,17 +63,8 @@ mutable struct SysState{P}
     Y::MVector{P, MyFloat}
     "vector of particle positions in z"
     Z::MVector{P, MyFloat}
-    SysState{P}() = new() 
 end 
 
-SysState{P}(d::Dict) =
-let ss=SysState{P}()
-    for f in fieldnames(SysState{P})
-        setproperty!(ss, f, d[f])
-    end
-    ss
-end
-
-sys_state_dict2struct(sys_state_dict) = SysState{P}(sys_state_dict)
+sys_state_dict2struct(dict) = SysState{P}(; pairs(dict)...)
 
 sys_state_dict2struct(sys_state_dict)
