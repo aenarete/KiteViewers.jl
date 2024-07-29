@@ -100,10 +100,12 @@ function update_system(kv::AKV, state::SysState; scale=1.0, kite_scale=1.0)
         for i in 3:3:length(state.Z) # middle points
             kv.points[i] = Point3f(state.X[i], state.Y[i], state.Z[i]) * scale
         end
+        y_kite = normalize(Point3f(state.X[end-2], state.Y[end-2], state.Z[end-2]) - Point3f(state.X[end-1], state.Y[end-1], state.Z[end-1]))
         for i in 1:3:length(state.Z) # left and right points, get bigger distance to eachother
             left = Point3f(state.X[i], state.Y[i], state.Z[i]) * scale
             right = Point3f(state.X[i+1], state.Y[i+1], state.Z[i+1]) * scale
-            y_local = left - right
+            distance = norm(left - right)
+            y_local = distance * y_kite
             kv.points[i] = left + (kite_scale-1.0) * y_local
             kv.points[i+1] = right - (kite_scale-1.0) * y_local
         end
