@@ -6,24 +6,20 @@ end
 
 using KiteViewers, KiteModels, KitePodModels, Rotations
 
-const Model = KPS4_3L
-
-if ! @isdefined kcu;  const kcu = KCU(se());   end
-if ! @isdefined kps4_3l; const kps4_3l = Model(kcu); end
+kcu::KCU = KCU(se())
+kps4_3l::KPS4_3L = KPS4_3L(kcu)
 
 # the following values can be changed to match your interest
 dt::Float64 = 0.3
-const TIME = 50
-const TIME_LAPSE_RATIO = 1
-const STEPS = Int64(round(TIME/dt))
+TIME = 50
+TIME_LAPSE_RATIO = 1
+STEPS = Int64(round(TIME/dt))
 STATISTIC = true
 SHOW_KITE = true
 PLOT_PERFORMANCE = false
 # USE 3L SETTINGS!
 update_settings()
 # end of user parameter section #
-
-if Model==KPS3 SHOW_KITE = true end
 
 if ! @isdefined time_vec_gc; const time_vec_gc = zeros(STEPS); end
 if ! @isdefined time_vec_sim; const time_vec_sim = zeros(STEPS); end
@@ -37,18 +33,18 @@ function simulate(integrator, steps)
     KiteViewers.clear_viewer(viewer)
     GC.gc()
     max_time = 0
+    set_speeds = [0.0, 0.0, 0.0]
     sys_state = SysState(kps4_3l)
     for i in 1:steps
-        if i == 300
-            # set_depower_steering(kps4_3l.kcu, 0.30, 0.0)
-        elseif i == 640
-            # set_depower_steering(kps4_3l.kcu, 0.35, 0.0)    
+        if i == 1
+            set_speeds = [0.0, 0.5, 0.5]
+        elseif i == 10
+            set_speeds = [0.0, -0.3, 0.0]
+        elseif i == 15
+            set_speeds = [0.0, 0.0, 0.0]
         end
-        t_sim = @elapsed KiteModels.next_step!(kps4_3l, integrator, dt=dt)
+        t_sim = @elapsed KiteModels.next_step!(kps4_3l, integrator; set_values=set_speeds, torque_control=false, dt=dt)
         t_gc = 0.0
-        # if t_sim < 0.08*dt
-        #     t_gc = @elapsed GC.gc(false)
-        # end
         t_show = 0.0
         # println(SysState(kps4_3l))
         if mod(i, TIME_LAPSE_RATIO) == 0 || i == steps
@@ -88,7 +84,7 @@ function simulate(integrator, steps)
 end
 
 function play()
-    integrator = KiteModels.init_sim!(kps4_3l, stiffness_factor=0.04, prn=STATISTIC)
+    integrator = KiteModels.init_sim!(kps4_3l, stiffness_factor=0.3, prn=STATISTIC)
     simulate(integrator, STEPS)
 end
 
