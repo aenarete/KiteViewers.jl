@@ -96,6 +96,13 @@ You can find more examples in the folder examples.
 ## Advanced usage
 For more examples see: [KiteSimulators](https://github.com/aenarete/KiteSimulators.jl)
 
+## License
+This project is licensed under the MIT License. Please see the below WAIVER in association with the license.
+
+## WAIVER
+Technische Universiteit Delft hereby disclaims all copyright interest in the package “KiteSimulators.jl” (simulators for airborne wind energy systems) written by the Author(s).
+
+Prof.dr. H.G.C. (Henri) Werij, Dean of Aerospace Engineering
 
 ## See also
 - [Research Fechner](https://research.tudelft.nl/en/publications/?search=Uwe+Fechner&pageSize=50&ordering=rating&descending=true) for the scientic background of this code
