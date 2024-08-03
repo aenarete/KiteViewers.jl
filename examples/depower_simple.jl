@@ -41,10 +41,13 @@ function simulate(integrator, steps)
             set_depower_steering(kps4.kcu, 0.35, 0.0)    
         end
         t_sim = @elapsed KiteModels.next_step!(kps4, integrator; set_speed=0, dt=dt)
+        if i==1
+            t_sim = 0
+        end
         t_gc = 0.0
-        # if t_sim < 0.08*dt
-        #     t_gc = @elapsed GC.gc(false)
-        # end
+        if t_sim < 0.08*dt
+            t_gc = @elapsed GC.gc(false)
+        end
         t_show = 0.0
         if mod(i, TIME_LAPSE_RATIO) == 0 || i == steps
             t_show = @elapsed update_system(viewer, SysState(kps4); scale = 0.08, kite_scale=3.0)
@@ -101,13 +104,13 @@ toc()
 play()
 stop(viewer)
 if PLOT_PERFORMANCE
-    include("plot.jl")
+    using ControlPlots
     if false
         plotx(range(dt,TIME,step=dt), time_vec_gc, time_vec_sim, time_vec_sim.+time_vec_gc;
-              labels=["GC time","sim_time","total_time"],
+              ylabels=["GC time","sim_time","total_time"],
               fig="depower_simple_timing")
     else
-        plot1(range(3*TIME_LAPSE_RATIO*dt,TIME,step=dt*TIME_LAPSE_RATIO), time_vec_tot[3:end],
+        plot(range(3*TIME_LAPSE_RATIO*dt,TIME,step=dt*TIME_LAPSE_RATIO), time_vec_tot[3:end];
               ylabel="time per frame [ms]")
     end
 end
