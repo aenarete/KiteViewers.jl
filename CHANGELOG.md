@@ -6,6 +6,7 @@
 - deleted obsolete files, e.g. plots.jl
 #### Added
 - add support for 3-line kite
+- add WAIVER from Delft University to README.md
 
 ### KiteViewers v0.4.16 - 2024-07-28
 - bugfix in function clear_viewer(), rename parameter `stop` to `stop_`
