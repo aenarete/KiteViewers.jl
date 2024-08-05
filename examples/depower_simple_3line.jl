@@ -6,7 +6,8 @@ end
 
 using KiteViewers, KiteModels, KitePodModels, Rotations
 
-kcu::KCU = KCU(se())
+set = deepcopy(se())
+kcu::KCU = KCU(set)
 kps4_3l::KPS4_3L = KPS4_3L(kcu)
 
 # the following values can be changed to match your interest
