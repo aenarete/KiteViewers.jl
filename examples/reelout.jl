@@ -47,6 +47,7 @@ function simulate(integrator, steps; log=false)
         end
         KiteModels.next_step!(kps4, integrator; set_speed=v_ro, dt=dt)     
         if mod(i, TIME_LAPSE_RATIO) == 0 || i == steps
+            time_ = time_ns()-start_time_ns
             if SHOW_VIEWER update_system2(kps4) end
             if log
                 save_png(viewer, index=div(i, TIME_LAPSE_RATIO))
@@ -54,11 +55,13 @@ function simulate(integrator, steps; log=false)
             if SHOW_VIEWER
                 wait_until(start_time_ns+dt*1e9, always_sleep=true) 
             end
+            if i == 1
+                time_ = 0.0
+            end
             start_time_ns = time_ns()
-            time_vec[div(i, TIME_LAPSE_RATIO)]=time_/(TIME_LAPSE_RATIO*dt)*100.0
+            time_vec[div(i, TIME_LAPSE_RATIO)]=1e-9*time_/(TIME_LAPSE_RATIO*dt)*100.0
             time_ = 0.0
         end
-        time_ += (kps4.iter - iter)*1.5e-6
     end
     (integrator.p.iter - start) / steps
 end
