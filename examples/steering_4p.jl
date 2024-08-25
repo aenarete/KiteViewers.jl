@@ -5,7 +5,10 @@ end
 
 using KiteViewers, KiteModels, KitePodModels, Rotations
 
-kcu::KCU = KCU(se())
+set = deepcopy(load_settings("system.yaml"))
+# set.solver = "IDA"
+
+kcu::KCU = KCU(set)
 kps4::KPS4 = KPS4(kcu)
 
 # the following values can be changed to match your interest
@@ -30,12 +33,12 @@ function simulate(integrator, steps)
     clear_viewer(viewer; stop_=false)
     for i in 1:steps
         if i == 300
-            set_depower_steering(kps4.kcu, 0.25, 0.2)
+            set_depower_steering(kps4.kcu, 0.25, 0.1)
         elseif i == 303
             set_depower_steering(kps4.kcu, 0.25, 0.0)   
-        elseif i == 600
-            set_depower_steering(kps4.kcu, 0.25, -0.2)
-        elseif i == 622
+        elseif i == 500
+            set_depower_steering(kps4.kcu, 0.25, -0.18)
+        elseif i == 506
             set_depower_steering(kps4.kcu, 0.25, 0.0)           
         end
         # KitePodModels.on_timer(kcu, dt)
@@ -50,7 +53,7 @@ function simulate(integrator, steps)
     (integrator.p.iter - start) / steps
 end
 
-integrator = KiteModels.init_sim!(kps4, stiffness_factor=0.5, prn=STATISTIC)
+integrator = KiteModels.init_sim!(kps4; delta=0, stiffness_factor=0.5, prn=STATISTIC)
 
 av_steps = simulate(integrator, STEPS)
 nothing
