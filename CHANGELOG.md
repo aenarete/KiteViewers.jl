@@ -1,12 +1,16 @@
 # Changelog
 
-### Unreleased
+### KiteViewers v0.4.17 - 2024-08-25
 #### Changed
 - replaced Plots with ControlPlots in Project.toml and the examples
 - deleted obsolete files, e.g. plots.jl
+- fix examples
 #### Added
 - add support for 3-line kite
 - add WAIVER from Delft University to README.md
+- add menu.jl
+#### Fixed
+- fix tests
 
 ### KiteViewers v0.4.16 - 2024-07-28
 - bugfix in function clear_viewer(), rename parameter `stop` to `stop_`
