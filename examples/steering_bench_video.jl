@@ -9,7 +9,10 @@ using KiteViewers, KiteModels, KitePodModels, Rotations
 # a. how to create a video
 # b. how to create a performance plot (simulation speed vs time)
 
-kcu::KCU = KCU(se())
+set = deepcopy(load_settings("system.yaml"))
+# set.solver = "IDA"
+
+kcu::KCU = KCU(set)
 kps4::KPS4 = KPS4(kcu)
 
 # the following values can be changed to match your interest
@@ -48,7 +51,7 @@ function simulate(integrator, steps; log=false)
         elseif i == 304
             set_depower_steering(kps4.kcu, 0.25, 0.0)    
         elseif i == 350
-            # set_depower_steering(kps4.kcu, 0.25, -0.04)
+             set_depower_steering(kps4.kcu, 0.25, -0.1)
         elseif i == 352
             set_depower_steering(kps4.kcu, 0.25, 0.0)           
         end
@@ -69,7 +72,7 @@ function simulate(integrator, steps; log=false)
     (integrator.p.iter - start) / steps
 end
 
-integrator = KiteModels.init_sim!(kps4, stiffness_factor=0.5, prn=STATISTIC)
+integrator = KiteModels.init_sim!(kps4; delta=0.0, stiffness_factor=0.5, prn=STATISTIC)
 
 av_steps = simulate(integrator, STEPS, log=SAVE_PNG)
 if PLOT_PERFORMANCE
