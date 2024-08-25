@@ -13,7 +13,7 @@ kps4::KPS4 = KPS4(kcu)
 
 # the following values can be changed to match your interest
 dt = 0.05
-TIME = 30
+TIME = 20
 TIME_LAPSE_RATIO = 1
 STEPS = Int64(round(TIME/dt))
 STATISTIC = false
@@ -44,7 +44,7 @@ function simulate(integrator, steps)
     (integrator.p.iter - start) / steps
 end
 
-integrator = KiteModels.init_sim!(kps4; stiffness_factor=0.5, prn=STATISTIC)
+integrator = KiteModels.init_sim!(kps4; delta=0, stiffness_factor=0.5, prn=STATISTIC)
 
 av_steps = simulate(integrator, STEPS)
 nothing
