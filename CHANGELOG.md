@@ -1,5 +1,9 @@
 # Changelog
 
+### KiteViewers v0.4.18 - 2024-10-16
+#### Changed
+- bump KiteUtils to 0.8
+
 ### KiteViewers v0.4.17 - 2024-08-25
 #### Changed
 - replaced Plots with ControlPlots in Project.toml and the examples
