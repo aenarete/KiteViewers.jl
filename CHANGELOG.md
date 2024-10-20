@@ -1,6 +1,6 @@
 # Changelog
 
-### Unreleased
+### KiteViewers v0.4.19 - 2024-10-20
 #### Changed
 - bump KiteUtils to 0.8.2
 - add param `ned=true` to function `update_system()`; with this parameter
