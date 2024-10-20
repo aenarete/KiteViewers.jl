@@ -68,7 +68,7 @@ function init_system(kv::AbstractKiteViewer, scene; show_kite=true)
 end
 
 # update the kite power system, consisting of the tether, the kite and the state (text and numbers)
-function update_system(kv::AKV, state::SysState; scale=1.0, kite_scale=1.0)
+function update_system(kv::AKV, state::SysState; scale=1.0, kite_scale=1.0, ned=true)
     azimuth = state.azimuth
     if azimuth ≈ 0 # suppress -0 and replace it with 0
         azimuth=zero(azimuth)
@@ -200,7 +200,11 @@ function update_system(kv::AKV, state::SysState; scale=1.0, kite_scale=1.0)
 
     if fourpoint
         s = kv.set.segments
-        q0 = state.orient                                     # SVector in the order w,x,y,z
+        if ned
+            q0 = quat2viewer(state.orient)                        # SVector in the order w,x,y,z
+        else
+            q0 = state.orient                                     # SVector in the order w,x,y,z
+        end
         quat[]     = Quaternionf(q0[2], q0[3], q0[4], q0[1])  # the constructor expects the order x,y,z,w
         kite_pos[] = 0.8 * 0.5 * (kv.points[s+4] + kv.points[s+5]) + 0.2 * kv.points[s+1]
     elseif fourpoint_3l
