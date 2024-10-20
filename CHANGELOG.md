@@ -1,5 +1,12 @@
 # Changelog
 
+### Unreleased
+#### Changed
+- bump KiteUtils to 0.8.2
+- add param `ned=true` to function `update_system()`; with this parameter
+  the orientation is automatically converted from **NED** to **viewer** reference frame
+- fix the example `basic_4p.jl`
+
 ### KiteViewers v0.4.18 - 2024-10-16
 #### Changed
 - bump KiteUtils to 0.8
