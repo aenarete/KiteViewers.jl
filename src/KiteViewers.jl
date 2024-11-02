@@ -24,6 +24,53 @@ include("common.jl")
     states::Vector{SysState{7}} = SysState{7}[]
 end
 
+"""
+    copy_examples()
+
+Copy all example scripts to the folder "examples"
+(it will be created if it doesn't exist).
+"""
+function copy_examples()
+    PATH = "examples"
+    if ! isdir(PATH) 
+        mkdir(PATH)
+    end
+    src_path = joinpath(dirname(pathof(@__MODULE__)), "..", PATH)
+    copy_files("examples", readdir(src_path))
+end
+
+function copy_viewer_settings()
+    files = ["settings.yaml", "system.yaml", "3l_settings.yaml", "kite.obj"]
+    dst_path = abspath(joinpath(pwd(), "data"))
+    copy_files("data", files)
+    set_data_path(joinpath(pwd(), "data"))
+    println("Copied $(length(files)) files to $(dst_path) !")
+end
+
+function install_examples(add_packages=true)
+    copy_examples()
+    copy_settings()
+    copy_viewer_settings()
+    if add_packages
+        Pkg.add("KiteUtils")
+        Pkg.add("ControlPlots")
+        Pkg.add("LaTeXStrings")
+        Pkg.add("StatsBase")
+    end
+end
+
+function copy_files(relpath, files)
+    if ! isdir(relpath) 
+        mkdir(relpath)
+    end
+    src_path = joinpath(dirname(pathof(@__MODULE__)), "..", relpath)
+    for file in files
+        cp(joinpath(src_path, file), joinpath(relpath, file), force=true)
+        chmod(joinpath(relpath, file), 0o774)
+    end
+    files
+end
+
 @setup_workload begin
 	# Putting some things in `@setup_workload` instead of `@compile_workload` can reduce the size of the
 	# precompile file and potentially make loading faster.
