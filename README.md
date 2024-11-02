@@ -13,7 +13,7 @@ or implement a real-time viewer for a system outside of Julia this package will 
 any statement `using KiteViewers` in the examples with `using KiteSimulators`.
 
 ## Installation
-Download and install [Julia 1.9](http://www.julialang.org) or later, if you haven't already.
+Download and install [Julia 1.10](https://ufechner7.github.io/2024/08/09/installing-julia-with-juliaup.html) or later, if you haven't already.
 Make sure you have the package `TestEnv` in your global environment if you want to run the examples. If you are not sure, run:
 ```bash
 julia -e 'using Pkg; Pkg.add("TestEnv")'
