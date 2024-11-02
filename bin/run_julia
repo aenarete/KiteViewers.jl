@@ -14,6 +14,11 @@ fi
 
 GCT="--gcthreads=$FAST_CORES,1"
 
+if [[ $HOSTNAME == "ufryzen" || $HOSTNAME == "framework" ]]; then
+    export NO_MTK=true
+    export USE_V9=true
+fi
+
 julia_version=$(julia --version | awk '{print($3)}')
 julia_major=${julia_version:0:3} 
 if [[ $julia_major == "1.1" ]]; then
