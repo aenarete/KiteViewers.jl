@@ -53,6 +53,7 @@ function install_examples(add_packages=true)
     copy_viewer_settings()
     if add_packages
         Pkg.add("KiteUtils")
+        Pkg.add("KiteModels")
         Pkg.add("ControlPlots")
         Pkg.add("LaTeXStrings")
         Pkg.add("StatsBase")
