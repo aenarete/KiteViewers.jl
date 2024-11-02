@@ -3,7 +3,7 @@ if ! ("KiteModels" ∈ keys(Pkg.project().dependencies))
     using TestEnv; TestEnv.activate()
 end
 
-using KiteViewers, KiteModels, KitePodModels, Rotations
+using KiteViewers, KiteModels
 
 set = deepcopy(load_settings("system.yaml"))
 # set.solver = "IDA"

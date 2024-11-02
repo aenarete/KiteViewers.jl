@@ -3,7 +3,7 @@ if ! ("KiteModels" ∈ keys(Pkg.project().dependencies))
     using TestEnv; TestEnv.activate()
 end
 
-using KiteViewers, KiteModels, KitePodModels, Rotations
+using KiteViewers, KiteModels
 
 # example program that shows
 # a. how to create a video
