@@ -308,7 +308,8 @@ function Viewer3D(set::Settings, show_kite=true, autolabel="Autopilot"; precompi
 end
 
 function save_png(viewer; filename="video", index = 1)
+    mkpath("video")
     buffer = IOBuffer()
     @printf(buffer, "%06i", index) 
-    save(filename * String(take!(buffer)) * ".png", viewer.scene)
+    save(joinpath("video", filename * String(take!(buffer)) * ".png"), viewer.fig; update=false)
 end
