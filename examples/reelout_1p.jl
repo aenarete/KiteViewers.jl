@@ -9,6 +9,8 @@ using KiteViewers, KiteModels, KitePodModels, Rotations
 # a. how to create a performance plot (simulation speed vs time)
 
 set = load_settings("system.yaml")
+set.abs_tol=0.00006
+set.rel_tol=0.0001 
 kcu::KCU = KCU(deepcopy(set))
 kps3::KPS3 = KPS3(kcu)
 
@@ -63,11 +65,14 @@ function simulate(integrator, steps; log=false)
             time_vec[div(i, TIME_LAPSE_RATIO)]=1e-9*time_/(TIME_LAPSE_RATIO*dt)*100.0
             time_ = 0.0
         end
+        # if mod(i, TIME_LAPSE_RATIO) == 0 
+        #     break
+        # end
     end
     (integrator.p.iter - start) / steps
 end
 
-integrator = KiteModels.init_sim!(kps3, delta=0.00001, stiffness_factor=0.05, prn=STATISTIC)
+integrator = KiteModels.init_sim!(kps3, delta=0, stiffness_factor=0.8, prn=STATISTIC)
 
 av_steps = simulate(integrator, STEPS, log=SAVE_PNG)
 if PLOT_PERFORMANCE
