@@ -1,5 +1,5 @@
 using Pkg, Timers
-if ! ("KitePodModels" ∈ keys(Pkg.project().dependencies))
+if ! ("KiteModels" ∈ keys(Pkg.project().dependencies))
     using TestEnv; TestEnv.activate()
 end
 
