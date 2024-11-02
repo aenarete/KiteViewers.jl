@@ -1,10 +1,10 @@
 using Pkg, Timers
 tic()
-if ! ("KitePodModels" ∈ keys(Pkg.project().dependencies))
+if ! ("KiteModels" ∈ keys(Pkg.project().dependencies))
     using TestEnv; TestEnv.activate()
 end
 
-using KiteViewers, KiteModels, KitePodModels
+using KiteViewers, KiteModels
 
 set = deepcopy(load_settings("system.yaml"))
 
