@@ -4,7 +4,7 @@ if ! ("KitePodModels" ∈ keys(Pkg.project().dependencies))
     using TestEnv; TestEnv.activate()
 end
 
-using KiteViewers, KiteModels, KitePodModels, Rotations
+using KiteViewers, KiteModels, KitePodModels
 
 set = deepcopy(load_settings("system.yaml"))
 
@@ -22,9 +22,9 @@ SHOW_KITE = true
 PLOT_PERFORMANCE = true
 # end of user parameter section #
 
-if ! @isdefined time_vec_gc; const time_vec_gc = zeros(STEPS); end
-if ! @isdefined time_vec_sim; const time_vec_sim = zeros(STEPS); end
-if ! @isdefined time_vec_tot; const time_vec_tot = zeros(div(STEPS, TIME_LAPSE_RATIO)); end
+time_vec_gc::Vector{Float64} = zeros(STEPS)
+time_vec_sim::Vector{Float64} = zeros(STEPS)
+time_vec_tot::Vector{Float64} = zeros(div(STEPS, TIME_LAPSE_RATIO))
 viewer::Viewer3D = Viewer3D(SHOW_KITE)
 
 function simulate(integrator, steps)
