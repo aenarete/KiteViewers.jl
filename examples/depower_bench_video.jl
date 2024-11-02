@@ -3,13 +3,14 @@ if ! ("KiteModels" ∈ keys(Pkg.project().dependencies))
     using TestEnv; TestEnv.activate()
 end
 
-using KiteViewers, KiteModels
+using KiteViewers, KiteModels, KiteUtils
 
 # example program that shows
 # a. how to create a video
 # b. how to create a performance plot (simulation speed vs time)
 
-kcu::KCU = KCU(se())
+set = load_settings("system.yaml")
+kcu::KCU = KCU(set)
 kps4::KPS4 = KPS4(kcu)
 
 # the following values can be changed to match your interest
