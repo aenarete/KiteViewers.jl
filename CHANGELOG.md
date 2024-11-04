@@ -5,7 +5,7 @@
 - fix function `save_png(viewer)`; it uses the folder `video` as output now
 #### Added
 - add function `install_examples()`
-- add example `reelouot_1p.jl`
+- add example `reelout_1p.jl`
 
 ### KiteViewers v0.4.19 - 2024-10-20
 #### Changed
