@@ -1,9 +1,13 @@
 # Changelog
-
-### KiteViewers v0.4.19 - 2024-10-20
+### Unreleased
+#### Fixed
+- fix display of kite in one point model
+- fix function `save_png(viewer)`; it uses the folder `video` as output now
 #### Added
 - add function `install_examples()`
-- fix function `save_png(viewer)`; it uses the folder `video` as output now
+- add example `reelouot_1p.jl`
+
+### KiteViewers v0.4.19 - 2024-10-20
 #### Changed
 - bump KiteUtils to 0.8.2
 - add param `ned=true` to function `update_system()`; with this parameter
