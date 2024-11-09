@@ -10,6 +10,8 @@ export clear_viewer, update_system, save_png, stop, pause, set_status  # functio
 @reexport using GLMakie: on
 
 const KITE_SPRINGS = 8 
+const POS_Y = 785
+const POS_X = 625
 
 function __init__()
     if isdir(joinpath(pwd(), "data")) && isfile(joinpath(pwd(), "data", "system.yaml"))

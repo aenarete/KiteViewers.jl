@@ -64,11 +64,11 @@ function init_system(kv::AbstractKiteViewer, scene; show_kite=true)
         font=kv.set.fixed_font
     end
     text!(scene, textnode, position  = Point2f(50, 110), fontsize=TEXT_SIZE, font=font, align = (:left, :top), space=:pixel)
-    text!(scene, textnode2, position  = Point2f(630, 735), fontsize=TEXT_SIZE, font=font, align = (:left, :bottom), space=:pixel)
+    text!(scene, textnode2, position  = Point2f(POS_X, POS_Y), fontsize=TEXT_SIZE, font=font, align = (:left, :top), space=:pixel)
 end
 
 # update the kite power system, consisting of the tether, the kite and the state (text and numbers)
-function update_system(kv::AKV, state::SysState; scale=1.0, kite_scale=1.0, ned=true)
+function update_system(kv::AKV, state::SysState; scale=1.0, kite_scale=1.0, ned=true, wind=[:v_wind_200m])
     azimuth = state.azimuth
     if azimuth ≈ 0 # suppress -0 and replace it with 0
         azimuth=zero(azimuth)
@@ -242,8 +242,14 @@ function update_system(kv::AKV, state::SysState; scale=1.0, kite_scale=1.0, ned=
             "v_reelout: $(@sprintf("%7.2f", state.v_reelout)) m/s   " * "p_mech: $(@sprintf("%8.2f", power)) W\n" *
             "force:     $(@sprintf("%7.2f", state.force    )) N     " * "energy: $(@sprintf("%8.2f", kv.energy)) Wh\n"
         textnode[] = msg
+        wind_msg = ""
+        if :v_wind_gnd in wind
+            wind_msg = "\nwind_gnd: $(@sprintf("%4.1f", norm(state.v_wind_gnd))) m/s"
+        elseif :v_wind_200m in wind
+            wind_msg = "\nwind@200m: $(@sprintf("%4.1f", norm(state.v_wind_200m))) m/s"
+        end
         textnode2[] = "depower:  $(@sprintf("%6.2f", state.depower*100)) %\n" *
-                      "steering: $(@sprintf("%6.2f", state.steering*100)) %"
+                      "steering: $(@sprintf("%6.2f", state.steering*100)) %" * wind_msg
     end
 end
 

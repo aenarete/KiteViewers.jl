@@ -223,7 +223,7 @@ function Viewer3D(set::Settings, show_kite=true, autolabel="Autopilot"; precompi
     text!(scene2D, status, position = Point2f( 20, 0), fontsize = TEXT_SIZE, align = (:left, :bottom), space=:pixel)
     text!(scene2D, plot_file, position = Point2f( 420, 0), fontsize = TEXT_SIZE, align = (:left, :bottom), space=:pixel)
 
-    textnode2[]="depower\nsteering:"
+    textnode2[]="depower:\nsteering:\n"
 
     fig[2, 1] = buttongrid = GridLayout(tellwidth=false)
     l_sublayout = GridLayout()
@@ -301,7 +301,7 @@ function Viewer3D(set::Settings, show_kite=true, autolabel="Autopilot"; precompi
     on(fig.scene.events.window_area) do x
         dx = x.widths[1] - WIDTH
         dy = x.widths[2] - HEIGHT
-        txt2.position[] = Point2f(630.0+dx, 735.0+dy)
+        txt2.position[] = Point2f(POS_X+dx, POS_Y+dy)
     end
     status[] = "Stopped"
     s
