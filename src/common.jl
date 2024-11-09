@@ -69,7 +69,7 @@ end
 
 # update the kite power system, consisting of the tether, the kite and the state (text and numbers)
 function update_system(kv::AKV, state::SysState; scale=1.0, kite_scale=1.0, ned=true, 
-                       wind=[:v_wind_200m, :v_wind_gnd, :v_wind_kite])
+                       wind=[:v_wind_200m, :v_wind_kite])
     azimuth = state.azimuth
     if azimuth ≈ 0 # suppress -0 and replace it with 0
         azimuth=zero(azimuth)
