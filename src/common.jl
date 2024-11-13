@@ -199,29 +199,20 @@ function update_system(kv::AKV, state::SysState; scale=1.0, kite_scale=1.0, ned=
     kv.markersizes[] = calc_markersizes(kv.set.segments)
     kv.rotation[]   = calc_rotations(kv.set.segments)
 
+    if ned
+        q0 = quat2viewer(state.orient)                        # SVector in the order w,x,y,z
+    else
+        q0 = state.orient                                     # SVector in the order w,x,y,z
+    end
+    quat[]     = Quaternionf(q0[2], q0[3], q0[4], q0[1])  # the constructor expects the order x,y,z,w
     if fourpoint
         s = kv.set.segments
-        if ned
-            q0 = quat2viewer(state.orient)                        # SVector in the order w,x,y,z
-        else
-            q0 = state.orient                                     # SVector in the order w,x,y,z
-        end
-        quat[]     = Quaternionf(q0[2], q0[3], q0[4], q0[1])  # the constructor expects the order x,y,z,w
         kite_pos[] = 0.8 * 0.5 * (kv.points[s+4] + kv.points[s+5]) + 0.2 * kv.points[s+1]
     elseif fourpoint_3l
         s = kv.set.segments
-        q0 = state.orient                                     # SVector in the order w,x,y,z
-        quat[]     = Quaternionf(q0[2], q0[3], q0[4], q0[1])  # the constructor expects the order x,y,z,w
         kite_pos[] = 0.8 * 0.5 * (kv.points[s*3+4] + kv.points[s*3+5]) + 0.2 * kv.points[s*3+3]
     else
-        if ned
-            q0 = quat2viewer(state.orient)                        # SVector in the order w,x,y,z
-        else
-            q0 = state.orient                                     # SVector in the order w,x,y,z
-        end
         # move and turn the kite to the new position
-        # SVector in the order w,x,y,z
-        quat[]     = Quaternionf(q0[2], q0[3], q0[4], q0[1]) # the constructor expects the order x,y,z,w
         kite_pos[] = Point3f(state.X[kv.set.segments+1], state.Y[kv.set.segments+1], state.Z[kv.set.segments+1]) * scale
     end
 
