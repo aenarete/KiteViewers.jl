@@ -1,5 +1,5 @@
 # http example
-using HTTP, JSON3, StructTypes, KiteUtils
+using HTTP, JSON3, StructTypes
 
 url = "http://localhost:8080"
 
