@@ -12,7 +12,7 @@ options = ["basic_1p = include(\"basic_1p.jl\")",
            "steering_bench_video = include(\"steering_bench_video.jl\")",
            "quit"]
 
-function menu()
+function example_menu()
     active = true
     while active
         menu = RadioMenu(options, pagesize=8)
@@ -27,4 +27,4 @@ function menu()
     end
 end
 
-menu()
+example_menu()
