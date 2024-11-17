@@ -32,12 +32,12 @@ pkg"add KiteViewers"
 at the Julia prompt.
 
 You can install the examples with:
-```
+```julia
 using KiteViewers
 KiteViewers.install_examples()
 ```
 and get a menu with the examples by typing:
-```
+```julia
 menu()
 ```
 
