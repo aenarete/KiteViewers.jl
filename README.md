@@ -29,7 +29,17 @@ and then add the package `KiteViewers` to your project by executing:
 using Pkg
 pkg"add KiteViewers"
 ``` 
-at the Julia prompt. 
+at the Julia prompt.
+
+You can install the examples with:
+```
+using KiteViewers
+KiteViewers.install_examples()
+```
+and get a menu with the examples by typing:
+```
+menu()
+```
 
 You can run the unit tests with the command:
 ```julia
