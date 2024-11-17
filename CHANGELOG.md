@@ -7,6 +7,7 @@
 #### Changed
 - reexport `KiteUtils`
 - automatically execute `using KiteViewers` when starting Julia with `./bin/run_julia`
+- improved the script `bin/install`
 
 ### KiteViewers v0.4.20 - 2024-11-09
 #### Fixed
