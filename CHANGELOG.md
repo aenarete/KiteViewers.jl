@@ -1,12 +1,12 @@
 # Changelog
 
-### Unreleased
+### KiteViewers v0.4.21 - 2024-11-17
 #### Fixed
 - fix display of kite in `KPS_3L` model
 - make `menu()` work
 #### Changed
 - reexport `KiteUtils`
-- automatically execute `using KiteViewers` when starting Julia
+- automatically execute `using KiteViewers` when starting Julia with `./bin/run_julia`
 
 ### KiteViewers v0.4.20 - 2024-11-09
 #### Fixed
