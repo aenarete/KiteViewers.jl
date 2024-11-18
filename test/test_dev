@@ -1,0 +1,20 @@
+#!/bin/bash -eu
+
+# test the installation and precompilation of KiteViewers from git
+
+cd ~/repos
+rm -rf julia_tmp
+mkdir julia_tmp
+export JULIA_DEPOT_PATH="~/julia_tmp"
+export NO_MTK=true # speeds up the precompilation
+rm -rf viewer_test
+mkdir viewer_test
+cd viewer_test
+echo "Installing KiteViewers from git ..."
+git clone https://github.com/aenarete/KiteViewers.jl
+cd KiteViewers.jl
+cd bin
+./install
+cd ..
+julia --project -e "using KiteViewers; using TestEnv; TestEnv.activate(); using KiteModels"
+echo "KiteViewers installed successfully!"
