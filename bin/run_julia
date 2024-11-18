@@ -6,6 +6,7 @@ fi
 
 export MPLBACKEND=qt5agg
 export JULIA_PKG_SERVER_REGISTRY_PREFERANCE=eager
+export NO_MTK=true # speeds up the precompilation
 
 if command -v nproc &> /dev/null; then
     FAST_CORES=$(($(nproc) / 2 - 1))
