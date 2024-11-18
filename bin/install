@@ -4,7 +4,5 @@ if [[ $(basename $(pwd)) == "bin" ]]; then
 fi
 
 julia -e 'using Pkg; Pkg.add("TestEnv")'
-julia --project -e 'using Pkg; Pkg.update()'
-julia --project -e 'using KiteViewers'
 julia --project -e 'using TestEnv; TestEnv.activate(); using Pkg; Pkg.update()'
 julia --project -e 'include("examples/update_manifest.jl")'
