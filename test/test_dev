@@ -2,7 +2,7 @@
 
 # test the installation and precompilation of KiteViewers from git
 
-cd ~/repos
+cd ~
 rm -rf julia_tmp
 mkdir julia_tmp
 export JULIA_DEPOT_PATH="~/julia_tmp"
