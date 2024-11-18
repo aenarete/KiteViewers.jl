@@ -48,6 +48,32 @@ pkg"test KiteViewers"
 ```
 This package should work on Linux, Windows and Mac. If you find a bug, please file an issue.
 
+## Installation from git (for package developers)
+First, fork this repository using the "Fork" button on the top of the website. Then, clone
+your fork, e.g.:
+```bash
+git clone https://github.com/USERNAME/KiteViewers.jl
+```
+where you have to replace USERNAME with your github user name.
+Then, run the installation script:
+```bash
+cd KiteViewers.jl
+cd bin
+./install
+cd ..
+```
+The install script creates a version of `Manifest.toml` that works both with the normal project 
+and with the test environment, needed to run the examples.
+To launch Julia, type:
+```bash
+./bin/run_julia
+```
+For more comfort, add this line to your `.bashrc` file:
+```bash
+alias jl='./bin/run_julia'
+```
+Then you can launch Julia, using the `run_julia` script just by typing `jl`.
+
 ## Exported types
 ```julia
 Viewer3D
