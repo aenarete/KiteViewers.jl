@@ -1,5 +1,10 @@
 # Changelog
 
+### KiteViewers v0.4.22 - 2025-04-20
+#### Changed
+- update KiteUtils to `1.10.2`
+- removed example `basic_4p_3lines.jl`
+
 ### KiteViewers v0.4.21 - 2024-11-17
 #### Fixed
 - fix display of kite in `KPS_3L` model
