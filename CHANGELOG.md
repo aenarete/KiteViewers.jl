@@ -3,6 +3,7 @@
 ### KiteViewers v0.4.23 - 2025-05-05
 #### Changed
 - bumped KiteUtils to `1.10.5`
+- bumped KiteModels to `0.7.3`
 - adapted the code to be able to process the new arrays in SysState
 
 ### KiteViewers v0.4.22 - 2025-04-20
