@@ -1,6 +1,6 @@
 # Changelog
 
-### KiteViewers v0.4.23 - 2025-04-20
+### KiteViewers v0.4.23 - 2025-05-05
 #### Changed
 - bumped KiteUtils to `1.10.5`
 - adapted the code to be able to process the new arrays in SysState
