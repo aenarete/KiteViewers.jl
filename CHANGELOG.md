@@ -1,4 +1,7 @@
 # Changelog
+### KiteViewers v0.4.24 - 2025-01-06
+- bump GLMakie to 0.11
+- bump GeometryBasic to 0.5
 
 ### KiteViewers v0.4.23 - 2025-05-05
 #### Changed
