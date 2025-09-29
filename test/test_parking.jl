@@ -8,6 +8,8 @@ using KiteViewers, KiteModels, KitePodModels, Rotations, Timers
 set_data_path()
 
 set = load_settings("system.yaml")
+set.rel_tol =0.0001
+set.abs_tol = 0.00006
 kcu::KCU = KCU(set);
 kps4::KPS4 = KPS4(kcu)
 
