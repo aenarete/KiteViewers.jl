@@ -1,3 +1,8 @@
+# This script updates the Manifest.toml file for the current Julia version.
+# It copies the Manifest.toml from the TestEnv environment to the current directory,
+# renaming it according to the Julia version (e.g., Manifest-v1.10.toml).
+# Usage: ./bin/install
+
 using TestEnv; pr=TestEnv.activate()
 using KiteViewers, KiteModels
 src = joinpath(dirname(pr), "Manifest.toml")
