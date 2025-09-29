@@ -4,6 +4,8 @@
 - move repo to OpenSourceAWE
 - update README.md
 - update CI.yml
+- update script `update_manifest.jl`
+- add Manifest-v1.11.toml.default
 
 ### KiteViewers v0.4.24 - 2025-01-06
 #### Changed
