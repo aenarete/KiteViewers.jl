@@ -1,6 +1,9 @@
 # Changelog
 ### Unreleased
 - bump GLMakie to 0.13
+- move repo to OpenSourceAWE
+- update README.md
+- update CI.yml
 
 ### KiteViewers v0.4.24 - 2025-01-06
 #### Changed
